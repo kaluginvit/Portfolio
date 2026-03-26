@@ -1,0 +1,2 @@
+baseline_metric,baseline_mean_control,baseline_std_control,target_relative_mde_pct,recommended_sample_size_per_group,actual_users_control,actual_users_test
+cr_apply,0.081,0.27286240264674727,2.5,1140100,5000,5000

@@ -1,0 +1,13 @@
+ab_group,event_type,events,share_within_group
+A_control,home_view,5000,0.5833625014584063
+A_control,offer_apply,405,0.04725236261813091
+A_control,offer_approved,333,0.03885194259712986
+A_control,offer_click,525,0.061253062653132656
+A_control,offer_impression,1975,0.23042818807607046
+A_control,revenue,333,0.03885194259712986
+B_test,home_view,5000,0.4374835943652113
+B_test,offer_apply,632,0.05529792632776271
+B_test,offer_approved,632,0.05529792632776271
+B_test,offer_click,1104,0.09659637763583866
+B_test,offer_impression,3429,0.30002624901566194
+B_test,revenue,632,0.05529792632776271

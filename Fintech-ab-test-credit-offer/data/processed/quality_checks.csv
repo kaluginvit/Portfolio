@@ -1,0 +1,8 @@
+check_name,value
+duplicate_rows,0
+missing_ab_group,0
+bad_offer_rows,0
+bad_home_offer_rows,0
+nonpositive_revenue_rows,0
+unique_users,10000
+total_rows,20000

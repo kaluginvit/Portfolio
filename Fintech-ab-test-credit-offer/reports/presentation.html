@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A/B-тест: credit_of_day в ленте</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,600;0,700;1,400&family=Unbounded:wght@500;700&display=swap&subset=latin,cyrillic" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f0e8;
+      --bg-slide: linear-gradient(145deg, #faf8f3 0%, #ebe4d8 48%, #e8dfd2 100%);
+      --ink: #1a1614;
+      --ink-muted: #5c534c;
+      --accent: #0c6e67;
+      --accent-bright: #14b8a6;
+      --control: #4f46e5;
+      --control-soft: rgba(79, 70, 229, 0.12);
+      --test: #c2410c;
+      --test-soft: rgba(194, 65, 12, 0.12);
+      --positive: #15803d;
+      --positive-soft: rgba(21, 128, 61, 0.12);
+      --warn: #b45309;
+      --warn-bg: rgba(180, 83, 9, 0.1);
+      --card: #fffefb;
+      --shadow: 0 8px 32px rgba(26, 22, 20, 0.08);
+      --r-main-font: 'Mulish', system-ui, sans-serif;
+      --r-heading-font: 'Unbounded', system-ui, sans-serif;
+    }
+
+    .reveal-viewport { background: var(--bg); }
+
+    .reveal {
+      font-family: var(--r-main-font);
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .reveal .slides section {
+      padding: 1.5em 2em;
+      text-align: left;
+      background: var(--bg-slide);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(26, 22, 20, 0.06);
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: var(--r-heading-font);
+      font-weight: 700;
+      color: var(--ink);
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .reveal h1 {
+      font-size: 1.55em;
+      background: linear-gradient(105deg, var(--accent) 0%, #0f172a 55%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .reveal h2 {
+      font-size: 1.12em;
+      font-weight: 700;
+      margin-bottom: 0.65em;
+      padding-bottom: 0.35em;
+      border-bottom: 3px solid var(--accent-bright);
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .reveal .subtitle {
+      color: var(--ink-muted);
+      font-size: 0.52em;
+      font-weight: 600;
+      line-height: 1.45;
+      max-width: 32em;
+      margin-top: 0.6em;
+    }
+
+    .reveal ul {
+      margin: 0.4em 0 0;
+      padding-left: 1.15em;
+    }
+
+    .reveal li {
+      margin: 0.5em 0;
+      line-height: 1.45;
+    }
+
+    .reveal li::marker { color: var(--accent); }
+
+    .reveal code {
+      font-family: ui-monospace, 'Cascadia Code', monospace;
+      font-size: 0.88em;
+      background: rgba(12, 110, 103, 0.1);
+      color: var(--accent);
+      padding: 0.12em 0.35em;
+      border-radius: 6px;
+    }
+
+    .reveal strong { color: var(--ink); font-weight: 700; }
+
+    .reveal .small {
+      font-size: 0.68em;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    /* Title slide */
+    .slide-title h1 {
+      font-size: 1.45em;
+      -webkit-text-fill-color: unset;
+      color: var(--ink);
+      background: none;
+    }
+
+    .slide-title .title-accent {
+      display: block;
+      height: 6px;
+      width: 4.5em;
+      margin-top: 0.35em;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+    }
+
+    .slide-title .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4em;
+      margin-top: 1.25em;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.38em;
+      font-weight: 700;
+      font-family: var(--r-heading-font);
+      padding: 0.35em 0.75em;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid rgba(12, 110, 103, 0.25);
+      color: var(--accent);
+    }
+
+    /* A/B cards */
+    .ab-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+      margin-top: 0.5em;
+      align-items: stretch;
+    }
+
+    .ab-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 0.85em 1em;
+      box-shadow: 0 4px 20px rgba(26, 22, 20, 0.06);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ab-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .ab-card.control { border-color: rgba(79, 70, 229, 0.35); }
+    .ab-card.control::before { background: var(--control); }
+    .ab-card.test { border-color: rgba(194, 65, 12, 0.35); }
+    .ab-card.test::before { background: var(--test); }
+
+    .ab-card .label {
+      font-family: var(--r-heading-font);
+      font-size: 0.42em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.35em;
+    }
+
+    .ab-card.control .label { color: var(--control); }
+    .ab-card.test .label { color: var(--test); }
+
+    .ab-card p {
+      margin: 0;
+      font-size: 0.62em;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65em 1em;
+      margin-top: 0.75em;
+    }
+
+    .meta-pill {
+      background: var(--card);
+      padding: 0.55em 0.75em;
+      border-radius: 12px;
+      font-size: 0.52em;
+      border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 12px rgba(26, 22, 20, 0.05);
+    }
+
+    .meta-pill span {
+      display: block;
+      font-family: var(--r-heading-font);
+      font-size: 0.72em;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.15em;
+    }
+
+    /* Funnel */
+    .funnel {
+      display: flex;
+      align-items: center;
+      gap: 0.35em;
+      flex-wrap: wrap;
+      margin-top: 0.5em;
+      font-size: 0.58em;
+      font-weight: 600;
+    }
+
+    .funnel-step {
+      background: var(--card);
+      padding: 0.45em 0.65em;
+      border-radius: 10px;
+      border: 1px solid rgba(12, 110, 103, 0.2);
+    }
+
+    .funnel-arrow { color: var(--accent); font-weight: 700; }
+
+    /* Bar comparison CR_apply */
+    .bar-chart {
+      margin: 0.75em 0 0.5em;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65em;
+      margin-bottom: 0.55em;
+    }
+
+    .bar-label {
+      width: 5.2em;
+      flex-shrink: 0;
+      font-size: 0.48em;
+      font-weight: 700;
+      font-family: var(--r-heading-font);
+    }
+
+    .bar-label.a { color: var(--control); }
+    .bar-label.b { color: var(--test); }
+
+    .bar-track {
+      flex: 1;
+      height: 1.35em;
+      background: rgba(26, 22, 20, 0.06);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.5em;
+      box-sizing: border-box;
+      min-width: 2.2em;
+      transition: width 0.6s ease;
+    }
+
+    .bar-fill.a { background: linear-gradient(90deg, var(--control), #818cf8); }
+    .bar-fill.b { background: linear-gradient(90deg, var(--test), #fb923c); }
+
+    .bar-value {
+      font-size: 0.42em;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .stat-banner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em 1em;
+      margin-top: 0.65em;
+      padding: 0.65em 0.85em;
+      background: var(--positive-soft);
+      border-radius: 14px;
+      border: 1px solid rgba(21, 128, 61, 0.25);
+      font-size: 0.52em;
+      line-height: 1.5;
+    }
+
+    .stat-banner .big {
+      font-family: var(--r-heading-font);
+      font-weight: 700;
+      color: var(--positive);
+      font-size: 1.15em;
+    }
+
+    /* Secondary metric cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85em;
+      margin-top: 0.6em;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 0.9em 1em;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-card .name {
+      font-family: var(--r-heading-font);
+      font-size: 0.4em;
+      font-weight: 700;
+      color: var(--ink-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .kpi-card .value {
+      font-family: var(--r-heading-font);
+      font-size: 1.15em;
+      font-weight: 700;
+      color: var(--test);
+      margin: 0.15em 0;
+      line-height: 1.1;
+    }
+
+    .kpi-card .hint {
+      font-size: 0.42em;
+      color: var(--ink-muted);
+    }
+
+    /* Sample size visual */
+    .n-compare {
+      margin-top: 0.65em;
+    }
+
+    .n-bar-wrap {
+      margin-bottom: 0.5em;
+    }
+
+    .n-bar-wrap .cap {
+      font-size: 0.45em;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+      color: var(--ink-muted);
+    }
+
+    .n-track {
+      height: 1.1em;
+      background: rgba(26, 22, 20, 0.08);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .n-fill.need {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #334155, #64748b);
+      border-radius: 6px;
+    }
+
+    .n-fill.have {
+      width: 0.9%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--warn), #fbbf24);
+      border-radius: 6px;
+      min-width: 6px;
+    }
+
+    .highlight-callout {
+      background: var(--warn-bg);
+      border-left: 4px solid var(--warn);
+      padding: 0.75em 1em;
+      margin: 0.65em 0 0;
+      font-size: 0.58em;
+      border-radius: 0 12px 12px 0;
+      line-height: 1.45;
+    }
+
+    /* Recommendations — numbered */
+    .rec-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 0.5em;
+      counter-reset: rec;
+    }
+
+    .rec-list li {
+      counter-increment: rec;
+      position: relative;
+      padding-left: 2.1em;
+      margin: 0.55em 0;
+      font-size: 0.88em;
+      line-height: 1.45;
+    }
+
+    .rec-list li::before {
+      content: counter(rec);
+      position: absolute;
+      left: 0;
+      top: 0.05em;
+      width: 1.45em;
+      height: 1.45em;
+      line-height: 1.45em;
+      text-align: center;
+      font-family: var(--r-heading-font);
+      font-size: 0.55em;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+    }
+
+    /* Table */
+    .reveal table {
+      font-size: 0.48em;
+      margin: 0.5em 0 0;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26, 22, 20, 0.06);
+    }
+
+    .reveal table th {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.5em 0.65em;
+      text-align: left;
+      font-family: var(--r-heading-font);
+      font-weight: 700;
+      font-size: 0.95em;
+    }
+
+    .reveal table td {
+      padding: 0.45em 0.65em;
+      background: var(--card);
+      border-bottom: 1px solid rgba(26, 22, 20, 0.06);
+    }
+
+    .reveal table tr:last-child td { border-bottom: none; }
+
+    .reveal table tr:nth-child(even) td { background: #f8f6f1; }
+
+    .cell-ok {
+      font-weight: 700;
+      color: var(--positive);
+    }
+
+    /* Navigation hint */
+    .nav-hint {
+      position: fixed;
+      bottom: 12px;
+      left: 16px;
+      z-index: 20;
+      font-family: var(--r-main-font);
+      font-size: 11px;
+      color: var(--ink-muted);
+      background: rgba(255, 254, 251, 0.92);
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(26, 22, 20, 0.1);
+      box-shadow: 0 2px 12px rgba(26, 22, 20, 0.08);
+      pointer-events: none;
+      max-width: min(90vw, 420px);
+      line-height: 1.35;
+    }
+
+    .nav-hint kbd {
+      display: inline-block;
+      font-family: inherit;
+      font-size: 10px;
+      padding: 2px 6px;
+      margin: 0 1px;
+      background: var(--bg);
+      border-radius: 4px;
+      border: 1px solid rgba(26, 22, 20, 0.12);
+      font-weight: 600;
+    }
+
+    /* Reveal UI */
+    .reveal .progress { background: rgba(26, 22, 20, 0.08); color: var(--accent-bright); height: 4px; }
+    .reveal .controls { color: var(--accent); }
+    .reveal .slide-number {
+      font-family: var(--r-heading-font);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      background: rgba(255, 254, 251, 0.9);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    /* Thank you */
+    .slide-end {
+      text-align: center;
+    }
+
+    .slide-end h1 {
+      -webkit-text-fill-color: unset;
+      background: none;
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .ab-row, .meta-grid, .kpi-row { grid-template-columns: 1fr; }
+      .nav-hint { font-size: 10px; left: 8px; right: 8px; max-width: none; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-hint" aria-hidden="true">
+    <kbd>←</kbd><kbd>→</kbd> или пробел — слайды · <kbd>O</kbd> обзор · <kbd>Esc</kbd> выход из полноэкранного
+  </div>
+
+  <div class="reveal">
+    <div class="slides">
+      <section class="slide-title">
+        <h1>A/B-тест: карточка credit_of_day</h1>
+        <span class="title-accent" aria-hidden="true"></span>
+        <p class="subtitle">Влияние переноса карточки вверх по ленте на CR_apply и смежные метрики</p>
+        <div class="tag-row">
+          <span class="tag">Продуктовая аналитика</span>
+          <span class="tag">Финальный отчёт</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Цель</h2>
+        <ul>
+          <li class="fragment">Понять, меняет ли перенос <code>credit_of_day</code> вверх ключевые метрики продукта.</li>
+          <li class="fragment">Главный критерий успеха — <strong>CR_apply</strong> (конверсия в заявку).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Дизайн эксперимента</h2>
+        <div class="ab-row">
+          <div class="ab-card control">
+            <div class="label">A · Control</div>
+            <p>Карточка остаётся <strong>внизу</strong> ленты</p>
+          </div>
+          <div class="ab-card test">
+            <div class="label">B · Test</div>
+            <p>Карточка переносится <strong>вверх</strong></p>
+          </div>
+        </div>
+        <div class="meta-grid">
+          <div class="meta-pill"><span>Рандомизация</span> по client_id</div>
+          <div class="meta-pill"><span>Целевой MDE</span> 2,5%</div>
+        </div>
+        <p class="small" style="margin-top: 0.85em;">Вторичные метрики: CTR, CR_home_apply, ARPU, Approval Rate</p>
+      </section>
+
+      <section>
+        <h2>Подготовка данных</h2>
+        <div class="funnel">
+          <span class="funnel-step">События</span>
+          <span class="funnel-arrow">→</span>
+          <span class="funnel-step">User-day funnel</span>
+          <span class="funnel-arrow">→</span>
+          <span class="funnel-step">User-level</span>
+        </div>
+        <ul style="margin-top: 0.75em;">
+          <li class="fragment">Проверки качества: дубликаты, offer_id, выручка (revenue).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Первичная метрика: CR_apply</h2>
+        <p class="small" style="margin: 0 0 0.25em;">Доли конверсии в заявку (сравнение групп)</p>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <span class="bar-label a">Control</span>
+            <div class="bar-track">
+              <div class="bar-fill a" style="width: 64%;"><span class="bar-value">8,10%</span></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label b">Test</span>
+            <div class="bar-track">
+              <div class="bar-fill b" style="width: 100%;"><span class="bar-value">12,64%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-banner">
+          <span>Относительный прирост <span class="big">+56,05%</span></span>
+          <span>· абс. разница <strong>+4,54 п.п.</strong></span>
+          <span>· p-value ≈ 9×10⁻¹⁴</span>
+          <span>· 95% ДИ: [0,0335; 0,0573]</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Вторичные метрики</h2>
+        <p class="small" style="margin-bottom: 0.35em;">Относительный прирост к контролю</p>
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="name">CTR</div>
+            <div class="value">+110,29%</div>
+            <div class="hint">клики / показы</div>
+          </div>
+          <div class="kpi-card">
+            <div class="name">ARPU</div>
+            <div class="value">+161,23%</div>
+            <div class="hint">выручка на пользователя</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Мощность и MDE</h2>
+        <p style="font-size: 0.58em; line-height: 1.45; margin: 0;">
+          При <strong>MDE = 2,5%</strong> ориентир по выборке — около <strong>1&nbsp;140&nbsp;100</strong> пользователей <em>на группу</em>.
+        </p>
+        <div class="n-compare">
+          <div class="n-bar-wrap">
+            <div class="cap">Требуется на группу (порядок величины)</div>
+            <div class="n-track"><div class="n-fill need"></div></div>
+          </div>
+          <div class="n-bar-wrap">
+            <div class="cap">Независимый трафик за 7 дней — существенно меньше</div>
+            <div class="n-track"><div class="n-fill have"></div></div>
+          </div>
+        </div>
+        <div class="highlight-callout">
+          Окно <strong>7 дней</strong> не даёт достаточной мощности для надёжной проверки такого малого MDE на реальном трафике.
+        </div>
+      </section>
+
+      <section>
+        <h2>Интерпретация</h2>
+        <ul>
+          <li class="fragment">Сильный положительный сигнал по <strong>CR_apply</strong> и <strong>CTR</strong> в имеющихся данных.</li>
+          <li class="fragment">Для целевого MDE выводы по мощности <strong>ограничены</strong>.</li>
+        </ul>
+        <div class="highlight-callout fragment">
+          Формулировка: <strong>directional positive signal</strong> — направление эффекта обнадёживает, но инференс под заявленный MDE слабый.
+        </div>
+      </section>
+
+      <section>
+        <h2>Рекомендации</h2>
+        <ol class="rec-list">
+          <li class="fragment">Считать изменение <strong>перспективным</strong>.</li>
+          <li class="fragment">Не опираться на этот прогон как на единственное основание для полного rollout.</li>
+          <li class="fragment">Повторить на трафике <strong>большей мощности</strong> или <strong>пересогласовать MDE</strong>.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Контроль качества</h2>
+        <p class="small" style="margin-bottom: 0.35em;">Снимок проверок перед выводами</p>
+        <table>
+          <thead><tr><th>Проверка</th><th>Значение</th></tr></thead>
+          <tbody>
+            <tr><td>duplicate_rows</td><td class="cell-ok">0 ✓</td></tr>
+            <tr><td>missing_ab_group</td><td class="cell-ok">0 ✓</td></tr>
+            <tr><td>bad_offer_rows</td><td class="cell-ok">0 ✓</td></tr>
+            <tr><td>bad_home_offer_rows</td><td class="cell-ok">0 ✓</td></tr>
+            <tr><td>nonpositive_revenue_rows</td><td class="cell-ok">0 ✓</td></tr>
+            <tr><td>unique_users</td><td>10 000</td></tr>
+            <tr><td>total_rows</td><td>20 000</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="slide-end">
+        <h1>Спасибо</h1>
+        <p class="subtitle" style="max-width: none;">Готов ответить на вопросы</p>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      transition: 'slide',
+      width: 1280,
+      height: 720,
+      progress: true,
+      controls: true,
+      controlsLayout: 'bottom-right',
+      navigationMode: 'linear',
+      fragments: true,
+      fragmentInURL: true,
+      help: true,
+      pause: true
+    });
+  </script>
+</body>
+</html>
