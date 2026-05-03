@@ -1,0 +1,6 @@
+.angular
+node_modules
+dist
+.env
+backend/data
+.ref-l5
