@@ -7,6 +7,8 @@
 
 `dt | client_id | ab_group | event_type | offer_id | value`
 
+Файл **Техническое задание** (исходное ТЗ курсового/финального проекта) лежит в [`docs/Техническое задание.docx`](./docs/Техническое%20задание.docx).
+
 ## Executive summary
 
 - **Primary metric:** `CR_apply = offer_apply / offer_impression`
@@ -50,6 +52,7 @@ ab_test_credit_card_banner_repo/
 │       ├── mde_grid.csv
 │       └── sample_size_recommendation.csv
 ├── docs/
+│   ├── Техническое задание.docx
 │   ├── experiment_design.md
 │   ├── metrics_definition.md
 │   ├── event_tracking.md
