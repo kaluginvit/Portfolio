@@ -1,0 +1,53 @@
+---
+/** Якорная навигация по главной (воронка как в референсе AmalSite). */
+const links = [
+  { href: '#audience', label: 'Для кого' },
+  { href: '#includes', label: 'Что входит' },
+  { href: '#portfolio', label: 'Кейсы' },
+  { href: '#compare', label: 'Подход' },
+  { href: '#process', label: 'Этапы' },
+  { href: '#formats', label: 'Услуги' },
+  { href: '#budget', label: 'Оценка' },
+  { href: '#brief', label: 'Бриф' },
+  { href: '#faq', label: 'FAQ' },
+];
+---
+
+<nav class="anchor-nav wrap" aria-label="Разделы страницы">
+  {
+    links.map((l) => (
+      <a href={l.href} class="anchor-nav__link" data-ym-goal={`anchor_${l.href.slice(1)}`}>
+        {l.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .anchor-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    justify-content: center;
+    padding: 0.65rem 0 0;
+    margin: 0 auto;
+    max-width: var(--max);
+  }
+
+  .anchor-nav__link {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  }
+
+  .anchor-nav__link:hover {
+    color: var(--heading);
+    background: var(--accent-soft);
+    border-color: var(--accent-border);
+  }
+</style>

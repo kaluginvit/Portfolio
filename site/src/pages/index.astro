@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import HomeAnchorNav from '../components/HomeAnchorNav.astro';
 import { cases } from '../data/cases';
 import { packages } from '../data/services';
 import { TELEGRAM, REPO_TREE, SVORAZBOR } from '../data/links';
@@ -10,24 +11,30 @@ const featured = cases.filter((c) => c.featured);
 ---
 
 <Layout
-  title="Виталий Калугин — данные, автоматизация и ИИ-продукты"
-  description="Помогаю бизнесу принимать решения по данным и собирать рабочие ИИ-продукты: от Telegram-ботов и n8n до прод-сайтов с лидами. 20+ кейсов, Docker в GHCR."
+  title="Виталий Калугин — аналитика, автоматизация и ИИ до продакшена"
+  description="Отчёты и A/B, n8n и интеграции, Telegram-боты и RAG, веб-MVP с деплоем. Открытые кейсы на GitHub, прод-сайт СВО в органике. Первичная оценка по короткому брифу в Telegram."
   current="home"
 >
   <section class="hero wrap">
-    <h1>Решения по данным и рабочие ИИ-продукты</h1>
+    <p class="hero-kicker">Аналитика · Автоматизация · ИИ-продукты · Веб-MVP</p>
+    <h1>От данных и идеи — к работающему продукту</h1>
     <p class="lead">
-      От Telegram-ботов и автоматизаций n8n до прод-сайтов с расчётами и лидогенерацией — с понятным деплоем и измеримым результатом.
+      Сначала уточняем задачу и критерий успеха, затем — формат работы и горизонт. Код и сценарии остаются у вас: GitHub, Docker, документация — без «чёрного ящика».
+    </p>
+    <p class="hero-micro muted">
+      Prod-сайт с лидами · онлайн-демо · 20+ кейсов по 5 направлениям · образы в GHCR — всё проверяемо по ссылкам ниже.
     </p>
     <div class="hero-stats">
-      <span><strong>1</strong> prod-сайт + <strong>2</strong> онлайн-демо</span>
-      <span><strong>20+</strong> кейсов по <strong>5</strong> направлениям</span>
-      <span><strong>Docker</strong> в GHCR</span>
+      <span><strong>1</strong> сайт на проде + <strong>2</strong> демо без установки</span>
+      <span><strong>20+</strong> кейсов · <strong>5</strong> направлений</span>
+      <span><strong>GHCR</strong> · воспроизводимый запуск</span>
     </div>
     <div class="cta-row">
-      <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_hero">Обсудить в Telegram</a>
-      <a class="btn btn-ghost" href={`${base}cases/`} data-ym-goal="cases_hero">Смотреть кейсы</a>
+      <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_hero">Написать в Telegram</a>
+      <a class="btn btn-ghost" href={`${base}cases/`} data-ym-goal="cases_hero">Каталог кейсов</a>
+      <a class="btn btn-ghost" href={`${base}contact/`} data-ym-goal="contact_hero">Контакты</a>
     </div>
+    <HomeAnchorNav />
   </section>
 
   <section class="section section--tight">
@@ -43,12 +50,42 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
+  <section class="section" id="audience">
+    <div class="wrap">
+      <p class="section-label">Для кого</p>
+      <h2 class="section-title">Если вам нужен не слайд, а работающий контур</h2>
+      <p class="section-lead">
+        Подключаюсь, когда важны измеримый эффект, прозрачные артефакты и возможность передать сопровождение внутрь команды.
+      </p>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>Руководителю и продукту</h3>
+          <p>
+            Гипотезы и A/B, дашборды под решения, воронка и аналитика: чтобы тратить бюджет на проверяемые шаги, а не на «отчёт ради отчёта».
+          </p>
+        </div>
+        <div class="card">
+          <h3>Маркетингу и продажам</h3>
+          <p>
+            Сайт с заявками и Метрикой, боты с анкетами, n8n-цепочки лидов: единая логика между каналами, без ручного Excel на каждом этапе.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Операциям и данным</h3>
+          <p>
+            Синхронизация хранилищ, брони и форм, RAG и MCP под ваши системы: меньше рутины, больше предсказуемого контура.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="includes">
     <div class="wrap">
       <p class="section-label">Что входит в работу</p>
-      <h2 class="section-title">Структура под задачу — не «шаблон ради шаблона»</h2>
+      <h2 class="section-title">Состав проекта обсуждаем заранее — и фиксируем в плане</h2>
       <p class="section-lead">
-        Сразу закладываю ясные артефакты, воспроизводимость (Docker / документация) и путь к продакшену — чтобы решением можно было пользоваться, а не «положить в презентацию».
+        В стоимость и сроки закладываю не «часы в никуда», а конкретные артефакты: отчёт, репозиторий, workflow, контейнер, инструкция по запуску — в зависимости от формата.
       </p>
       <div class="grid-cards">
         <div class="card">
@@ -74,8 +111,10 @@ const featured = cases.filter((c) => c.featured);
   <section class="section" id="portfolio" style="background: var(--bg-subtle); border-block: 1px solid var(--border);">
     <div class="wrap">
       <p class="section-label">Портфолио</p>
-      <h2 class="section-title">Флагманские направления</h2>
-      <p class="section-lead">Несколько сильных примеров — полный каталог в разделе «Кейсы» и в репозитории на GitHub.</p>
+      <h2 class="section-title">То, что можно открыть и проверить</h2>
+      <p class="section-lead">
+        Ниже — три «витринных» направления с превью. Полный список с фильтром — на странице «Кейсы»; исходники — в монорепозитории (ссылки в каждой карточке).
+      </p>
 
       <div class="portfolio-showcase">
         <article class="showcase-card">
@@ -180,8 +219,10 @@ const featured = cases.filter((c) => c.featured);
   <section class="section" id="compare">
     <div class="wrap">
       <p class="section-label">Почему такой формат</p>
-      <h2 class="section-title">Код и прод-опыт вместо «слайдов навсегда»</h2>
-      <p class="section-lead">Сравнение без обесценивания других подходов — о реалистичных ожиданиях для бизнеса.</p>
+      <h2 class="section-title">Почему «код в репо», а не только презентация</h2>
+      <p class="section-lead">
+        Слайд полезен для согласований. Чтобы сдвинуть метрику, обычно нужен запускаемый сценарий, данные и итерации — иначе вы платите за красивую картинку без рычага.
+      </p>
       <div class="compare">
         <div class="compare-box compare-box--yes">
           <h3>Рабочий контур</h3>
@@ -208,8 +249,10 @@ const featured = cases.filter((c) => c.featured);
   <section class="section" id="process" style="background: var(--bg-elevated); border-block: 1px solid var(--border);">
     <div class="wrap">
       <p class="section-label">Этапы</p>
-      <h2 class="section-title">Как мы двигаемся от запроса к результату</h2>
-      <p class="section-lead">Короткий цикл согласований; детальная страница — в разделе «Этапы».</p>
+      <h2 class="section-title">От первого сообщения до сдачи</h2>
+      <p class="section-lead">
+        Без многостраничных ТЗ «на старте»: достаточно брифа из трёх пунктов (см. блок ниже). Детально расписано на странице «Этапы».
+      </p>
       <div class="steps">
         <div class="step">
           <h3>Сообщение в Telegram</h3>
@@ -237,8 +280,10 @@ const featured = cases.filter((c) => c.featured);
   <section class="section" id="formats">
     <div class="wrap">
       <p class="section-label">Форматы</p>
-      <h2 class="section-title">Пакеты под типовые задачи</h2>
-      <p class="section-lead">Полное описание и артефакты в репозитории — на странице услуг.</p>
+      <h2 class="section-title">Пять типовых входов — одна логика отчётности</h2>
+      <p class="section-lead">
+        Аналитика, автоматизация, ИИ-продукты, веб-MVP и стратегия: у каждого направления свои сроки и артефакты. Ниже — кратко; детальные формулировки на странице «Услуги».
+      </p>
       <div class="grid-cards">
         {
           packages.map((p) => (
@@ -259,28 +304,80 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
+  <section class="section" id="budget">
+    <div class="wrap">
+      <p class="section-label">Оценка и бюджет</p>
+      <h2 class="section-title">Фикс-прайс без контекста не озвучиваю — зато прозрачно после брифа</h2>
+      <p class="section-lead">
+        Стоимость зависит от глубины данных, интеграций и того, что считаем результатом (отчёт, MVP в проде, сценарии n8n и т.д.). После короткого созвона или переписки даю вилку или поэтапный план без навязанных «пакетов из прайса».
+      </p>
+      <ul class="budget-list">
+        <li>
+          <strong>Ориентиры</strong>
+          <span>Разовая стратегия и дорожная карта — от одной глубокой сессии. Аналитический блок чаще 1–3 недели; автоматизация сценария — порядка 1–2 недель; ИИ-продукт или веб-MVP — обычно несколько недель итераций.</span>
+        </li>
+        <li>
+          <strong>Оплата</strong>
+          <span>Поэтапно по результатам этапа или фикс за согласованный объём — обсуждаем до старта работ.</span>
+        </li>
+        <li>
+          <strong>Репозиторий</strong>
+          <span>Кейсы в открытом GitHub — это витрина. Коммерческие проекты, NDA и закрытый контур — отдельно, по договорённости.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="brief" style="background: var(--bg-subtle); border-block: 1px solid var(--border);">
+    <div class="wrap">
+      <p class="section-label">Бриф</p>
+      <h2 class="section-title">Что прислать, чтобы я ответил с оценкой, а не общими словами</h2>
+      <p class="section-lead">Скопируйте в Telegram — можно списком, без оформления.</p>
+      <div class="brief-card">
+        <p class="brief-card__title">Три пункта в первом сообщении</p>
+        <ol>
+          <li><strong>Цель</strong> — что должно измениться: метрика, процесс, продукт, срок внедрения.</li>
+          <li><strong>Горизонт</strong> — дедлайн или окно по времени, есть ли жёсткие зависимости (запуск рекламы, отчёт для совета директоров и т.д.).</li>
+          <li>
+            <strong>Контекст</strong> — ссылка на текущий процесс, пример таблицы/выгрузки, доступ к тестовым данным (или описание полей), что уже пробовали.
+          </li>
+        </ol>
+        <div class="cta-row" style="justify-content: flex-start;">
+          <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_brief">Отправить бриф в Telegram</a>
+          <a class="btn btn-ghost" href={`${base}contact/`}>Страница контактов</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="faq">
     <div class="wrap">
       <p class="section-label">FAQ</p>
-      <h2 class="section-title">Коротко о формате работы</h2>
+      <h2 class="section-title">Частые вопросы</h2>
       <div class="faq-item">
-        <h3>С чего начать?</h3>
+        <h3>С чего начать, если я не технарь?</h3>
         <p>
-          Напишите в Telegram: цель, что считаете успехом, дедлайн или окно по срокам, контекст или пример данных — этого достаточно для первичной оценки.
+          Достаточно трёх пунктов из блока «Бриф» выше. Термины и стек разберём на уточняющих вопросах — без необходимости готовить ТЗ на десять страниц.
         </p>
       </div>
       <div class="faq-item">
-        <h3>Только открытый код?</h3>
+        <h3>Вы работаете только с открытым кодом на GitHub?</h3>
         <p>
-          Портфолио в открытом репозитории; коммерческие проекты обсуждаются отдельно, возможны NDA и закрытый контур.
+          Портфолио — открытый монорепозиторий, чтобы было видно качество и воспроизводимость. Закрытые проекты, NDA и деплой в вашем контуре — обычная практика, обсуждается до старта.
         </p>
       </div>
       <div class="faq-item">
-        <h3>Есть ли поддержка после сдачи?</h3>
-        <p>Да, доработки и сопровождение по согласованию — как отдельные небольшие итерации.</p>
+        <h3>Как быстро приходит ответ?</h3>
+        <p>Первичный ответ в Telegram — в течение рабочего дня. Если задача объёмная, вернусь с уточнениями или с предложением короткого созвона.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Что после сдачи?</h3>
+        <p>
+          Передача артефактов и инструкций; при необходимости — сопровождение и доработки отдельными небольшими задачами.
+        </p>
       </div>
       <p class="muted" style="margin-top: 1rem;">
-        <a href={`${base}faq/`}>Все вопросы и ответы →</a>
+        <a href={`${base}faq/`}>Ещё вопросы — полная страница FAQ →</a>
       </p>
     </div>
   </section>

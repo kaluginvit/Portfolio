@@ -68,6 +68,11 @@ a:hover {
   margin-inline: auto;
 }
 
+/* Фиксированная шапка: якоря не прячутся под header */
+section[id] {
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -364,8 +369,24 @@ a:hover {
 }
 
 .hero {
-  padding: calc(var(--header-h) + 2rem) 0 3rem;
+  padding: calc(var(--header-h) + 2rem) 0 2.5rem;
   text-align: center;
+}
+
+.hero-kicker {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero-micro {
+  margin: 0 auto 1.25rem;
+  max-width: 48ch;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .hero h1 {
@@ -498,4 +519,66 @@ a:hover {
 
 [data-case-card].is-hidden {
   display: none;
+}
+
+.brief-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.brief-card__title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--heading);
+}
+
+.brief-card ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.35rem;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.brief-card li + li {
+  margin-top: 0.5rem;
+}
+
+.budget-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.budget-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: baseline;
+  padding: 0.85rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.budget-list strong {
+  flex: 0 0 auto;
+  color: var(--heading);
+  min-width: min(100%, 7rem);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.budget-list li span {
+  flex: 1 1 16rem;
+  min-width: 0;
 }
