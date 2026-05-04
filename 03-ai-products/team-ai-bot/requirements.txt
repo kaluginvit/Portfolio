@@ -1,6 +1,5 @@
 haystack-ai
-haystack-integrations
-pinecone
+pinecone-haystack
 pyTelegramBotAPI
 python-dotenv
 pytest

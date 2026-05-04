@@ -1,5 +1,7 @@
 FROM python:3.11-slim-bookworm
 
+# Интеграция Pinecone ↔ Haystack: пакет pinecone-haystack (не haystack-integrations).
+
 WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1
