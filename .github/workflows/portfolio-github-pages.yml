@@ -2,13 +2,12 @@
 # Включите: Settings → Pages → Build and deployment → Source: GitHub Actions.
 name: Deploy Portfolio site (GitHub Pages)
 
+# Без фильтра paths: любой push в main пересобирает витрину. Иначе после коммита
+# только в README/кейсах workflow не запускался бы, а при ошибочном источнике Pages
+# «из ветки» на главной оказывался README (см. docs/PORTFOLIO_SITE.md).
 on:
   push:
     branches: [main]
-    paths:
-      - 'site/**'
-      - '01-data-analytics/superstore-retail-analytics/superstore-dashboard.html'
-      - '.github/workflows/portfolio-github-pages.yml'
   workflow_dispatch:
 
 permissions:

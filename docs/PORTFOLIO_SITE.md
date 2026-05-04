@@ -5,9 +5,18 @@
 - **Сайт-визитка (Astro):** корень проекта Pages, для репозитория `Portfolio` это `https://kaluginvit-svg.github.io/Portfolio/`
 - **Superstore dashboard:** `https://kaluginvit-svg.github.io/Portfolio/superstore/`
 
-Сборка и публикация — workflow [`.github/workflows/portfolio-github-pages.yml`](../.github/workflows/portfolio-github-pages.yml) (триггеры: изменения в `site/`, в `superstore-dashboard.html` или в самом workflow).
+Сборка и публикация — workflow [`.github/workflows/portfolio-github-pages.yml`](../.github/workflows/portfolio-github-pages.yml) (любой push в `main` или **Run workflow** вручную).
 
 Файл **`.nojekyll`** в корне артефакта Pages (создаётся шагом workflow) отключает Jekyll, чтобы не отбрасывался каталог `_astro/` со стилями Astro.
+
+### Если на главной виден длинный текст из «шапки README» (таблицы, ссылки на `/01-data-analytics/` и т.д.)
+
+Значит **источник Pages** сейчас не Actions, а публикация **из ветки** (Jekyll отдаёт README как стартовую страницу). Визитка Astro при этом не показывается.
+
+**Что сделать:**
+
+1. Репозиторий → **Settings** → **Pages** → **Build and deployment** → **Source: GitHub Actions** (не «Deploy from a branch»).
+2. **Actions** → **Deploy Portfolio site (GitHub Pages)** → **Run workflow** или дождаться push в `main` после исправления источника.
 
 ### Если в логе «YAML Exception» / «Invalid YAML front matter» в `.astro`
 
@@ -16,7 +25,7 @@
 **Что сделать:**
 
 1. Репозиторий → **Settings** → **Pages** → **Build and deployment** → **Source: GitHub Actions** (не «Deploy from a branch»).
-2. **Actions** → откройте workflow **Deploy Portfolio site (GitHub Pages)** → **Run workflow** (или пуш в `main` в путях `site/**`, `superstore-dashboard.html` или workflow).
+2. **Actions** → откройте workflow **Deploy Portfolio site (GitHub Pages)** → **Run workflow** или сделайте push в `main`.
 3. В корне репозитория лежит [`_config.yml`](../_config.yml) с `exclude: [site]` — подстраховка, чтобы при ошибочном деплое из ветки Jekyll не трогал папку `site/`. Саму витрину это не собирает: для неё всё равно нужен успешный прогон workflow.
 
 ## Яндекс.Метрика
