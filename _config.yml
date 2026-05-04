@@ -1,0 +1,5 @@
+# Подстраховка, если в Settings → Pages ошибочно включён деплой «из ветки» с Jekyll:
+# исходники Astro в site/ начинаются с --- и ломают парсер YAML.
+# Правильная публикация этого репозитория — только GitHub Actions (см. docs/PORTFOLIO_SITE.md).
+exclude:
+  - site
