@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
   <defs>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a2744"/>
-      <stop offset="100%" style="stop-color:#0c1528"/>
+      <stop offset="0%" style="stop-color:#ecfdf5"/>
+      <stop offset="100%" style="stop-color:#d1fae5"/>
     </linearGradient>
   </defs>
   <rect width="800" height="500" fill="url(#g)" rx="16"/>
-  <text x="48" y="72" fill="#fff" font-family="Georgia,serif" font-size="32" font-weight="600">!  2K?;0BK A5<LO<</text>
-  <text x="48" y="118" fill="#8fa3c4" font-family="system-ui,sans-serif" font-size="18">@>4: Next.js · :287 · ;84K · 1>B</text>
-  <rect x="48" y="160" width="320" height="12" rx="6" fill="#3d8bfd" opacity="0.35"/>
-  <rect x="48" y="190" width="260" height="12" rx="6" fill="#3d8bfd" opacity="0.2"/>
-  <rect x="400" y="80" width="352" height="340" rx="12" fill="#121822" stroke="#2a3548" stroke-width="1"/>
+  <text x="48" y="72" fill="#064e3b" font-family="Georgia,serif" font-size="28" font-weight="600">??? — ??????? ??????</text>
+  <text x="48" y="112" fill="#57534e" font-family="system-ui,sans-serif" font-size="17">????: Next.js · ???? · ???</text>
+  <rect x="48" y="148" width="280" height="10" rx="5" fill="#047857" opacity="0.35"/>
+  <rect x="48" y="172" width="220" height="10" rx="5" fill="#047857" opacity="0.2"/>
+  <rect x="400" y="56" width="352" height="388" rx="12" fill="#ffffff" stroke="#e7e5e4" stroke-width="1"/>
 </svg>

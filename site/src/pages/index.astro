@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { cases } from '../data/cases';
 import { packages } from '../data/services';
 import { TELEGRAM, REPO_TREE, SVORAZBOR } from '../data/links';
+import { siteAsset } from '../lib/paths';
 
 const base = import.meta.env.BASE_URL;
 const featured = cases.filter((c) => c.featured);
@@ -70,7 +71,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="portfolio" style="background: var(--bg-elevated); border-block: 1px solid var(--border);">
+  <section class="section" id="portfolio" style="background: var(--bg-subtle); border-block: 1px solid var(--border);">
     <div class="wrap">
       <p class="section-label">Портфолио</p>
       <h2 class="section-title">Флагманские направления</h2>
@@ -78,8 +79,17 @@ const featured = cases.filter((c) => c.featured);
 
       <div class="portfolio-showcase">
         <article class="showcase-card">
-          <a class="showcase-visual" href={`${base}case/svo/`}>
-            <img src={`${base}images/preview-svo.svg`} width="800" height="500" alt="Превью кейса СВО" loading="lazy" />
+          <a class="showcase-link" href={`${base}case/svo/`}>
+            <div class="showcase-frame">
+              <img
+                src={siteAsset('images/preview-svo.svg')}
+                width="800"
+                height="500"
+                alt="Превью кейса СВО"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </a>
           <div class="showcase-body">
             <h3>Прод: сайт + бот (СВО)</h3>
@@ -92,8 +102,17 @@ const featured = cases.filter((c) => c.featured);
         </article>
 
         <article class="showcase-card showcase-card--reverse">
-          <a class="showcase-visual" href={`${base}cases/`}>
-            <img src={`${base}images/preview-n8n.svg`} width="800" height="500" alt="Превью n8n лидогенерации" loading="lazy" />
+          <a class="showcase-link" href={`${base}cases/`}>
+            <div class="showcase-frame">
+              <img
+                src={siteAsset('images/preview-n8n.svg')}
+                width="800"
+                height="500"
+                alt="Превью n8n лидогенерации"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </a>
           <div class="showcase-body">
             <h3>Лидогенерация на n8n</h3>
@@ -106,8 +125,22 @@ const featured = cases.filter((c) => c.featured);
         </article>
 
         <article class="showcase-card">
-          <a class="showcase-visual" href="https://kaluginvit-svg.github.io/Portfolio/superstore/" target="_blank" rel="noopener noreferrer">
-            <img src={`${base}images/preview-dashboard.svg`} width="800" height="500" alt="Превью retail-дашборда" loading="lazy" />
+          <a
+            class="showcase-link"
+            href="https://kaluginvit-svg.github.io/Portfolio/superstore/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="showcase-frame">
+              <img
+                src={siteAsset('images/preview-dashboard.svg')}
+                width="800"
+                height="500"
+                alt="Превью retail-дашборда"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </a>
           <div class="showcase-body">
             <h3>Retail-дашборд (Plotly)</h3>
@@ -172,7 +205,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="process" style="background: var(--surface); border-block: 1px solid var(--border);">
+  <section class="section" id="process" style="background: var(--bg-elevated); border-block: 1px solid var(--border);">
     <div class="wrap">
       <p class="section-label">Этапы</p>
       <h2 class="section-title">Как мы двигаемся от запроса к результату</h2>
@@ -284,7 +317,7 @@ const featured = cases.filter((c) => c.featured);
       grid-template-columns: 1.1fr 1fr;
     }
 
-    .showcase-card--reverse .showcase-visual {
+    .showcase-card--reverse .showcase-link {
       order: 2;
     }
 
@@ -293,22 +326,20 @@ const featured = cases.filter((c) => c.featured);
     }
   }
 
-  .showcase-visual {
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border);
+  .showcase-link {
     display: block;
+    text-decoration: none;
     line-height: 0;
   }
 
-  .showcase-visual:hover {
-    border-color: rgba(61, 139, 253, 0.45);
+  .showcase-link:hover .showcase-frame {
+    border-color: var(--accent-border);
   }
 
   .showcase-body h3 {
     margin: 0 0 0.5rem;
     font-size: 1.25rem;
-    color: #fff;
+    color: var(--heading);
   }
 
   .showcase-body p {

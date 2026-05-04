@@ -71,9 +71,10 @@ const nav = [
     right: 0;
     z-index: 50;
     height: var(--header-h);
-    background: rgba(12, 15, 20, 0.85);
+    background: rgba(255, 253, 250, 0.88);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
   }
 
   .header-inner {
@@ -86,7 +87,7 @@ const nav = [
   .logo {
     font-weight: 700;
     font-size: 0.95rem;
-    color: #fff;
+    color: var(--heading);
     text-decoration: none;
     letter-spacing: -0.02em;
     margin-right: auto;
@@ -119,8 +120,8 @@ const nav = [
 
   .nav-link:hover,
   .nav-link.active {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.06);
+    color: var(--heading);
+    background: var(--accent-soft);
   }
 
   .header-actions {
@@ -177,7 +178,7 @@ const nav = [
     display: block;
     width: 1.1rem;
     height: 2px;
-    background: #fff;
+    background: var(--heading);
     border-radius: 1px;
   }
 
@@ -204,7 +205,7 @@ const nav = [
 
   .nav-mobile-link:hover,
   .nav-mobile-link.active {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--accent-soft);
   }
 
   .nav-mobile[open] .nav-burger {

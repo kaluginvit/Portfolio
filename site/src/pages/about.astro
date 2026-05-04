@@ -20,11 +20,13 @@ import { CERTS_README, TELEGRAM } from '../data/links';
 
   <section class="section section--tight">
     <div class="wrap">
-      <div class="cert-grid">
+      <div class="cert-strip">
         {
           certificates.map((c) => (
             <a href={CERTS_README} target="_blank" rel="noopener noreferrer" title={c.label}>
-              <img src={c.src} alt={c.label} width="180" height="240" loading="lazy" />
+              <div class="cert-thumb">
+                <img src={c.src} alt={c.label} width="320" height="200" loading="lazy" decoding="async" />
+              </div>
               <span>{c.label}</span>
             </a>
           ))

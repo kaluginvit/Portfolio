@@ -1,14 +1,18 @@
+/* Светлая «лендинговая» палитра (крем + зелёный акцент), ближе к продающим одностраничникам */
 :root {
-  --bg: #0c0f14;
-  --bg-elevated: #121822;
-  --surface: #161d2a;
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #e8ecf4;
-  --text-muted: #9aa3b5;
-  --accent: #3d8bfd;
-  --accent-hover: #5ba3ff;
-  --accent-soft: rgba(61, 139, 253, 0.12);
-  --success: #34c759;
+  --bg: #f8f6f3;
+  --bg-subtle: #f0ece6;
+  --bg-elevated: #ffffff;
+  --surface: #ebe7e1;
+  --border: rgba(28, 25, 23, 0.12);
+  --text: #292524;
+  --text-muted: #57534e;
+  --heading: #0c0a09;
+  --accent: #047857;
+  --accent-hover: #059669;
+  --accent-soft: rgba(4, 120, 87, 0.12);
+  --accent-border: rgba(4, 120, 87, 0.35);
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.06);
   --radius: 12px;
   --radius-sm: 8px;
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, sans-serif;
@@ -76,7 +80,7 @@ a:hover {
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
 }
 
 .btn:active {
@@ -95,13 +99,14 @@ a:hover {
 
 .btn-ghost {
   background: transparent;
-  color: var(--text);
+  color: var(--heading);
   border: 1px solid var(--border);
 }
 
 .btn-ghost:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  border-color: rgba(28, 25, 23, 0.22);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--heading);
 }
 
 .chips {
@@ -119,9 +124,10 @@ a:hover {
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-muted);
-  background: var(--surface);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 999px;
+  box-shadow: var(--shadow-sm);
 }
 
 .section {
@@ -138,7 +144,7 @@ a:hover {
   font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .section-lead {
@@ -170,12 +176,13 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .card h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .card p {
@@ -234,17 +241,17 @@ a:hover {
 
 .compare-box--yes {
   background: var(--accent-soft);
-  border-color: rgba(61, 139, 253, 0.35);
+  border-color: var(--accent-border);
 }
 
 .compare-box--no {
-  background: var(--surface);
+  background: var(--bg-subtle);
 }
 
 .compare-box h3 {
   margin: 0 0 1rem;
   font-size: 1rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .compare-box ul {
@@ -276,6 +283,7 @@ a:hover {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
 }
 
 .step::before {
@@ -297,7 +305,7 @@ a:hover {
 .step h3 {
   margin: 0 0 0.35rem;
   font-size: 0.95rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .step p {
@@ -318,7 +326,7 @@ a:hover {
 .faq-item h3 {
   margin: 0 0 0.5rem;
   font-size: 1rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .faq-item p {
@@ -330,16 +338,17 @@ a:hover {
 .cta-band {
   text-align: center;
   padding: clamp(2.5rem, 5vw, 4rem);
-  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-subtle) 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
 }
 
 .cta-band h2 {
   font-family: var(--font-display);
   margin: 0 0 0.5rem;
   font-size: clamp(1.5rem, 3vw, 2rem);
-  color: #fff;
+  color: var(--heading);
 }
 
 .cta-band p {
@@ -366,8 +375,8 @@ a:hover {
   letter-spacing: -0.03em;
   line-height: 1.15;
   margin: 0 auto 1rem;
-  max-width: 18ch;
-  color: #fff;
+  max-width: 20ch;
+  color: var(--heading);
 }
 
 .hero .lead {
@@ -393,34 +402,73 @@ a:hover {
   font-weight: 400;
 }
 
-.cert-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1rem;
+.hero-stats strong {
+  color: var(--heading);
 }
 
-.cert-grid a {
-  display: block;
+/* Горизонтальные карточки сертификатов: фиксированная ширина слота, изображение contain */
+.cert-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cert-strip a {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 260px);
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--border);
   text-decoration: none;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
 }
 
-.cert-grid img {
+.cert-thumb {
   width: 100%;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-  filter: saturate(0.95);
+  aspect-ratio: 16 / 10;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.cert-grid span {
+.cert-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cert-strip span {
   display: block;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.7rem;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   text-align: center;
-  background: var(--bg-elevated);
+  line-height: 1.35;
+  border-top: 1px solid var(--border);
+}
+
+/* Превью кейсов на главной: контейнер с соотношением сторон, SVG всегда виден */
+.showcase-frame {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.showcase-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .filter-bar {
@@ -444,7 +492,7 @@ a:hover {
 .filter-btn:hover,
 .filter-btn.is-active {
   border-color: var(--accent);
-  color: #fff;
+  color: var(--heading);
   background: var(--accent-soft);
 }
 

@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
-  <rect width="800" height="500" fill="#0f1419" rx="16"/>
-  <text x="48" y="68" fill="#fff" font-family="Georgia,serif" font-size="28">Retail-40H1>@4</text>
-  <text x="48" y="104" fill="#9aa3b5" font-family="system-ui,sans-serif" font-size="16">Plotly · 8=A09BK · GitHub Pages</text>
-  <rect x="48" y="140" width="704" height="320" rx="12" fill="#161d2a" stroke="#2a3548"/>
-  <polyline points="80,380 140,300 220,340 320,220 420,260 520,180 620,200 720,150" fill="none" stroke="#3d8bfd" stroke-width="3"/>
-  <rect x="80" y="400" width="60" height="40" rx="4" fill="#3d8bfd" opacity="0.5"/>
-  <rect x="160" y="380" width="60" height="60" rx="4" fill="#3d8bfd" opacity="0.35"/>
-  <rect x="240" y="410" width="60" height="30" rx="4" fill="#3d8bfd" opacity="0.25"/>
+  <rect width="800" height="500" fill="#f8fafc" rx="16"/>
+  <text x="48" y="64" fill="#0f172a" font-family="Georgia,serif" font-size="26">Retail-???????</text>
+  <text x="48" y="98" fill="#64748b" font-family="system-ui,sans-serif" font-size="15">Plotly · ??????? · GitHub Pages</text>
+  <rect x="48" y="128" width="704" height="324" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <polyline points="80,360 140,300 220,330 320,240 420,280 520,200 620,220 720,180" fill="none" stroke="#047857" stroke-width="3"/>
+  <rect x="80" y="388" width="56" height="36" rx="4" fill="#047857" opacity="0.45"/>
+  <rect x="152" y="372" width="56" height="52" rx="4" fill="#047857" opacity="0.3"/>
+  <rect x="224" y="396" width="56" height="28" rx="4" fill="#047857" opacity="0.22"/>
 </svg>
