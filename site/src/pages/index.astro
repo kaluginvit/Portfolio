@@ -15,7 +15,8 @@ const featured = cases.filter((c) => c.featured);
   description="Отчёты и A/B, n8n и интеграции, Telegram-боты и RAG, веб-MVP с деплоем. Открытые кейсы на GitHub, прод-сайт СВО в органике. Первичная оценка по короткому брифу в Telegram."
   current="home"
 >
-  <section class="hero wrap">
+  <section class="hero--landing" aria-label="Первый экран">
+    <div class="wrap">
     <p class="hero-kicker">Аналитика · Автоматизация · ИИ-продукты · Веб-MVP</p>
     <h1>От данных и идеи — к работающему продукту</h1>
     <p class="lead">
@@ -35,6 +36,7 @@ const featured = cases.filter((c) => c.featured);
       <a class="btn btn-ghost" href={`${base}contact/`} data-ym-goal="contact_hero">Контакты</a>
     </div>
     <HomeAnchorNav />
+    </div>
   </section>
 
   <section class="section section--tight">
@@ -50,7 +52,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="audience">
+  <section class="section section--muted" id="audience">
     <div class="wrap">
       <p class="section-label">Для кого</p>
       <h2 class="section-title">Если вам нужен не слайд, а работающий контур</h2>
@@ -108,7 +110,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="portfolio" style="background: var(--bg-subtle); border-block: 1px solid var(--border);">
+  <section class="section section--muted" id="portfolio" style="border-block: 1px solid var(--border);">
     <div class="wrap">
       <p class="section-label">Портфолио</p>
       <h2 class="section-title">То, что можно открыть и проверить</h2>
@@ -246,7 +248,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="process" style="background: var(--bg-elevated); border-block: 1px solid var(--border);">
+  <section class="section" id="process" style="background: var(--bg-elevated); border-block: 1px solid rgba(24, 24, 27, 0.08);">
     <div class="wrap">
       <p class="section-label">Этапы</p>
       <h2 class="section-title">От первого сообщения до сдачи</h2>
@@ -328,7 +330,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="brief" style="background: var(--bg-subtle); border-block: 1px solid var(--border);">
+  <section class="section section--muted" id="brief" style="border-block: 1px solid rgba(24, 24, 27, 0.08);">
     <div class="wrap">
       <p class="section-label">Бриф</p>
       <h2 class="section-title">Что прислать, чтобы я ответил с оценкой, а не общими словами</h2>
@@ -354,6 +356,7 @@ const featured = cases.filter((c) => c.featured);
     <div class="wrap">
       <p class="section-label">FAQ</p>
       <h2 class="section-title">Частые вопросы</h2>
+      <div class="faq-list">
       <div class="faq-item">
         <h3>С чего начать, если я не технарь?</h3>
         <p>
@@ -376,6 +379,7 @@ const featured = cases.filter((c) => c.featured);
           Передача артефактов и инструкций; при необходимости — сопровождение и доработки отдельными небольшими задачами.
         </p>
       </div>
+      </div>
       <p class="muted" style="margin-top: 1rem;">
         <a href={`${base}faq/`}>Ещё вопросы — полная страница FAQ →</a>
       </p>
@@ -384,7 +388,7 @@ const featured = cases.filter((c) => c.featured);
 
   <section class="section">
     <div class="wrap">
-      <div class="cta-band">
+      <div class="cta-band cta-band--closing">
         <h2>Обсудим вашу задачу</h2>
         <p>Ответ в течение рабочего дня. Email — по согласованию в личке Telegram.</p>
         <div class="cta-row">
@@ -430,7 +434,7 @@ const featured = cases.filter((c) => c.featured);
   }
 
   .showcase-link:hover .showcase-frame {
-    border-color: var(--accent-border);
+    border-color: rgba(24, 24, 27, 0.18);
   }
 
   .showcase-body h3 {
