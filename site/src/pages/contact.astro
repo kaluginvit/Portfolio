@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { TELEGRAM, REPO_ROOT, REPO_TREE } from '../data/links';
+---
+
+<Layout
+  title="Контакты — Виталий Калугин"
+  description="Связь в Telegram для обсуждения аналитики, автоматизации, ИИ-продуктов и веб-MVP. Email — по согласованию в личке."
+  current="contact"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">Контакты</p>
+    <h1 class="section-title" style="text-align: left;">Куда написать</h1>
+    <p class="section-lead">
+      Основной канал — <strong>Telegram</strong>. Для деловых писем удобнее сначала коротко описать задачу в мессенджере; email передаю по необходимости.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid-cards">
+        <div class="card">
+          <h3>Telegram</h3>
+          <p>Быстрый старт: цель, сроки, контекст или пример данных.</p>
+          <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_contact">@kaluginvit</a>
+        </div>
+        <div class="card">
+          <h3>GitHub</h3>
+          <p>Исходники кейсов, Docker и документация в монорепозитории Portfolio.</p>
+          <div class="card-actions">
+            <a href={REPO_ROOT} target="_blank" rel="noopener noreferrer" data-ym-goal="github_contact_repo">Репозиторий</a>
+            <a href={REPO_TREE} target="_blank" rel="noopener noreferrer">Дерево файлов</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-band" style="margin-top: 2.5rem;">
+        <h2>Чеклист для первого сообщения</h2>
+        <ol style="text-align: left; max-width: 42ch; margin: 0 auto 1.5rem; color: var(--text-muted); padding-left: 1.2rem;">
+          <li>Цель и что считаете успехом</li>
+          <li>Дедлайн или окно по срокам</li>
+          <li>Контекст / пример данных / ссылка на текущее решение</li>
+        </ol>
+        <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_contact_cta">Открыть Telegram</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+  }
+</style>

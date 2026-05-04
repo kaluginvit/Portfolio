@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { TELEGRAM } from '../data/links';
+---
+
+<Layout
+  title="FAQ — Виталий Калугин"
+  description="Частые вопросы: сроки, NDA, формат оплаты, стек, поддержка после сдачи, что прислать для оценки."
+  current="faq"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">FAQ</p>
+    <h1 class="section-title" style="text-align: left;">Частые вопросы</h1>
+    <p class="section-lead">Если вашего вопроса нет в списке — напишите в Telegram, разберём точечно.</p>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap" style="max-width: 720px;">
+      <div class="faq-item">
+        <h3>Как быстро вы отвечаете?</h3>
+        <p>В течение рабочего дня на первичное сообщение в Telegram. Сложные оценки могу разбить на уточняющие вопросы на 1–2 итерации.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Работаете ли по NDA?</h3>
+        <p>Да, закрытый контур и NDA обсуждаются заранее. Публичное портфолио показывает стиль работы без раскрытия ваших данных.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Какой типичный формат оплаты?</h3>
+        <p>Зависит от объёма: поэтапно по итерациям или фикс за оговоренный пакет. Детали — после согласования объёма.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Нужен ли мне свой разработчик в команде?</h3>
+        <p>Не обязательно для многих задач: отдаю воспроизводимый артефакт и инструкцию. Для долгосопровождения удобно иметь внутреннего владельца.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Можно ли совмещать аналитику и автоматизацию?</h3>
+        <p>Да, частый кейс: сначала ясность по данным и метрикам, затем автоматизация отчётов или воронки.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Что прислать для оценки?</h3>
+        <p>Цель и критерий успеха; дедлайн или окно по срокам; контекст, пример данных или ссылка на текущий процесс. Этого достаточно для первого ответа.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Есть ли поддержка после сдачи?</h3>
+        <p>Да: мелкие правки, мониторинг, доработка сценариев — отдельными небольшими задачами.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Работаете только удалённо?</h3>
+        <p>По умолчанию да, эффективно для аналитики и разработки. Встречи — по договорённости.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <h2>Остались вопросы?</h2>
+        <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_faq">Telegram @kaluginvit</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+  }
+</style>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#14121a" rx="16"/>
+  <text x="48" y="72" fill="#ea4b71" font-family="system-ui,sans-serif" font-size="28" font-weight="700">n8n</text>
+  <text x="48" y="112" fill="#e8ecf4" font-family="Georgia,serif" font-size="26">84>35=5@0F8O · 11 workflow</text>
+  <text x="48" y="150" fill="#9aa3b5" font-family="system-ui,sans-serif" font-size="16">=B5=B ’ >1>30I5=85 ’ :0A0=85 ’ >BGQB=>ABL</text>
+  <g opacity="0.4">
+    <rect x="48" y="200" width="140" height="56" rx="8" fill="#ea4b71"/>
+    <rect x="210" y="220" width="80" height="16" rx="4" fill="#3d8bfd"/>
+    <rect x="310" y="200" width="140" height="56" rx="8" fill="#2a3548"/>
+    <rect x="472" y="220" width="80" height="16" rx="4" fill="#3d8bfd"/>
+    <rect x="572" y="200" width="140" height="56" rx="8" fill="#2a3548"/>
+  </g>
+</svg>

@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { packages } from '../data/services';
+import { TELEGRAM, REPO_TREE } from '../data/links';
+---
+
+<Layout
+  title="Услуги и форматы — Виталий Калугин"
+  description="Аналитика и решения, автоматизация n8n, ИИ-продукты, веб-MVP и ИИ-консалтинг: состав работ, сроки и ссылки на артефакты в репозитории."
+  current="services"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">Услуги</p>
+    <h1 class="section-title" style="text-align: left; max-width: 20ch;">Форматы работы под вашу задачу</h1>
+    <p class="section-lead" style="margin-bottom: 2rem;">
+      Ниже — типовые пакеты. Точная оценка после короткого созвона или переписки в Telegram: что считать успехом, какие данные и интеграции доступны, какой горизонт по срокам.
+    </p>
+    <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_services">Запросить оценку</a>
+  </section>
+
+  {
+    packages.map((p) => (
+      <section class="section" id={p.slug} style="scroll-margin-top: calc(var(--header-h) + 1rem);">
+        <div class="wrap">
+          <p class="section-label">{p.timeline}</p>
+          <h2 class="section-title">{p.title}</h2>
+          <p class="section-lead">{p.tagline}</p>
+          <div class="two-col">
+            <div class="card" style="margin: 0;">
+              <h3 style="margin-top: 0;">Задача</h3>
+              <p>{p.problem}</p>
+            </div>
+            <div class="card" style="margin: 0;">
+              <h3 style="margin-top: 0;">Что на выходе</h3>
+              <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                {p.deliverables.map((d) => (
+                  <li>{d}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p class="muted" style="margin-top: 1.25rem;">
+            <a href={`${REPO_TREE}/${p.repoFolder}`} target="_blank" rel="noopener noreferrer">
+              Артефакты и кейсы в папке {p.repoFolder} →
+            </a>
+          </p>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <h2>Нужен смешанный формат?</h2>
+        <p>Часто задача пересекает аналитику, автоматизацию и ИИ — соберём дорожную карту под ваш контур.</p>
+        <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_services_bottom">
+          Написать в Telegram
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+    padding-bottom: 1rem;
+  }
+</style>

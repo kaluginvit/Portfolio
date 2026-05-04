@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { TELEGRAM, REPO_TREE, SVORAZBOR } from '../../data/links';
+
+const web = `${REPO_TREE}/04-web/svo-payouts-website`;
+const bot = `${REPO_TREE}/03-ai-products/svo-payments-bot`;
+const ghcrWeb = 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payouts-website';
+const ghcrBot = 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payments-bot';
+---
+
+<Layout
+  title="Кейс: сайт и бот выплат СВО — Виталий Калугин"
+  description="Продакшен: Next.js-сайт с квизом и лид-формой, Telegram-бот с анкетой и расчётом. Органика, GHCR, парные артефакты в репозитории."
+  current="svo"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">Избранный кейс</p>
+    <h1 class="section-title" style="text-align: left; max-width: 24ch;">Калькулятор выплат для семей участников СВО</h1>
+    <p class="section-lead">
+      Один продукт в двух артефактах: <strong>веб</strong> (квиз, лиды, SEO-база) и <strong>Telegram-бот</strong> (анкета, расчёт, заявки). На проде, реальный трафик из органики.
+    </p>
+    <div class="cta-row" style="justify-content: flex-start;">
+      <a class="btn btn-primary" href={SVORAZBOR} target="_blank" rel="noopener noreferrer" data-ym-goal="svo_case_site">Открыть svorazbor.ru</a>
+      <a class="btn btn-ghost" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="svo_case_tg">Обсудить похожий проект</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section-title" style="font-size: 1.35rem;">Что сделано</h2>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>Сайт (Next.js)</h3>
+          <ul class="muted" style="margin: 0; padding-left: 1.2rem;">
+            <li>Квиз и сценарии под намерение пользователя</li>
+            <li>Лид-форма и события аналитики</li>
+            <li>Деплой, домен, согласованность с ботом</li>
+          </ul>
+          <div class="card-actions">
+            <a href={web} target="_blank" rel="noopener noreferrer">Код в репозитории</a>
+            <a href={ghcrWeb} target="_blank" rel="noopener noreferrer">GHCR</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Telegram-бот</h3>
+          <ul class="muted" style="margin: 0; padding-left: 1.2rem;">
+            <li>Анкета и расчёт под регламенты</li>
+            <li>Заявки и связка с воронкой</li>
+            <li>Образ для воспроизводимого деплоя</li>
+          </ul>
+          <div class="card-actions">
+            <a href={bot} target="_blank" rel="noopener noreferrer">Код в репозитории</a>
+            <a href={ghcrBot} target="_blank" rel="noopener noreferrer">GHCR</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-elevated); border-block: 1px solid var(--border);">
+    <div class="wrap">
+      <h2 class="section-title" style="font-size: 1.35rem;">Почему это сильный кейс для B2G/B2C</h2>
+      <p class="section-lead">
+        Чувствительная тема, высокие требования к ясности текстов и к скорости ответа; нужны одновременно веб-воронка и мессенджер — без «разъезда» логики между каналами.
+      </p>
+      <div class="compare">
+        <div class="compare-box compare-box--yes">
+          <h3>Что отработано</h3>
+          <ul>
+            <li>Прод-контур, не демо на коленке</li>
+            <li>Связка сайт ↔ бот под одну задачу</li>
+            <li>Измеримость: заявки, цели в Метрике</li>
+            <li>Контейнеризация и повторяемый деплой</li>
+          </ul>
+        </div>
+        <div class="compare-box compare-box--no">
+          <h3>Типичные риски в таких проектах</h3>
+          <ul>
+            <li>Разные сценарии на сайте и в боте</li>
+            <li>Отсутствие аналитики по шагам воронки</li>
+            <li>Сложность сопровождения без Docker</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+  }
+</style>

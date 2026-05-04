@@ -1,0 +1,318 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cases } from '../data/cases';
+import { packages } from '../data/services';
+import { TELEGRAM, REPO_TREE, SVORAZBOR } from '../data/links';
+
+const base = import.meta.env.BASE_URL;
+const featured = cases.filter((c) => c.featured);
+---
+
+<Layout
+  title="Виталий Калугин — данные, автоматизация и ИИ-продукты"
+  description="Помогаю бизнесу принимать решения по данным и собирать рабочие ИИ-продукты: от Telegram-ботов и n8n до прод-сайтов с лидами. 20+ кейсов, Docker в GHCR."
+  current="home"
+>
+  <section class="hero wrap">
+    <h1>Решения по данным и рабочие ИИ-продукты</h1>
+    <p class="lead">
+      От Telegram-ботов и автоматизаций n8n до прод-сайтов с расчётами и лидогенерацией — с понятным деплоем и измеримым результатом.
+    </p>
+    <div class="hero-stats">
+      <span><strong>1</strong> prod-сайт + <strong>2</strong> онлайн-демо</span>
+      <span><strong>20+</strong> кейсов по <strong>5</strong> направлениям</span>
+      <span><strong>Docker</strong> в GHCR</span>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_hero">Обсудить в Telegram</a>
+      <a class="btn btn-ghost" href={`${base}cases/`} data-ym-goal="cases_hero">Смотреть кейсы</a>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <ul class="chips">
+        <li class="chip">EDA и A/B</li>
+        <li class="chip">n8n и интеграции</li>
+        <li class="chip">MCP и RAG</li>
+        <li class="chip">Next.js / Angular</li>
+        <li class="chip">Postgres · Docker</li>
+        <li class="chip">Яндекс.Метрика в проде</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="includes">
+    <div class="wrap">
+      <p class="section-label">Что входит в работу</p>
+      <h2 class="section-title">Структура под задачу — не «шаблон ради шаблона»</h2>
+      <p class="section-lead">
+        Сразу закладываю ясные артефакты, воспроизводимость (Docker / документация) и путь к продакшену — чтобы решением можно было пользоваться, а не «положить в презентацию».
+      </p>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>Диагностика и метрики успеха</h3>
+          <p>Согласуем цель, ограничения данных и критерии «готово» — до разработки.</p>
+        </div>
+        <div class="card">
+          <h3>Код и сценарии в репозитории</h3>
+          <p>Артефакты в открытом или вашем контуре: воспроизводимый запуск, README, при необходимости CI/CD.</p>
+        </div>
+        <div class="card">
+          <h3>Интеграции и прод-опыт</h3>
+          <p>Реальные прод-сайты, боты, GHCR-образы — не только учебные ноутбуки.</p>
+        </div>
+        <div class="card">
+          <h3>Прозрачные этапы</h3>
+          <p>Короткие итерации, демо по ходу, финальная сдача с проверкой сценариев.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="portfolio" style="background: var(--bg-elevated); border-block: 1px solid var(--border);">
+    <div class="wrap">
+      <p class="section-label">Портфолио</p>
+      <h2 class="section-title">Флагманские направления</h2>
+      <p class="section-lead">Несколько сильных примеров — полный каталог в разделе «Кейсы» и в репозитории на GitHub.</p>
+
+      <div class="portfolio-showcase">
+        <article class="showcase-card">
+          <a class="showcase-visual" href={`${base}case/svo/`}>
+            <img src={`${base}images/preview-svo.svg`} width="800" height="500" alt="Превью кейса СВО" loading="lazy" />
+          </a>
+          <div class="showcase-body">
+            <h3>Прод: сайт + бот (СВО)</h3>
+            <p>Квиз, лиды, органика; парный Telegram-бот. Реальный трафик.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm" href={SVORAZBOR} target="_blank" rel="noopener noreferrer" data-ym-goal="svorazbor">Открыть сайт</a>
+              <a class="btn btn-ghost btn-sm" href={`${base}case/svo/`}>Разбор кейса</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="showcase-card showcase-card--reverse">
+          <a class="showcase-visual" href={`${base}cases/`}>
+            <img src={`${base}images/preview-n8n.svg`} width="800" height="500" alt="Превью n8n лидогенерации" loading="lazy" />
+          </a>
+          <div class="showcase-body">
+            <h3>Лидогенерация на n8n</h3>
+            <p>11 связанных workflow: интент → обогащение → касание → отчётность.</p>
+            <div class="card-actions">
+              <a class="btn btn-ghost btn-sm" href={REPO_TREE + '/02-automation/leadgen-n8n-system'} target="_blank" rel="noopener noreferrer">Репозиторий</a>
+              <a class="btn btn-primary btn-sm" href={`${base}cases/`}>Все кейсы</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="showcase-card">
+          <a class="showcase-visual" href="https://kaluginvit-svg.github.io/Portfolio/superstore/" target="_blank" rel="noopener noreferrer">
+            <img src={`${base}images/preview-dashboard.svg`} width="800" height="500" alt="Превью retail-дашборда" loading="lazy" />
+          </a>
+          <div class="showcase-body">
+            <h3>Retail-дашборд (Plotly)</h3>
+            <p>Интерактивная аналитика и инсайты для стейкхолдеров — на GitHub Pages.</p>
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm" href="https://kaluginvit-svg.github.io/Portfolio/superstore/" target="_blank" rel="noopener noreferrer" data-ym-goal="superstore">Открыть дашборд</a>
+              <a class="btn btn-ghost btn-sm" href={`${base}cases/`}>Кейсы</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="grid-cards" style="margin-top: 2rem;">
+        {
+          featured.map((c) => (
+            <div class="card">
+              <span class="chip" style="align-self: flex-start;">
+                {c.categoryLabel}
+              </span>
+              <h3>{c.title}</h3>
+              <p>{c.result}</p>
+              <div class="card-actions">
+                <a href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+                <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" data-ym-goal={`live_${c.id}`}>
+                  {c.liveLabel}
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="compare">
+    <div class="wrap">
+      <p class="section-label">Почему такой формат</p>
+      <h2 class="section-title">Код и прод-опыт вместо «слайдов навсегда»</h2>
+      <p class="section-lead">Сравнение без обесценивания других подходов — о реалистичных ожиданиях для бизнеса.</p>
+      <div class="compare">
+        <div class="compare-box compare-box--yes">
+          <h3>Рабочий контур</h3>
+          <ul>
+            <li>Артефакты, которые можно запустить и передать команде</li>
+            <li>Интеграции, Docker, GHCR — по задаче</li>
+            <li>Прод-сайты и боты с реальными пользователями</li>
+            <li>Отчёты и дашборды с выводами для решений</li>
+          </ul>
+        </div>
+        <div class="compare-box compare-box--no">
+          <h3>Только презентации</h3>
+          <ul>
+            <li>Нет исполняемого контура под ваш стек</li>
+            <li>Сложно проверить гипотезу на данных</li>
+            <li>Риск «красивого плана» без внедрения</li>
+            <li>Зависимость от внешних исполнителей на каждый шаг</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="process" style="background: var(--surface); border-block: 1px solid var(--border);">
+    <div class="wrap">
+      <p class="section-label">Этапы</p>
+      <h2 class="section-title">Как мы двигаемся от запроса к результату</h2>
+      <p class="section-lead">Короткий цикл согласований; детальная страница — в разделе «Этапы».</p>
+      <div class="steps">
+        <div class="step">
+          <h3>Сообщение в Telegram</h3>
+          <p>Цель, сроки, пример данных или ссылка на текущий процесс.</p>
+        </div>
+        <div class="step">
+          <h3>Уточнение</h3>
+          <p>Задаю вопросы, предлагаю формат: аналитика, автоматизация, ИИ или веб.</p>
+        </div>
+        <div class="step">
+          <h3>Оценка и план</h3>
+          <p>Сроки, артефакты, риски — до старта работ.</p>
+        </div>
+        <div class="step">
+          <h3>Реализация и сдача</h3>
+          <p>Итерации с демо, финальная проверка сценариев, документация.</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top: 1.25rem; text-align: center;">
+        <a href={`${base}process/`}>Подробнее про этапы →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="formats">
+    <div class="wrap">
+      <p class="section-label">Форматы</p>
+      <h2 class="section-title">Пакеты под типовые задачи</h2>
+      <p class="section-lead">Полное описание и артефакты в репозитории — на странице услуг.</p>
+      <div class="grid-cards">
+        {
+          packages.map((p) => (
+            <div class="card">
+              <h3>{p.title}</h3>
+              <p>{p.tagline}</p>
+              <p class="muted">{p.timeline}</p>
+              <div class="card-actions">
+                <a href={`${base}services/#${p.slug}`}>Подробнее</a>
+                <a href={`${REPO_TREE}/${p.repoFolder}`} target="_blank" rel="noopener noreferrer">
+                  Папка в GitHub
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <p class="section-label">FAQ</p>
+      <h2 class="section-title">Коротко о формате работы</h2>
+      <div class="faq-item">
+        <h3>С чего начать?</h3>
+        <p>
+          Напишите в Telegram: цель, что считаете успехом, дедлайн или окно по срокам, контекст или пример данных — этого достаточно для первичной оценки.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>Только открытый код?</h3>
+        <p>
+          Портфолио в открытом репозитории; коммерческие проекты обсуждаются отдельно, возможны NDA и закрытый контур.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>Есть ли поддержка после сдачи?</h3>
+        <p>Да, доработки и сопровождение по согласованию — как отдельные небольшие итерации.</p>
+      </div>
+      <p class="muted" style="margin-top: 1rem;">
+        <a href={`${base}faq/`}>Все вопросы и ответы →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <h2>Обсудим вашу задачу</h2>
+        <p>Ответ в течение рабочего дня. Email — по согласованию в личке Telegram.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_footer_cta">Написать в Telegram</a>
+          <a class="btn btn-ghost" href={REPO_TREE} target="_blank" rel="noopener noreferrer" data-ym-goal="github_repo">Репозиторий с кейсами</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .portfolio-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .showcase-card {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .showcase-card {
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .showcase-card--reverse .showcase-visual {
+      order: 2;
+    }
+
+    .showcase-card--reverse .showcase-body {
+      order: 1;
+    }
+  }
+
+  .showcase-visual {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    display: block;
+    line-height: 0;
+  }
+
+  .showcase-visual:hover {
+    border-color: rgba(61, 139, 253, 0.45);
+  }
+
+  .showcase-body h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    color: #fff;
+  }
+
+  .showcase-body p {
+    margin: 0 0 1rem;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cases, categoryFilters } from '../data/cases';
+import { REPO_TREE } from '../data/links';
+---
+
+<Layout
+  title="Кейсы — Виталий Калугин"
+  description="Каталог проектов: аналитика, автоматизация n8n, ИИ-продукты, веб и консалтинг. Ссылки на GitHub и live-демо."
+  current="cases"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">Кейсы</p>
+    <h1 class="section-title" style="text-align: left;">Выберите направление</h1>
+    <p class="section-lead">
+      Полный индекс папок — в корневом README репозитория. Здесь — флагманы и ключевые артефакты с быстрыми ссылками.
+    </p>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="filter-bar" id="case-filters" role="tablist" aria-label="Фильтр по направлению">
+        {
+          categoryFilters.map((f) => (
+            <button type="button" class:list={['filter-btn', { 'is-active': f.id === 'all' }]} data-filter={f.id}>
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="grid-cards" id="case-grid">
+        {
+          cases.map((c) => (
+            <article class="card" data-case-card data-category={c.category}>
+              <span class="chip" style="align-self: flex-start;">
+                {c.categoryLabel}
+              </span>
+              <h3>{c.title}</h3>
+              <p>{c.result}</p>
+              <div class="card-actions">
+                <a href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer">
+                  Репозиторий
+                </a>
+                <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" data-ym-goal={`cases_live_${c.id}`}>
+                  {c.liveLabel}
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll('#case-filters .filter-btn');
+  const cards = document.querySelectorAll('[data-case-card]');
+
+  function applyFilter(id) {
+    buttons.forEach((b) => b.classList.toggle('is-active', b.getAttribute('data-filter') === id));
+    cards.forEach((card) => {
+      const cat = card.getAttribute('data-category');
+      const show = id === 'all' || cat === id;
+      card.classList.toggle('is-hidden', !show);
+    });
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter') || 'all'));
+  });
+</script>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+    padding-bottom: 0;
+  }
+</style>

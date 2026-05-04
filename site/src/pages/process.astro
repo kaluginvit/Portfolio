@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { TELEGRAM } from '../data/links';
+---
+
+<Layout
+  title="Этапы работы — Виталий Калугин"
+  description="От сообщения в Telegram до сдачи: уточнение задачи, оценка, реализация итерациями, финальная проверка и документация."
+  current="process"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">Процесс</p>
+    <h1 class="section-title" style="text-align: left;">Как вы получите результат</h1>
+    <p class="section-lead">Прозрачные шаги без лишней бюрократии — ориентир для B2B и продуктовых команд.</p>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="steps" style="grid-template-columns: 1fr;">
+        <div class="step" style="max-width: 640px;">
+          <h3>1. Сообщение и контекст</h3>
+          <p>
+            Вы пишете в Telegram: цель, что считаете успехом, дедлайн или окно по срокам, ссылка на процесс или пример данных. Можно приложить файл или скрин.
+          </p>
+        </div>
+        <div class="step" style="max-width: 640px;">
+          <h3>2. Уточняющие вопросы</h3>
+          <p>Короткий уточняющий диалог: доступы, стек, ограничения по безопасности, ожидания по формату отчёта или интерфейса.</p>
+        </div>
+        <div class="step" style="max-width: 640px;">
+          <h3>3. Предложение и оценка</h3>
+          <p>Возвращаюсь с форматом работ (аналитика, автоматизация, ИИ, веб или комбинация), ориентиром по срокам и артефактами.</p>
+        </div>
+        <div class="step" style="max-width: 640px;">
+          <h3>4. Реализация и демо</h3>
+          <p>Итерации с промежуточными демо: ноутбук, дашборд, workflow, бот — в зависимости от задачи. Вы видите прогресс, а не «чёрный ящик».</p>
+        </div>
+        <div class="step" style="max-width: 640px;">
+          <h3>5. Сдача и сопровождение</h3>
+          <p>Финальная проверка сценариев, README и инструкции по запуску. Доработки и сопровождение — отдельными согласованными итерациями.</p>
+        </div>
+      </div>
+
+      <div class="cta-band" style="margin-top: 3rem;">
+        <h2>Начать с первого шага</h2>
+        <p>Пришлите контекст в Telegram — отвечу в течение рабочего дня.</p>
+        <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_process">Написать</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+  }
+
+  .steps .step + .step {
+    margin-top: 0.5rem;
+  }
+</style>

@@ -73,9 +73,9 @@ jupyter notebook superstore_eda.ipynb
 
 Откройте в браузере `superstore-dashboard.html` и `superstore_presentation.html` (при необходимости через Live Server в VS Code / Cursor).
 
-**Live (GitHub Pages):** workflow [Deploy Superstore dashboard](../../.github/workflows/superstore-github-pages.yml) публикует дашборд как корень сайта. Включите **Settings → Pages → Build and deployment: GitHub Actions**. После успешного прогона URL: **[https://kaluginvit-svg.github.io/Portfolio/](https://kaluginvit-svg.github.io/Portfolio/)** (индекс = дашборд). Кнопка для README:
+**Live (GitHub Pages):** workflow [Deploy Portfolio site](../../.github/workflows/portfolio-github-pages.yml) публикует **сайт-визитку** в корень Pages и дашборд по пути **`/Portfolio/superstore/`**. Включите **Settings → Pages → Build and deployment: GitHub Actions**. После успешного прогона дашборд: **[https://kaluginvit-svg.github.io/Portfolio/superstore/](https://kaluginvit-svg.github.io/Portfolio/superstore/)**. Кнопка для README:
 
-[![Superstore Pages](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/superstore-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/superstore-github-pages.yml)
+[![GitHub Pages — визитка + Superstore](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml)
 
 **3. PowerPoint (по желанию)**
 

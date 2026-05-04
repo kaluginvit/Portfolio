@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kaluginvit-svg.github.io/Portfolio/sitemap-index.xml

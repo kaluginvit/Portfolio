@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { certificates } from '../data/certs';
+import { CERTS_README, TELEGRAM } from '../data/links';
+---
+
+<Layout
+  title="Доказательства и обучение — Виталий Калугин"
+  description="Сертификаты и программы: аналитика данных, автоматизация, ИИ, веб. Краткое социальное доказательство перед обсуждением задачи."
+  current="about"
+>
+  <section class="section hero-sub wrap">
+    <p class="section-label">Доказательства</p>
+    <h1 class="section-title" style="text-align: left;">Сертификаты и программы</h1>
+    <p class="section-lead">
+      Ниже — миниатюры; полный каталог с подписями в репозитории. Это дополняет, а не заменяет прод-кейсы в портфолио.
+    </p>
+    <a class="btn btn-ghost" href={CERTS_README} target="_blank" rel="noopener noreferrer">Сертификаты/README.md на GitHub</a>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="cert-grid">
+        {
+          certificates.map((c) => (
+            <a href={CERTS_README} target="_blank" rel="noopener noreferrer" title={c.label}>
+              <img src={c.src} alt={c.label} width="180" height="240" loading="lazy" />
+              <span>{c.label}</span>
+            </a>
+          ))
+        }
+      </div>
+      <p class="muted" style="margin-top: 1.5rem;">
+        Изображения подгружаются с <code style="color: var(--text-muted);">raw.githubusercontent.com</code> — при блокировке сети используйте просмотр в репозитории.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <h2>Готовы обсудить задачу?</h2>
+        <p>Расскажите о контексте — предложу формат и следующий шаг.</p>
+        <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_about">Telegram</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-sub {
+    padding-top: calc(var(--header-h) + 2.5rem);
+  }
+</style>

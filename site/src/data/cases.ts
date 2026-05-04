@@ -1,0 +1,202 @@
+export type CaseCategory = '01' | '02' | '03' | '04' | '05';
+
+export interface CaseItem {
+  id: string;
+  category: CaseCategory;
+  categoryLabel: string;
+  title: string;
+  result: string;
+  repoPath: string;
+  liveLabel: string;
+  liveUrl: string;
+  featured?: boolean;
+}
+
+const tree = 'https://github.com/kaluginvit-svg/Portfolio/tree/main';
+
+export const cases: CaseItem[] = [
+  {
+    id: 'svo-web',
+    category: '04',
+    categoryLabel: 'Веб',
+    title: 'Сайт СВО — выплаты семьям',
+    result: 'Прод-сайт: квиз, лид-форма, органика; пара с Telegram-ботом.',
+    repoPath: '04-web/svo-payouts-website',
+    liveLabel: 'svorazbor.ru',
+    liveUrl: 'https://svorazbor.ru',
+    featured: true,
+  },
+  {
+    id: 'svo-bot',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'Telegram-бот выплат (СВО)',
+    result: 'Бот на проде: анкета, расчёт, заявки; GHCR.',
+    repoPath: '03-ai-products/svo-payments-bot',
+    liveLabel: 'Telegram + GHCR',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payments-bot',
+    featured: true,
+  },
+  {
+    id: 'leadgen-n8n',
+    category: '02',
+    categoryLabel: 'Автоматизация',
+    title: 'Лидогенерация на n8n',
+    result: '11 workflow: интент → обогащение → касание → отчётность.',
+    repoPath: '02-automation/leadgen-n8n-system',
+    liveLabel: 'docker compose',
+    liveUrl: `${tree}/02-automation/leadgen-n8n-system`,
+    featured: true,
+  },
+  {
+    id: 'superstore',
+    category: '01',
+    categoryLabel: 'Аналитика',
+    title: 'Retail-аналитика Superstore',
+    result: 'Интерактивный дашборд Plotly + инсайты для стейкхолдеров.',
+    repoPath: '01-data-analytics/superstore-retail-analytics',
+    liveLabel: 'Дашборд на Pages',
+    liveUrl: 'https://kaluginvit-svg.github.io/Portfolio/superstore/',
+    featured: true,
+  },
+  {
+    id: 'fintech-ab',
+    category: '01',
+    categoryLabel: 'Аналитика',
+    title: 'A/B-тест в финтех',
+    result: 'Отчёт с MDE и продуктовой рекомендацией.',
+    repoPath: '01-data-analytics/fintech-ab-test-credit-offer',
+    liveLabel: 'nbviewer',
+    liveUrl:
+      'https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb',
+  },
+  {
+    id: 'wb',
+    category: '01',
+    categoryLabel: 'Аналитика',
+    title: 'Коммерческий анализ Wildberries',
+    result: 'Кейс продавца: маржа, точки роста.',
+    repoPath: '01-data-analytics/wb-sales-commercial-analysis',
+    liveLabel: 'Репозиторий',
+    liveUrl: `${tree}/01-data-analytics/wb-sales-commercial-analysis`,
+  },
+  {
+    id: 'yandex-google',
+    category: '02',
+    categoryLabel: 'Автоматизация',
+    title: 'Яндекс.Диск ↔ Google Drive',
+    result: 'Двусторонний sync, конфликты, cron.',
+    repoPath: '02-automation/yandex-google-sync',
+    liveLabel: 'GHCR',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/yandex-google-sync',
+  },
+  {
+    id: 'hotel-tally',
+    category: '02',
+    categoryLabel: 'Автоматизация',
+    title: 'Бронирования Tally → Supabase',
+    result: 'Форма → дедуп → бронь → письма без Excel.',
+    repoPath: '02-automation/hotel-booking-tally-supabase',
+    liveLabel: 'Документация',
+    liveUrl: `${tree}/02-automation/hotel-booking-tally-supabase`,
+  },
+  {
+    id: 'gha-setup',
+    category: '02',
+    categoryLabel: 'Автоматизация',
+    title: 'CI/CD: Actions → GHCR → SSH',
+    result: 'Типовой деплой одной строкой.',
+    repoPath: '02-automation/github-actions-setup',
+    liveLabel: 'GHCR',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/github-actions-setup',
+  },
+  {
+    id: 'seo-mcp',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'MCP + Yandex Wordstat',
+    result: 'Семантика и частотности в Cursor / Claude.',
+    repoPath: '03-ai-products/seo-mcp-bot',
+    liveLabel: 'GHCR',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/yandex-wordstat-mcp',
+  },
+  {
+    id: 'team-bot',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'RAG-бот команды (Haystack + Pinecone)',
+    result: 'Память команды, корпоративный контур.',
+    repoPath: '03-ai-products/team-ai-bot',
+    liveLabel: 'GHCR',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/team-ai-bot',
+  },
+  {
+    id: 'personal-rag',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'Персональный RAG в Telegram',
+    result: 'Ассистент по личной базе (Pinecone).',
+    repoPath: '03-ai-products/personal-rag-assistant',
+    liveLabel: 'GHCR',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/personal-rag-assistant',
+  },
+  {
+    id: 'autonomous-agents',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'ИИ-агент SEO-ядра по URL',
+    result: 'Парсинг + кластеризация через ProxyAPI.',
+    repoPath: '03-ai-products/autonomous-agents',
+    liveLabel: 'GHCR backend',
+    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/autonomous-agents-backend',
+  },
+  {
+    id: 'mcp-lesson',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'End-to-end MCP: каталог ↔ Telegram',
+    result: 'Шаблон LLM ↔ MCP ↔ SQLite.',
+    repoPath: '03-ai-products/mcp-lesson',
+    liveLabel: 'docker compose',
+    liveUrl: `${tree}/03-ai-products/mcp-lesson`,
+  },
+  {
+    id: 'dostaffkin',
+    category: '04',
+    categoryLabel: 'Веб',
+    title: 'Dostaffkin — доставка',
+    result: 'Angular + Express, трекинг статусов; демо онлайн.',
+    repoPath: '04-web/dostaffkin',
+    liveLabel: 'GitHub Pages',
+    liveUrl: 'https://kaluginvit72.github.io/dostaffkin/',
+  },
+  {
+    id: 'postgres-work',
+    category: '04',
+    categoryLabel: 'Веб',
+    title: 'Telegram-бот ↔ PostgreSQL',
+    result: 'Каркас бот ↔ Postgres ↔ бэкап.',
+    repoPath: '04-web/postgres-work',
+    liveLabel: 'Репозиторий',
+    liveUrl: `${tree}/04-web/postgres-work`,
+  },
+  {
+    id: 'ai-accounting',
+    category: '05',
+    categoryLabel: 'Консалтинг',
+    title: 'Стратегия ИИ в бухгалтерии',
+    result: 'Презентация и дорожная карта пилота.',
+    repoPath: '05-ai-consulting/ai-in-accounting-strategic-plan',
+    liveLabel: 'PDF',
+    liveUrl: `${tree}/05-ai-consulting/ai-in-accounting-strategic-plan/presentation.pdf`,
+  },
+];
+
+export const categoryFilters: { id: CaseCategory | 'all'; label: string }[] = [
+  { id: 'all', label: 'Все' },
+  { id: '01', label: '01 Аналитика' },
+  { id: '02', label: '02 Автоматизация' },
+  { id: '03', label: '03 ИИ-продукты' },
+  { id: '04', label: '04 Веб' },
+  { id: '05', label: '05 Консалтинг' },
+];

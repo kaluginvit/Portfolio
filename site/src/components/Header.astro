@@ -1,0 +1,213 @@
+---
+import { TELEGRAM, REPO_ROOT } from '../data/links';
+
+interface Props {
+  current?: string;
+}
+
+const { current = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const nav = [
+  { href: `${base}`, label: 'Главная', id: 'home' },
+  { href: `${base}services/`, label: 'Услуги', id: 'services' },
+  { href: `${base}cases/`, label: 'Кейсы', id: 'cases' },
+  { href: `${base}case/svo/`, label: 'Кейс СВО', id: 'svo' },
+  { href: `${base}process/`, label: 'Этапы', id: 'process' },
+  { href: `${base}about/`, label: 'Доказательства', id: 'about' },
+  { href: `${base}faq/`, label: 'FAQ', id: 'faq' },
+  { href: `${base}contact/`, label: 'Контакты', id: 'contact' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href={base} data-ym-goal="logo_home">Виталий Калугин</a>
+
+    <nav class="nav-desktop" aria-label="Основное">
+      {
+        nav.map((item) => (
+          <a href={item.href} class:list={['nav-link', { active: current === item.id }]} data-ym-goal={`nav_${item.id}`}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn-primary btn-sm" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_header">
+        Telegram
+      </a>
+      <a class="btn btn-ghost btn-sm gh" href={REPO_ROOT} target="_blank" rel="noopener noreferrer" data-ym-goal="github_header">
+        GitHub
+      </a>
+    </div>
+
+    <details class="nav-mobile">
+      <summary class="nav-burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </summary>
+      <div class="nav-mobile-panel">
+        {
+          nav.map((item) => (
+            <a href={item.href} class:list={['nav-mobile-link', { active: current === item.id }]}>
+              {item.label}
+            </a>
+          ))
+        }
+        <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_menu">
+          Написать в Telegram
+        </a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: rgba(12, 15, 20, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: var(--header-h);
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    margin-right: auto;
+  }
+
+  .logo:hover {
+    color: var(--accent-hover);
+  }
+
+  .nav-desktop {
+    display: none;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  @media (min-width: 960px) {
+    .nav-desktop {
+      display: flex;
+    }
+  }
+
+  .nav-link {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .header-actions {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 960px) {
+    .header-actions {
+      display: flex;
+    }
+  }
+
+  .btn-sm {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+  }
+
+  .gh {
+    padding-inline: 0.75rem;
+  }
+
+  .nav-mobile {
+    margin-left: auto;
+  }
+
+  @media (min-width: 960px) {
+    .nav-mobile {
+      display: none;
+    }
+  }
+
+  .nav-burger {
+    list-style: none;
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+  }
+
+  .nav-burger::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-burger span {
+    display: block;
+    width: 1.1rem;
+    height: 2px;
+    background: #fff;
+    border-radius: 1px;
+  }
+
+  .nav-mobile-panel {
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .nav-mobile-link {
+    padding: 0.65rem 0.75rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+  }
+
+  .nav-mobile-link:hover,
+  .nav-mobile-link.active {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav-mobile[open] .nav-burger {
+    border-color: var(--accent);
+  }
+</style>

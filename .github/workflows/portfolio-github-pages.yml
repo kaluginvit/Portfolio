@@ -1,0 +1,56 @@
+# Публикует сайт-визитку (Astro) в корень GitHub Pages и дашборд Superstore в /superstore/.
+# Включите: Settings → Pages → Build and deployment → Source: GitHub Actions.
+name: Deploy Portfolio site (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '01-data-analytics/superstore-retail-analytics/superstore-dashboard.html'
+      - '.github/workflows/portfolio-github-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-portfolio
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/configure-pages@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install and build site
+        working-directory: site
+        env:
+          PUBLIC_YANDEX_METRIKA_ID: ${{ vars.PUBLIC_YANDEX_METRIKA_ID }}
+        run: |
+          npm ci
+          npm run build
+      - name: Assemble Pages artifact
+        run: |
+          mkdir -p _site/superstore
+          cp -r site/dist/. _site/
+          cp "01-data-analytics/superstore-retail-analytics/superstore-dashboard.html" _site/superstore/index.html
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

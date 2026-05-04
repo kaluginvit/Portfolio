@@ -7,9 +7,9 @@
 **1 prod-сайт + 2 онлайн-демо** · **20+ кейсов по 5 направлениям** · **Docker-образы в GHCR** → [svorazbor.ru](https://svorazbor.ru)
 
 [![Build Docker images](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/build-images.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/build-images.yml)
-[![Superstore Pages](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/superstore-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/superstore-github-pages.yml)
+[![GitHub Pages — визитка + Superstore](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml)
 
-**Запуск любого кейса за 5 минут →** [`docs/RUN_LOCAL.md`](./docs/RUN_LOCAL.md) · **Готовые образы** → [`docs/GHCR_IMAGES.md`](./docs/GHCR_IMAGES.md)
+**Сайт-визитка на Pages →** [`docs/PORTFOLIO_SITE.md`](./docs/PORTFOLIO_SITE.md) · **Запуск кейсов локально →** [`docs/RUN_LOCAL.md`](./docs/RUN_LOCAL.md) · **Образы GHCR →** [`docs/GHCR_IMAGES.md`](./docs/GHCR_IMAGES.md)
 
 <p>
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white" alt="Python"/>
@@ -78,11 +78,12 @@
 
 | Проект | Ссылка | Тип | Стек |
 |--------|--------|-----|------|
+| **Сайт-визитка (маркетинг)** | **[kaluginvit-svg.github.io/Portfolio/](https://kaluginvit-svg.github.io/Portfolio/)** | многостраничный Astro: услуги, кейсы, FAQ, CTA | Astro (статика) |
 | **СВО — выплаты семьям** | **[svorazbor.ru](https://svorazbor.ru)** | прод-сайт + Telegram-бот, реальные лиды | Next.js + Telegram |
 | **Dostaffkin — доставка** | **[kaluginvit72.github.io/dostaffkin](https://kaluginvit72.github.io/dostaffkin/)** | онлайн-демо фронта (backend локально) | Angular + Express + Postgres |
-| **Superstore Dashboard** | **[kaluginvit-svg.github.io/Portfolio](https://kaluginvit-svg.github.io/Portfolio/)** | интерактивный HTML-дашборд (после включения Pages) | Plotly + HTML |
+| **Superstore Dashboard** | **[kaluginvit-svg.github.io/Portfolio/superstore/](https://kaluginvit-svg.github.io/Portfolio/superstore/)** | интерактивный HTML-дашборд (после деплоя Pages) | Plotly + HTML |
 
-Все три открываются по клику без локальной установки. Подробнее — в таблицах ниже.
+Все четыре открываются по клику без локальной установки (кроме backend у Dostaffkin). Подробнее — в таблицах ниже и в [`docs/PORTFOLIO_SITE.md`](./docs/PORTFOLIO_SITE.md).
 
 ---
 
@@ -118,7 +119,7 @@
 | Кейс | Результат / роль | Ссылка | Live |
 |------|------------------|--------|------|
 | A/B-тест в финтех | Полный отчёт по A/B с MDE и продуктовой рекомендацией — уровень product-аналитика | [`fintech-ab-test-credit-offer`](./01-data-analytics/fintech-ab-test-credit-offer/) | [nbviewer](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb) |
-| Retail-аналитика и дашборд | Интерактивный дашборд + 3 инсайта для стейкхолдеров | [`superstore-retail-analytics`](./01-data-analytics/superstore-retail-analytics/) | [GitHub Pages](https://kaluginvit-svg.github.io/Portfolio/) |
+| Retail-аналитика и дашборд | Интерактивный дашборд + 3 инсайта для стейкхолдеров | [`superstore-retail-analytics`](./01-data-analytics/superstore-retail-analytics/) | [GitHub Pages `/superstore/`](https://kaluginvit-svg.github.io/Portfolio/superstore/) |
 | Коммерческий анализ Wildberries | Реальный кейс продавца: где теряем маржу, что менять | [`wb-sales-commercial-analysis`](./01-data-analytics/wb-sales-commercial-analysis/) | локально / скрипты |
 
 ### [02 — Автоматизация](./02-automation/)
