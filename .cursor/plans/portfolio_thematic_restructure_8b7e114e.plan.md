@@ -1,6 +1,6 @@
 ---
 name: Portfolio thematic restructure
-overview: "Сессия 1: реструктуризация и гигиена. Сессия 2: 8 флагманов первой волны. Сессия 3: вторая волна флагманов, корневая витрина README, минимальные README по не-флагманам."
+overview: "Сессия 1: реструктуризация и гигиена. Сессия 2: 8 флагманов первой волны. Сессия 3: вторая волна флагманов, корневая витрина README, минимальные README по не-флагманам. Сессия 4 (Этап 6+7): пересборка архива — 7 проектов промоутятся в направления, оставшийся архив сжимается до 15 «keep» с потенциалом доводки, 15 «remove» удаляются из репо (локально остаются)."
 todos:
   - id: gitignore-and-cleanup
     content: "Сессия 1: создать корневой .gitignore, удалить .venv/venv/node_modules/.next/__pycache__/.pytest_cache/логи (~30 000 файлов)"
@@ -61,6 +61,42 @@ todos:
     status: completed
   - id: rename-repo-optional
     content: (Опционально) На GitHub имя репозитория привести к Portfolio — если ещё не сделано
+    status: pending
+  - id: git-mv-7
+    content: "Этап 6.1: перенести 7 папок из 99-archive через git mv (mcp-lesson, autonomous-agents → 03-ai-products; mortgage-calculator, n8n-bpmn-notes, github-actions-setup → 02-automation; pdf-checker → 03-ai-products; postgres-work → 04-web)"
+    status: pending
+  - id: dedup-autonomous-local
+    content: "Этап 6.2: удалить 99-archive/autonomous-agents-local/ (дубль autonomous-agents)"
+    status: pending
+  - id: merge-go-server
+    content: "Этап 6.3: влить 99-archive/go-server-mini/ внутрь 99-archive/ai-coding-lessons/ как Go-аналог Python API (демонстрация языкового паритета)"
+    status: pending
+  - id: readme-promoted-automation
+    content: "Этап 6.4: README у 3 промо-проектов в 02-automation (mortgage-calculator — финрасчёты; n8n-bpmn-notes — методика BPMN; github-actions-setup — CI/CD-шаблон)"
+    status: pending
+  - id: readme-promoted-ai
+    content: "Этап 6.5: README у 3 промо-проектов в 03-ai-products (mcp-lesson, autonomous-agents, pdf-checker) — проблема/решение/стек/демо"
+    status: pending
+  - id: readme-promoted-web
+    content: "Этап 6.6: README у 04-web/postgres-work — описание fullstack-кейса с PostgreSQL"
+    status: pending
+  - id: readme-cats-update
+    content: "Этап 6.7: обновить категорийные README 02-automation/03-ai-products/04-web — добавить промо-проекты в таблицы"
+    status: pending
+  - id: readme-root-update
+    content: "Этап 6.8: корневой README.md — добавить промо-проекты в карточки/featured-блок где уместно"
+    status: pending
+  - id: archive-prune-cached
+    content: "Этап 7.1: git rm -r --cached на 15 «remove» папок в 99-archive (api-testing-bot, auto-deploy-lesson, autonomous-agents-local, db-lessons, docker-lessons, langchain-lesson-1, langchain-lesson-2, llm-lessons, local-ai-agent, loki-grafana-stack, python-modules-lessons, python-oop-practice, recipe-search-bot, sql-lessons, sqlite-lesson) — локально файлы остаются"
+    status: pending
+  - id: gitignore-prune
+    content: "Этап 7.2: дописать 15 удалённых путей в корневой .gitignore (под секцией # Pruned archive)"
+    status: pending
+  - id: readme-archive-rebuild
+    content: "Этап 7.3: переписать 99-archive/README.md — список 15 «keep» с описаниями (9 полузавершённых продуктов + 6 методических артефактов с кодом)"
+    status: pending
+  - id: commit-push-final
+    content: "Этап 6+7 финал: 2 коммита (chore(archive): promote 7 + chore(archive): prune to 15) и git push origin main без force"
     status: pending
 isProject: false
 ---
@@ -291,6 +327,126 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 ## Этап 5. Опциональное переименование репозитория
 
 Целевое имя репозитория на GitHub — **`Portfolio`** (`kaluginvit-svg/Portfolio`). Переименование на стороне GitHub не ломает историю; старые URL редиректятся. Остальные кандидаты (`kalugin-portfolio`, `it-portfolio`) — запасные.
+
+## Этап 6. Пересборка архива (промоут достойных)
+
+Из `99-archive/` поднимаются 7 проектов в основные направления — у каждого есть рабочий код или ценная документация:
+
+**В `02-automation/`:**
+- `mortgage-calculator/` — рабочий калькулятор ипотеки.
+- `n8n-bpmn-notes/` — методические заметки по BPMN-моделированию в n8n.
+- `github-actions-setup/` — шаблон CI с GitHub Actions.
+
+**В `03-ai-products/`:**
+- `mcp-lesson/` — урок-разбор MCP-протокола.
+- `autonomous-agents/` — кейс автономных агентов.
+- `pdf-checker/` — утилита проверки PDF через ИИ.
+
+**В `04-web/`:**
+- `postgres-work/` — учебный fullstack-кейс с PostgreSQL.
+
+**Дедуп:**
+- `99-archive/autonomous-agents-local/` — удаляется как дубликат `autonomous-agents/`.
+- `99-archive/go-server-mini/` — вливается внутрь `99-archive/ai-coding-lessons/` как Go-аналог Python-сервера (демонстрация языкового паритета).
+
+**Обновления README:**
+- README у 7 поднятых проектов: проблема / решение / стек / демо; для `ci-cd-fastapi-deploy` (если он попадает в эту волну отдельно) — акцент на CI/CD.
+- Категорийные README `02-automation/`, `03-ai-products/`, `04-web/` — добавить промоутнутые проекты в таблицы.
+- Корневой `README.md` — добавить промоутнутые проекты в таблицы флагманов где уместно.
+- `99-archive/README.md` — обновить список (минус 7 промоутнутых, минус 1 dedup, минус 1 merge).
+
+## Этап 7. Чистка архива до 15 проектов
+
+После промоута Этапа 6 в `99-archive/` остаётся 30 папок. Сжимаем до 15 «keep» с потенциалом доводки до самостоятельных проектов. Остальные 15 — учебные обрывки и дубли — удаляются из репо (локально остаются у пользователя).
+
+### 15 «keep» — оставить в архиве
+
+Категория «полузавершённые продукты»:
+1. `mini-booking-system/` — Python + PostgreSQL-driver + Tkinter-GUI: каркас «БД + UI».
+2. `password-generator/` — CLI + GUI, Fernet, хэш мастер-пароля; рабочая утилита.
+3. `mcp-practice/` (`coin_flip_api/`) — Flask + Docker Compose + UI; самодостаточный мини-сервис.
+4. `docker-vps-project/` — TG-бот + Docker Hub + Logtail; пример деплоя.
+5. `rag-lessons/` — полный пример RAG: Pinecone + LangChain + TG-бот.
+6. `ux-reviewer-agent/` — каркас FastAPI + Vite/React + Docker UX-агента.
+7. `desktop-reminder/` — Tkinter + SQLite + win10toast + готовый `.exe`; завершённая Windows-утилита.
+8. `recurring-payments-reminder/` — рабочий aiogram-бот напоминаний о платежах.
+9. `api-lessons/` — Flask + Leaflet с UI и шаблонами; завершённый мини-сервис «карта + API».
+
+Категория «методические артефакты с ценным кодом»:
+
+10. `prompting-case/` — сравнение промптов GPT-4o с готовыми артефактами `.md/.json`.
+11. `memory-lessons/` — три варианта памяти TG-ботов (`short`, `long`, `hybrid`).
+12. `expert-project/` — Flask: URL → цепочка промптов → готовый пост.
+13. `ai-bot-lessons/` — крупный TG-бот: Sora-видео, память, прайсинг.
+14. `ai-automation-lessons/` — конвейер «транскрипт → ИИ → PDF-отчёт».
+15. `ai-coding-lessons/` (+ влитая `go-server-mini/`) — демонстрация Python/Go API-паритета.
+
+### 15 «remove» — удалить из репо (локально остаются)
+
+`api-testing-bot/`, `auto-deploy-lesson/`, `autonomous-agents-local/` (если ещё не удалена в Этапе 6), `db-lessons/`, `docker-lessons/`, `langchain-lesson-1/`, `langchain-lesson-2/`, `llm-lessons/`, `local-ai-agent/`, `loki-grafana-stack/`, `python-modules-lessons/`, `python-oop-practice/`, `recipe-search-bot/`, `sql-lessons/`, `sqlite-lesson/`.
+
+### Механика удаления (выбор пользователя — `soft_no_local_delete`)
+
+```bash
+# 1. Удалить из индекса и рабочего дерева репо
+git rm -rf 99-archive/api-testing-bot \
+          99-archive/auto-deploy-lesson \
+          99-archive/autonomous-agents-local \
+          99-archive/db-lessons \
+          99-archive/docker-lessons \
+          99-archive/langchain-lesson-1 \
+          99-archive/langchain-lesson-2 \
+          99-archive/llm-lessons \
+          99-archive/local-ai-agent \
+          99-archive/loki-grafana-stack \
+          99-archive/python-modules-lessons \
+          99-archive/python-oop-practice \
+          99-archive/recipe-search-bot \
+          99-archive/sql-lessons \
+          99-archive/sqlite-lesson
+
+# 2. Локально вернуть копии из последнего коммита (где они ещё есть) во временную папку вне репо,
+#    чтобы не потерять (опционально, по желанию пользователя). Альтернативно — git checkout HEAD~1 -- ...
+#    Простейший вариант: пользователь делает резервную копию папки 99-archive до коммита.
+
+# 3. Дописать в .gitignore (чтобы пути не вернулись в индекс случайно)
+99-archive/api-testing-bot/
+99-archive/auto-deploy-lesson/
+99-archive/autonomous-agents-local/
+99-archive/db-lessons/
+99-archive/docker-lessons/
+99-archive/langchain-lesson-1/
+99-archive/langchain-lesson-2/
+99-archive/llm-lessons/
+99-archive/local-ai-agent/
+99-archive/loki-grafana-stack/
+99-archive/python-modules-lessons/
+99-archive/python-oop-practice/
+99-archive/recipe-search-bot/
+99-archive/sql-lessons/
+99-archive/sqlite-lesson/
+
+# 4. Один коммит и обычный push
+git add -A
+git commit -m "chore(archive): prune to 15 portfolio-worthy projects"
+git push origin main
+```
+
+**Важно про режим `soft_no_local_delete`:**
+- `git rm -rf` удаляет файлы и из индекса, и **из рабочего дерева**. Чтобы локально оставить копии, надо сделать резервную копию папки до коммита (например, `xcopy 99-archive _backup-archive\ /E /I`) или использовать `git rm -r --cached <path>` (тогда файлы остаются в рабочем дереве, но `.gitignore` обязателен, иначе они вернутся при следующем `git add`).
+- **Рекомендованная команда** для требования «локально оставить» — это именно `git rm -r --cached <path>` + добавление пути в `.gitignore` тем же коммитом. Но Git не удаляет файлы из дерева, и они остаются у пользователя.
+
+```bash
+# Альтернатива, точно сохраняющая локальные копии:
+git rm -r --cached 99-archive/api-testing-bot 99-archive/auto-deploy-lesson ... # все 15 путей
+# + .gitignore добавление + commit + push
+```
+
+В реализации Этапа 7 будет использован именно вариант `git rm -r --cached` — он соответствует выбранному режиму без рисков для локальных файлов.
+
+### Обновление `99-archive/README.md`
+
+Краткая фраза в духе «Здесь оставлены 15 проектов с потенциалом довести до самостоятельных утилит/кейсов: 9 полузавершённых продуктов и 6 методических артефактов с рабочим кодом. Учебные обрывки и дубли удалены из репо (локально доступны автору)». Плюс таблица «оставленные 15» с одной строкой описания каждого.
 
 ## Что я НЕ делаю в рамках одного прохода (честно)
 
