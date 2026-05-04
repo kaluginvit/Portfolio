@@ -54,3 +54,8 @@ desktop.ini
 
 # --- Local-only assets (optional sandbox) ---
 ASSETS/local/
+
+# --- GitHub: hard limit 100 MB per file (push rejected) ---
+# Видео/огромные дампы хранить локально или в LFS, не в обычном git.
+**/*.mp4
+**/tg_catalog*.db
