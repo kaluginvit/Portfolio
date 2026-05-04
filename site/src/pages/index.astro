@@ -4,7 +4,9 @@ import HomeAnchorNav from '../components/HomeAnchorNav.astro';
 import { cases } from '../data/cases';
 import { packages } from '../data/services';
 import { TELEGRAM, REPO_TREE, SVORAZBOR } from '../data/links';
-import { siteAsset } from '../lib/paths';
+import previewSvo from '../assets/portfolio/preview-svo.svg?url';
+import previewN8n from '../assets/portfolio/preview-n8n.svg?url';
+import previewDashboard from '../assets/portfolio/preview-dashboard.svg?url';
 
 const base = import.meta.env.BASE_URL;
 const featured = cases.filter((c) => c.featured);
@@ -123,11 +125,11 @@ const featured = cases.filter((c) => c.featured);
           <a class="showcase-link" href={`${base}case/svo/`}>
             <div class="showcase-frame">
               <img
-                src={siteAsset('images/preview-svo.svg')}
+                src={previewSvo}
                 width="800"
                 height="500"
                 alt="Превью кейса СВО"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
             </div>
@@ -146,11 +148,11 @@ const featured = cases.filter((c) => c.featured);
           <a class="showcase-link" href={`${base}cases/`}>
             <div class="showcase-frame">
               <img
-                src={siteAsset('images/preview-n8n.svg')}
+                src={previewN8n}
                 width="800"
                 height="500"
                 alt="Превью n8n лидогенерации"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
             </div>
@@ -174,11 +176,11 @@ const featured = cases.filter((c) => c.featured);
           >
             <div class="showcase-frame">
               <img
-                src={siteAsset('images/preview-dashboard.svg')}
+                src={previewDashboard}
                 width="800"
                 height="500"
                 alt="Превью retail-дашборда"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
             </div>
