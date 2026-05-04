@@ -22,10 +22,10 @@ todos:
     status: completed
   - id: stage-1-commit
     content: "Сессия 1: коммит «chore: thematic restructure of portfolio» и push в origin/main"
-    status: in_progress
+    status: completed
   - id: category-readmes
     content: "Сессия 2: README.md в каждой категорийной папке (обзор + список кейсов)"
-    status: pending
+    status: completed
   - id: flagship-leadgen
     content: "Сессия 2 — флагман A1: leadgen-n8n-system — обзор 11 workflow в README, mermaid-схема, скрины"
     status: pending
@@ -60,7 +60,7 @@ todos:
     content: "Сессия 3: корневой README.md — hero, бейджи, карточки категорий, контакты, featured-блок"
     status: pending
   - id: rename-repo-optional
-    content: (Опционально) Переименовать репозиторий Business-Analyst-portfolio → portfolio
+    content: (Опционально) На GitHub имя репозитория привести к Portfolio — если ещё не сделано
     status: pending
 isProject: false
 ---
@@ -78,7 +78,7 @@ isProject: false
 ## Целевая структура (Вариант C — 5 направлений + архив)
 
 ```
-_Portfolio/                              ← репозиторий kaluginvit-svg/Business-Analyst-portfolio
+_Portfolio/                              ← репозиторий kaluginvit-svg/Portfolio
 ├── README.md                            ← витрина (карточки 5 направлений + контакты)
 ├── .gitignore                           ← общий: .venv, venv, node_modules, .next, __pycache__, .env, *.log
 ├── ASSETS/                              ← общие медиа: аватар, шапка, иконки
@@ -87,11 +87,17 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 │   ├── README.md
 │   ├── superstore-retail-analytics/     ← из «Бизнес_аналитика»                           (ФЛАГМАН A6)
 │   ├── wb-sales-commercial-analysis/    ← из «Задание» — реальный коммерческий анализ WB (ФЛАГМАН A5)
-│   ├── fintech-ab-test-credit-offer/    ← из «Fintech-ab-test-credit-offer»               (флагман 2-й волны)
+│   ├── fintech-ab-test-credit-offer/    ← из «Fintech-ab-test-credit-offer»; единый кейс A/B (ТЗ: docs/)
 │   ├── wb-tailoring-test-analysis/      ← из «Тестовый швейный»
-│   ├── data-analyst-final-project/      ← из «Проекты\Финальный проект\Data-Analyst-..»
-│   ├── data-analyst-final-v1/           ← из «Проекты\Финальный проект\1»
+│   ├── customer-segmentation/           ← сегментация пользователей
+│   ├── marketplace-unit-economics/      ← юнит-экономика маркетплейса
+│   ├── product-metrics/                 ← продуктовые метрики
+│   ├── python-business-analytics/
+│   ├── python-business-case/
+│   ├── sql-business-case/
+│   ├── reviews-sentiment/               ← анализ отзывов
 │   └── data-work-utilities/             ← из «_Проекты\Работа с данными»
+│       (↑ дубликаты data-analyst-final-* удалены; единый кейс — fintech-ab-test-credit-offer + ТЗ в docs/)
 │
 ├── 02-automation/                       ← Автоматизация процессов
 │   ├── README.md
@@ -118,13 +124,13 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 │   ├── smart-text-helper/               ← из «Проекты_VC\Умный текст-помощник»
 │   ├── weather-tg-bot/                  ← из «Проекты_VC\Погода в ТГ-боте»
 │   ├── team-tg-bot-vc/                  ← из «Проекты_VC\ТГ-бот_для_команды»
-│   ├── dialog-bot-assistant/            ← из «Уроки_VC\Диалоговый бот - ассистент»
-│   ├── dialog-bot-with-memory/          ← из «Уроки_VC\Диалоговый бот с памятью»
-│   └── memory-bot/                      ← из «Уроки_VC\Бот с памятью»
+│   ├── memory-bot/                      ← из «Уроки_VC\Бот с памятью» (узкий сценарий, не полный RAG)
+│   └── (dialog-bot-assistant / dialog-bot-with-memory удалены как дубли personal-rag-assistant)
 │
 ├── 04-web/                              ← Сайты и фронтенд-продукты
 │   ├── README.md
-│   └── svo-payouts-website/             ← из «Сайт СВО» — Next.js + квиз                   (ФЛАГМАН A2, парный с ботом)
+│   ├── svo-payouts-website/             ← из «Сайт СВО» — Next.js + квиз                   (ФЛАГМАН A2, парный с ботом)
+│   └── dostaffkin/                      ← Angular + Express: доставка, PostgreSQL
 │
 ├── 05-ai-consulting/                    ← Стратегии и кейсы внедрения ИИ
 │   ├── README.md
@@ -252,7 +258,7 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 - Удалить `.venv` (Этап 1 — критично).
 - Унифицировать точку входа: один из `bot.py`/`main.py`, второй удалить.
 - Dockerfile + инструкция деплоя.
-- Убрать упоминания «ZeroCoder / VPg07» — нейтральная бизнес-формулировка.
+- Нейтральная бизнес-формулировка в README (без привязки к номеру урока платформы).
 
 ## Этап 2.5. Вторая волна флагманов (после первого пуша)
 
@@ -268,7 +274,7 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 Для остальных ~15 подпроектов (в основном `02-automation` и `03-ai-products`):
 - README из 4 блоков: что это / стек / запуск / статус (например, «учебный, ограниченная функциональность» или «коммерческий MVP»).
 - Удалить `.env`, `.venv`, временные файлы, скриншоты-черновики.
-- Если внутри направления несколько похожих ботов (`dialog-bot-assistant`, `dialog-bot-with-memory`, `memory-bot`, `team-tg-bot-vc`) — в каждом README отметить уникальное отличие, чтобы они не выглядели дублями.
+- Если внутри направления несколько похожих ботов (`personal-rag-assistant`, `team-ai-bot`, `memory-bot`, `team-tg-bot-vc`) — в каждом README отметить уникальное отличие (в `03-ai-products/README.md` уже есть сводная таблица).
 
 Для `99-archive/*` — README ровно из 3 строк: «учебные ноутбуки/скрипты, оставлены для истории».
 
@@ -277,14 +283,14 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 Структура корневого `README.md`:
 1. **Hero**: имя, позиционирование («аналитика данных · автоматизация процессов · ИИ-продукты · сайты · ИИ-консалтинг»), контакты ([t.me/kaluginvit](https://t.me/kaluginvit), email).
 2. **Стек-бейджи**: Python, n8n, Apps Script, Next.js, TypeScript, Pinecone, Haystack, Supabase, Telegram Bot API, MCP, faster-whisper, Plotly, pandas.
-3. **Карточки 5 направлений** — каждая ссылается на свою папку. Внутри карточки — буллет-список 1-3 флагманских кейсов с прямыми GitHub-ссылками вида `https://github.com/kaluginvit-svg/Business-Analyst-portfolio/tree/main/02-automation/leadgen-n8n-system`.
+3. **Карточки 5 направлений** — каждая ссылается на свою папку. Внутри карточки — буллет-список 1-3 флагманских кейсов с прямыми GitHub-ссылками вида `https://github.com/kaluginvit-svg/Portfolio/tree/main/02-automation/leadgen-n8n-system`.
 4. **Featured-блок** наверху — отдельная плашка для кейса «Калькулятор выплат СВО» (web + бот) как самый продакшен-готовый кейс с реальным клиентом.
 5. **Раздел «Архив» (учебные артефакты)** — свёрнутый `<details>` со ссылкой на `99-archive/`.
 6. **Призыв к действию**: «обсудим задачу — Telegram/email».
 
 ## Этап 5. Опциональное переименование репозитория
 
-Текущее имя `Business-Analyst-portfolio` теперь сужает позиционирование (вы шире, чем BA). На GitHub репозиторий можно переименовать без потери истории/звёзд — старые URL автоматически редиректятся. Кандидаты: `portfolio`, `kalugin-portfolio`, `it-portfolio`. Делаю это последним шагом и **только** после вашего подтверждения.
+Целевое имя репозитория на GitHub — **`Portfolio`** (`kaluginvit-svg/Portfolio`). Переименование на стороне GitHub не ломает историю; старые URL редиректятся. Остальные кандидаты (`kalugin-portfolio`, `it-portfolio`) — запасные.
 
 ## Что я НЕ делаю в рамках одного прохода (честно)
 
@@ -297,5 +303,5 @@ _Portfolio/                              ← репозиторий kaluginvit-s
 ## Открытые вопросы (не блокирующие — решим по ходу)
 
 - Какие 2-3 строчки положить в Hero корневого README (роль / для кого / что предлагаете)? Сейчас положу плейсхолдер, вы отредактируете.
-- Имя репозитория переименовываем (Этап 5) или оставляем `Business-Analyst-portfolio`?
+- Имя репозитория на GitHub: целевое **`Portfolio`** (`kaluginvit-svg/Portfolio`); при необходимости старые URL редиректят после переименования.
 - Нужно ли держать локальный `.venv` для `personal-rag-assistant` после удаления из git (через `.gitignore`) — или вы пересоздадите его сами?

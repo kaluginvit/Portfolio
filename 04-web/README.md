@@ -9,4 +9,4 @@
 | [`svo-payouts-website`](./svo-payouts-website/) | Next.js: информационный сайт и квиз по выплатам для семей (продакшен). |
 | [`dostaffkin`](./dostaffkin/) | Angular SPA + Express API: оформление доставки и трек статусов (PostgreSQL). |
 
-В репозитории на GitHub пути: `04-web/<папка>/`.
+В репозитории на GitHub: `https://github.com/kaluginvit-svg/Portfolio/tree/main/04-web/<папка>/`.
