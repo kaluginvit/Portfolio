@@ -52,25 +52,25 @@ import { REPO_TREE } from '../data/links';
       </div>
     </div>
   </section>
+
+  <script is:inline>
+    (function () {
+      const buttons = document.querySelectorAll('#case-filters .filter-btn');
+      const cards = document.querySelectorAll('[data-case-card]');
+      function applyFilter(id) {
+        buttons.forEach((b) => b.classList.toggle('is-active', b.getAttribute('data-filter') === id));
+        cards.forEach((card) => {
+          const cat = card.getAttribute('data-category');
+          const show = id === 'all' || cat === id;
+          card.classList.toggle('is-hidden', !show);
+        });
+      }
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter') || 'all'));
+      });
+    })();
+  </script>
 </Layout>
-
-<script>
-  const buttons = document.querySelectorAll('#case-filters .filter-btn');
-  const cards = document.querySelectorAll('[data-case-card]');
-
-  function applyFilter(id) {
-    buttons.forEach((b) => b.classList.toggle('is-active', b.getAttribute('data-filter') === id));
-    cards.forEach((card) => {
-      const cat = card.getAttribute('data-category');
-      const show = id === 'all' || cat === id;
-      card.classList.toggle('is-hidden', !show);
-    });
-  }
-
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter') || 'all'));
-  });
-</script>
 
 <style>
   .hero-sub {
