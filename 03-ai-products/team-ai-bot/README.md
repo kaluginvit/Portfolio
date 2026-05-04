@@ -82,6 +82,7 @@ PINECONE_INDEX_DIMENSION=3072
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python bot.py
 ```
 
@@ -118,6 +119,7 @@ docker compose up -d --build
 Локальные проверки без реальных API:
 
 ```bash
+pip install -r requirements-dev.txt
 python -m compileall bot.py src tests
 python -m pytest
 ```

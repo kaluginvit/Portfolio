@@ -8,6 +8,7 @@
 **/.venv/
 **/venv/
 _pip_check_venv/
+_tai_venv/
 **/env/
 **/__pycache__/
 **/.pytest_cache/
