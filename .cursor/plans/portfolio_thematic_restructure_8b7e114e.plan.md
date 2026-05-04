@@ -94,10 +94,10 @@ todos:
     status: completed
   - id: readme-archive-rebuild
     content: "Этап 7.3: переписать 99-archive/README.md — список 15 «keep» с описаниями (9 полузавершённых продуктов + 6 методических артефактов с кодом)"
-    status: in_progress
+    status: completed
   - id: commit-push-final
     content: "Этап 6+7 финал: 2 коммита (chore(archive): promote 7 + chore(archive): prune to 15) и git push origin main без force"
-    status: pending
+    status: completed
 isProject: false
 ---
 
