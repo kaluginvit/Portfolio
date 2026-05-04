@@ -27,7 +27,11 @@
 | [`supabase-schema-and-seed.sql`](./supabase-schema-and-seed.sql) | Схема и начальные данные |
 | [`setup-steps.md`](./setup-steps.md) | Шаги настройки |
 | [`links-and-materials.md`](./links-and-materials.md) | Ссылки и материалы |
-| `*.md` (прочие) | Рабочие заметки, шаблоны писем, матрица тестов — материалы курса/проекта |
+| [`email-templates.md`](./email-templates.md) | Шаблоны писем (клиенту, дирекции, сводный) |
+| [`postman-bodies.md`](./postman-bodies.md) | Примеры запросов для Postman / curl |
+| [`process-diagram.mermaid.md`](./process-diagram.mermaid.md) | Mermaid-диаграммы процесса |
+| [`test-matrix.md`](./test-matrix.md) | Матрица позитивных и негативных сценариев |
+| [`_artifacts/`](./_artifacts/) | HTML-экспорты n8n (снимки workflow, не runtime) |
 
 ---
 

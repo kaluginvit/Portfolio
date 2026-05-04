@@ -1,0 +1,21 @@
+# Один `docker compose up`: MCP по HTTP + Telegram-бот.
+services:
+  mcp_server:
+    build:
+      context: ./mcp_server
+    ports:
+      - "${MCP_PUBLISH_PORT:-8765}:8765"
+    environment:
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: "8765"
+
+  telegram_bot:
+    build:
+      context: ./telegram_bot
+    depends_on:
+      - mcp_server
+    env_file:
+      - .env
+    environment:
+      MCP_BASE_URL: http://mcp_server:8765/mcp
+    restart: unless-stopped

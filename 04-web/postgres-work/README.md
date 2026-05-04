@@ -1,5 +1,38 @@
 # Telegram-бот ↔ PostgreSQL: сбор анкет с бэкапом
 
+## Запуск
+
+1. **Клонировать** репозиторий и перейти в `04-web/postgres-work/`.
+2. **Окружение:** `python -m venv .venv` → активировать `.venv`, затем `pip install -r requirements.txt` и скопировать `.env.example` в `.env`, заполнить токен бота и параметры Postgres.
+3. **Запуск (dev):** `python bot.py` — бот должен ответить на `/start` и `/status` (подключение к БД).
+
+### Smoke-чеклист
+
+- [ ] `python bot.py` стартует без traceback.
+- [ ] В Telegram `/start` — приветствие.
+- [ ] `/status` — сообщение о подключении к БД и списке таблиц (или явная ошибка конфигурации).
+
+### Docker: только PostgreSQL
+
+Из `04-web/postgres-work/`:
+
+```bash
+docker compose up -d
+```
+
+В `.env` укажите `DB_HOST=localhost`, `DB_PORT=5432` (или `POSTGRES_PUBLISH_PORT`, если меняли проброс), `DB_NAME=telegram_forms`, `DB_USER=botuser`, `DB_PASSWORD=botpass` — в соответствии с `docker-compose.yml`. Скрипт [`init.sql`](./init.sql) создаёт демо-таблицу при первом запуске тома.
+
+### Пример диалога
+
+1. Пользователь: `/start` → бот приветствует и предлагает команды.  
+2. `/status` → бот отвечает, что подключение к PostgreSQL активно и перечисляет таблицы (в т.ч. `demo_anketa` после compose).  
+3. Дальнейшие шаги зависят от реализованных сценариев анкеты (`/form` и т.д.).
+
+### Деплой (Railway / Render)
+
+- Поднимите **managed Postgres**, задайте переменные `DB_*` в сервисе с ботом.  
+- Либо запускайте `docker compose` на VPS с пробросом порта только на localhost + SSH-туннель.
+
 > **Проблема:** типовая задача — собирать анкеты/лиды через Telegram и складывать их в PostgreSQL без отдельного бэкенда; при этом структуру таблиц хочется менять без переписывания кода под каждое изменение.  
 > **Решение:** Telegram-бот на pyTelegramBotAPI, конфигурация через `.env`. БД-слой читает структуру таблиц из `information_schema` и работает с любой схемой. Есть резервное копирование PostgreSQL → SQLite/Excel для быстрых отчётов.  
 > **Стек:** Python 3.10+, pyTelegramBotAPI, PostgreSQL + psycopg2, openpyxl, SQLite (для бэкапа).  

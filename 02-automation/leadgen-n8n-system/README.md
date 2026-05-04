@@ -64,7 +64,19 @@ flowchart LR
 
 ---
 
-## Как запустить у себя
+## Локальный n8n + Postgres (docker compose)
+
+1. Скопируйте [`.env.example`](./.env.example) в `.env`, задайте пароль Postgres и **`N8N_ENCRYPTION_KEY`** (≥32 символов).
+2. `docker compose up -d` в этой папке → UI n8n: **http://localhost:5678** (или порт из `N8N_PORT`).
+3. Импортируйте JSON из [`n8n-workflows/`](./n8n-workflows/) **в порядке 01 → 11** (см. таблицу выше), затем настройте credentials.
+
+### Внешние сервисы (после импорта)
+
+Типично понадобятся: **OpenAI / Anthropic / другой LLM**, **CRM или HTTP API**, **почта (SMTP / Gmail OAuth)**, **Google Sheets / Airtable / БД**, **webhook URL** для дашборда и входящих событий.
+
+---
+
+## Как запустить у себя (cloud / свой инстанс)
 
 1. Поднимите **n8n** (cloud или self-hosted).
 2. Импортируйте workflow из [`n8n-workflows/`](./n8n-workflows/).

@@ -47,6 +47,17 @@ flowchart LR
 python main.py sync
 ```
 
+### Docker (после первичного OAuth на хосте)
+
+Интерактивный вход в браузере удобнее выполнить **локально** (см. раздел «Настройка» выше), чтобы заполнить `./.sync_state/`. Затем синхронизацию можно гонять в контейнере с тем же томом:
+
+```bash
+docker build -t yandex-google-sync .
+docker run --rm --env-file .env -v "%CD%/.sync_state:/app/.sync_state" yandex-google-sync
+```
+
+На Linux/macOS замените `%CD%` на `$(pwd)`.
+
 В Windows можно запускать **`run-sync.bat`** из каталога проекта (двойной щелчок или `.\run-sync.bat` в PowerShell).
 
 Проверка доступа к папкам: `python test_folder_access.py`. Нужен Python в `PATH`; удобно задать `PYTHONUNBUFFERED=1` для пошагового вывода в консоли Windows.

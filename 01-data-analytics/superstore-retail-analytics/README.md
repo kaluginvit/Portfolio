@@ -73,7 +73,9 @@ jupyter notebook superstore_eda.ipynb
 
 Откройте в браузере `superstore-dashboard.html` и `superstore_presentation.html` (при необходимости через Live Server в VS Code / Cursor).
 
-**Публичная ссылка (GitHub Pages):** в настройках репозитория на GitHub → **Pages** выберите ветку и папку, где рядом лежат `superstore-dashboard.html` и `Sample - Superstore.csv` (часто для монорепо заводят папку `docs/` в корне или отдельную ветку `gh-pages`). После деплоя URL будет вида `https://<user>.github.io/<repo>/.../superstore-dashboard.html`.
+**Live (GitHub Pages):** workflow [Deploy Superstore dashboard](../../.github/workflows/superstore-github-pages.yml) публикует дашборд как корень сайта. Включите **Settings → Pages → Build and deployment: GitHub Actions**. После успешного прогона URL: **[https://kaluginvit-svg.github.io/Portfolio/](https://kaluginvit-svg.github.io/Portfolio/)** (индекс = дашборд). Кнопка для README:
+
+[![Superstore Pages](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/superstore-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/superstore-github-pages.yml)
 
 **3. PowerPoint (по желанию)**
 

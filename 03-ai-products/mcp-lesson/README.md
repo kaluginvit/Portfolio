@@ -55,6 +55,15 @@ pip install -r requirements.txt
 
 ## Запуск
 
+### Docker (рекомендуется для демо)
+
+Из корня `mcp-lesson/` (рядом с `docker-compose.yml`):
+
+1. Скопируйте [`.env.example`](./.env.example) в `.env`, задайте `TELEGRAM_API_TOKEN` и `OPENAI_API_KEY`.
+2. `docker compose up --build` — поднимется **mcp_server** (порт **8765** на хосте) и **telegram_bot** с `MCP_BASE_URL=http://mcp_server:8765/mcp`.
+
+Порт хоста можно переопределить: `MCP_PUBLISH_PORT=9876 docker compose up`.
+
 ### 1) MCP-сервер в режиме HTTP (для бота)
 
 В отдельном терминале:

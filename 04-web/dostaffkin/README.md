@@ -1,5 +1,9 @@
 # Dostaffkin — доставка: заказ и трек статусов
 
+[![Live demo](https://img.shields.io/badge/Live-kaluginvit72.github.io%2Fdostaffkin-22c55e?style=flat&logo=github)](https://kaluginvit72.github.io/dostaffkin/)
+
+> **Демо онлайн:** [kaluginvit72.github.io/dostaffkin](https://kaluginvit72.github.io/dostaffkin/) — статическая сборка фронта (Angular). Backend (Express + Postgres) в демо отключён, поэтому «оформить заказ» и «трек статусов» работают только локально через `docker compose up`. Полный сценарий запуска — ниже.
+
 SPA на **Angular 21** с лёгким backend на **Node.js + Express** и хранением в **PostgreSQL**. Пользователь оформляет доставку, получает номер заказа и может смотреть цепочку статусов на экране трекинга.
 
 ## Ценность в портфолио
@@ -17,6 +21,27 @@ SPA на **Angular 21** с лёгким backend на **Node.js + Express** и х
 | Хранилище | PostgreSQL (таблица `deliveries`) |
 
 Подробнее по API см. [`backend/README.md`](./backend/README.md).
+
+## Docker (Postgres + API + статический фронт)
+
+Из корня `04-web/dostaffkin/`:
+
+```powershell
+docker compose up --build
+```
+
+- API: `http://localhost:3000/health`  
+- Сайт (собранный Angular из `docs/`): `http://localhost:8080`  
+
+Переменные портов: `DOSTAFFKIN_DB_PORT`, `DOSTAFFKIN_API_PORT`, `DOSTAFFKIN_WEB_PORT`.
+
+### Деплой на Railway / Render (free tier)
+
+1. Создайте **PostgreSQL** add-on, скопируйте internal `DATABASE_URL`.  
+2. Сервис **Web** для Node: корень репозитория `dostaffkin`, build `npm ci`, start `node backend/server.js`, env `DATABASE_URL` (+ `DATABASE_SSL=true` при необходимости).  
+3. Статический фронт: отдельный **Static Site** из папки `docs/` или пересоберите `npm run build` в CI и деплой артефакта.
+
+---
 
 ## Быстрый старт (Windows)
 

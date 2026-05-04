@@ -12,10 +12,10 @@
 
 | Папка | Роль |
 |--------|------|
-| [`yandex-wordstat-mcp/`](./yandex-wordstat-mcp/) | MCP-сервер Wordstat (основная точка входа для документации по установке) |
-| [`mcp/`](./mcp/) | Альтернативная/расширенная сборка MCP — см. локальный [`mcp/README.md`](./mcp/README.md) |
+| **`yandex-wordstat-mcp/`** | **Основной** MCP-сервер Wordstat — сюда идите первым: venv, `.env`, OAuth, `python mcp_server.py`, Docker (`yandex-wordstat-mcp/Dockerfile`). |
+| **`mcp/`** | **Legacy / альтернативная** сборка — только если нужны сценарии из [`mcp/README.md`](./mcp/README.md); для новых подключений используйте `yandex-wordstat-mcp`. |
 
-Начните с **`yandex-wordstat-mcp/README.md`**: venv, `.env`, получение OAuth-токена, запуск `python mcp_server.py`.
+Начните с **`yandex-wordstat-mcp/README.md`**.
 
 ---
 

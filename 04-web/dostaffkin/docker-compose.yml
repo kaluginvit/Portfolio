@@ -1,0 +1,46 @@
+# Локальный «one up»: Postgres + Express API + статическая сборка Angular (папка docs/).
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dostaffkin
+    ports:
+      - "${DOSTAFFKIN_DB_PORT:-5432}:5432"
+    volumes:
+      - dostaffkin_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dostaffkin"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/dostaffkin
+      DATABASE_SSL: "false"
+      PORT: "3000"
+    ports:
+      - "${DOSTAFFKIN_API_PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${DOSTAFFKIN_WEB_PORT:-8080}:80"
+    volumes:
+      - ./docs:/usr/share/nginx/html:ro
+
+volumes:
+  dostaffkin_pg:

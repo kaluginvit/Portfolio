@@ -121,6 +121,18 @@ ab_test_credit_card_banner_repo/
 По ТЗ минимально детектируемый эффект зафиксирован на уровне `2.5%`.  
 В проекте строится зависимость MDE от размера выборки и рассчитывается рекомендуемый объем пользователей на группу.
 
+## Запуск
+
+1. Клонировать репозиторий, перейти в `01-data-analytics/fintech-ab-test-credit-offer/`.
+2. `python -m venv .venv` → активировать (Windows: `.venv\Scripts\activate`), затем `pip install -r requirements.txt`.
+3. **Dev / воспроизведение:** `make all` (или по шагам `make data`, `make analysis`, `make report`).
+
+### Smoke-чеклист
+
+- [ ] `make all` завершается без ошибки.
+- [ ] Появляются файлы в `data/processed/` и `reports/final_report.md`.
+- [ ] Ноутбук открывается в [nbviewer](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb).
+
 ## Quick start
 
 ```bash

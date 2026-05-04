@@ -1,0 +1,73 @@
+# Сборка и push образов в GHCR при изменениях в соответствующих путях.
+name: Build Docker images (GHCR)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/Dockerfile"
+      - "**/Dockerfile.backend"
+      - ".github/workflows/build-images.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { image: mortgage-calculator, context: 02-automation/mortgage-calculator }
+          - { image: weather-api, context: 02-automation/weather-api }
+          - { image: currency-travel-api, context: 02-automation/currency-travel-api }
+          - { image: bankrot-trades-scraper, context: 02-automation/bankrot-trades-scraper }
+          - { image: yandex-google-sync, context: 02-automation/yandex-google-sync }
+          - { image: github-actions-setup, context: 02-automation/github-actions-setup }
+          - { image: weather-tg-bot, context: 03-ai-products/weather-tg-bot }
+          - { image: team-tg-bot-vc, context: 03-ai-products/team-tg-bot-vc }
+          - { image: smart-text-helper, context: 03-ai-products/smart-text-helper }
+          - { image: tg-catalog-analyzer, context: 03-ai-products/tg-catalog-analyzer }
+          - { image: mcp-lesson-mcp-server, context: 03-ai-products/mcp-lesson/mcp_server }
+          - { image: mcp-lesson-telegram-bot, context: 03-ai-products/mcp-lesson/telegram_bot }
+          - { image: pdf-checker, context: 03-ai-products/pdf-checker }
+          - { image: audio-transcriber, context: 03-ai-products/audio-transcriber }
+          - { image: finance-mcp-server, context: 03-ai-products/finance-mcp-server/product-mcp }
+          - { image: yandex-wordstat-mcp, context: 03-ai-products/seo-mcp-bot/yandex-wordstat-mcp }
+          - { image: team-ai-bot, context: 03-ai-products/team-ai-bot }
+          - { image: personal-rag-assistant, context: 03-ai-products/personal-rag-assistant }
+          - { image: memory-bot, context: 03-ai-products/memory-bot }
+          - { image: svo-payments-bot, context: 03-ai-products/svo-payments-bot }
+          - { image: crewai-multiagent, context: 03-ai-products/crewai-multiagent }
+          - { image: autonomous-agents-backend, context: 03-ai-products/autonomous-agents/backend }
+          - { image: svo-payouts-website, context: 04-web/svo-payouts-website/web }
+          - { image: dostaffkin-backend, context: 04-web/dostaffkin, file: 04-web/dostaffkin/Dockerfile.backend }
+    concurrency:
+      group: ghcr-${{ github.ref }}-${{ matrix.image }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file || format('{0}/Dockerfile', matrix.context) }}
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}:latest
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}

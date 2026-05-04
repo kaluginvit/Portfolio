@@ -47,6 +47,9 @@ htmlcov/
 *.swp
 *.swo
 
+# --- Служебное автора (Cursor planning workspace) ---
+.cursor/
+
 # --- OS droppings ---
 .DS_Store
 Thumbs.db

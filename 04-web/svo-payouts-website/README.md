@@ -4,6 +4,9 @@
 
 **Живой сайт:** [svorazbor.ru](https://svorazbor.ru)
 
+[![Live](https://img.shields.io/badge/Live-svorazbor.ru-22c55e?style=flat)](https://svorazbor.ru)
+[![Vercel-friendly](https://img.shields.io/badge/Deploy-Vercel%20%7C%20аналог-000000?style=flat&logo=vercel)](https://vercel.com/docs)
+
 *Помочь родственникам погибших участников СВО разобраться, на что ориентироваться по мерам поддержки и что делать дальше.*
 
 <br/>

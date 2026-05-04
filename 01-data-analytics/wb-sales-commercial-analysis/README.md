@@ -20,16 +20,19 @@
 
 ---
 
-## Запуск расчётов
+## Запуск
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install pandas numpy
-python wb_analysis.py
-```
+1. **Клонировать** репозиторий, перейти в `01-data-analytics/wb-sales-commercial-analysis/`.
+2. **Окружение:** `python -m venv .venv` → активировать `.venv`, затем `pip install -r requirements.txt`.
+3. **Запуск (dev):** `python wb_analysis.py` (остальные скрипты — по необходимости).
 
-Другие скрипты (`sales_analysis_commercial.py`, …) — по необходимости; зависимости смотрите в импортах файла.
+### Smoke-чеклист
+
+- [ ] `pip install -r requirements.txt` без ошибок.
+- [ ] `python wb_analysis.py` завершается без исключения (CSV на месте).
+- [ ] В консоли/выводе есть сводные метрики по отчёту.
+
+См. [`DATA_ANONYMIZATION.md`](./DATA_ANONYMIZATION.md) перед публикацией сырых CSV.
 
 ---
 

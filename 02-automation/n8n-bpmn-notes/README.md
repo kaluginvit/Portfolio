@@ -35,6 +35,18 @@
 2. Откройте в браузере: `http://localhost:8080/viewer.html`.
 3. Переключайте вкладки «Кейс 1» и «Кейс 2» для просмотра диаграмм.
 
+### Mermaid в Markdown (GitHub / Cursor)
+
+Файлы `*.mmd` можно вставить в любой `.md` обёрткой:
+
+````markdown
+```mermaid
+<!-- содержимое case1-telegram-bot-studio.mmd -->
+```
+````
+
+GitHub отрисует блок `mermaid` прямо в превью README или в Issues/PR.
+
 ### Вариант 3: Редакторы
 - **Camunda Modeler** — бесплатный десктопный редактор BPMN.
 - **bpmn.io** — веб-демо для просмотра и редактирования.
