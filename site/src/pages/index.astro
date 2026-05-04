@@ -16,28 +16,31 @@ const featured = cases.filter((c) => c.featured);
 >
   <section class="hero--landing" aria-label="Первый экран">
     <div class="wrap">
-    <p class="hero-kicker">Аналитика · Автоматизация · ИИ-продукты · Веб-MVP</p>
-    <h1>От данных и идеи — к работающему продукту</h1>
-    <p class="lead">
+    <p class="eyebrow">Аналитика · Автоматизация · ИИ-продукты · Веб-MVP</p>
+    <h1>
+      От данных и идеи —<br />
+      к <span class="text-gold">работающему продукту</span>
+    </h1>
+    <p class="lead hero-text">
       Сначала уточняем задачу и критерий успеха, затем — формат работы и горизонт. Код и сценарии остаются у вас: GitHub, Docker, документация — без «чёрного ящика».
     </p>
     <p class="hero-tagline">
       Prod-сайт с лидами · онлайн-демо · проверяемые кейсы и образы в GHCR — по ссылкам ниже.
     </p>
-    <ul class="hero-facts" aria-label="Кратко о витрине">
-      <li class="hero-fact">
-        <span class="hero-fact__val">20+</span>
-        <span class="hero-fact__label">кейсов в монорепозитории</span>
-      </li>
-      <li class="hero-fact">
-        <span class="hero-fact__val">5</span>
-        <span class="hero-fact__label">направлений: от аналитики до веб-MVP</span>
-      </li>
-      <li class="hero-fact">
-        <span class="hero-fact__val">Prod + demo</span>
-        <span class="hero-fact__label">реальный трафик и онлайн-демо</span>
-      </li>
-    </ul>
+    <div class="stats-strip" role="list" aria-label="Кратко о витрине">
+      <div role="listitem">
+        <strong>20+</strong>
+        <span>кейсов в монорепозитории</span>
+      </div>
+      <div role="listitem">
+        <strong>5</strong>
+        <span>направлений: от аналитики до веб-MVP</span>
+      </div>
+      <div role="listitem">
+        <strong>Prod + demo</strong>
+        <span>реальный трафик и онлайн-демо</span>
+      </div>
+    </div>
     <div class="cta-row hero-cta">
       <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_hero">Написать в Telegram</a>
       <a class="btn btn-ghost" href={`${base}cases/`} data-ym-goal="cases_hero">Каталог кейсов</a>
@@ -215,7 +218,7 @@ const featured = cases.filter((c) => c.featured);
           <p>Итерации с демо, финальная проверка сценариев, документация.</p>
         </div>
       </div>
-      <p class="muted" style="margin-top: 1.25rem; text-align: center;">
+      <p class="safe-note">
         <a href={`${base}process/`}>Подробнее про этапы →</a>
       </p>
     </div>
@@ -298,7 +301,7 @@ const featured = cases.filter((c) => c.featured);
     <div class="wrap">
       <p class="section-label">FAQ</p>
       <h2 class="section-title">Частые вопросы</h2>
-      <div class="faq-list">
+      <div class="faq-list faq-list--amal">
       <div class="faq-item">
         <h3>С чего начать, если я не технарь?</h3>
         <p>
