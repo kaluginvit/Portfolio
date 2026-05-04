@@ -52,6 +52,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Job summary (какой образ собирается)
+        run: |
+          echo "## Docker image: \`${{ matrix.image }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Параметр | Значение |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Image | \`${{ matrix.image }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Context | \`${{ matrix.context }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Dockerfile | \`${{ matrix.file || format('{0}/Dockerfile', matrix.context) }}\` |" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
