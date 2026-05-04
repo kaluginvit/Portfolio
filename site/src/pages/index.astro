@@ -21,24 +21,37 @@ const featured = cases.filter((c) => c.featured);
     <p class="lead">
       Сначала уточняем задачу и критерий успеха, затем — формат работы и горизонт. Код и сценарии остаются у вас: GitHub, Docker, документация — без «чёрного ящика».
     </p>
-    <p class="hero-micro muted">
-      Prod-сайт с лидами · онлайн-демо · 20+ кейсов по 5 направлениям · образы в GHCR — всё проверяемо по ссылкам ниже.
+    <p class="hero-tagline">
+      Prod-сайт с лидами · онлайн-демо · проверяемые кейсы и образы в GHCR — по ссылкам ниже.
     </p>
-    <div class="hero-stats">
-      <span><strong>1</strong> сайт на проде + <strong>2</strong> демо без установки</span>
-      <span><strong>20+</strong> кейсов · <strong>5</strong> направлений</span>
-      <span><strong>GHCR</strong> · воспроизводимый запуск</span>
-    </div>
-    <div class="cta-row">
+    <ul class="hero-facts" aria-label="Кратко о витрине">
+      <li class="hero-fact">
+        <span class="hero-fact__val">20+</span>
+        <span class="hero-fact__label">кейсов в монорепозитории</span>
+      </li>
+      <li class="hero-fact">
+        <span class="hero-fact__val">5</span>
+        <span class="hero-fact__label">направлений: от аналитики до веб-MVP</span>
+      </li>
+      <li class="hero-fact">
+        <span class="hero-fact__val">Prod + demo</span>
+        <span class="hero-fact__label">реальный трафик и онлайн-демо</span>
+      </li>
+    </ul>
+    <div class="cta-row hero-cta">
       <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_hero">Написать в Telegram</a>
       <a class="btn btn-ghost" href={`${base}cases/`} data-ym-goal="cases_hero">Каталог кейсов</a>
-      <a class="btn btn-ghost" href={`${base}contact/`} data-ym-goal="contact_hero">Контакты</a>
     </div>
+    <p class="hero-subcta muted">
+      <a href={`${base}contact/`} data-ym-goal="contact_hero">Контакты</a>
+      ·
+      <a href="#brief">Бриф в три пункта</a>
+    </p>
     <HomeAnchorNav />
     </div>
   </section>
 
-  <section class="section section--tight">
+  <section class="section section--chips" aria-label="Стек и инструменты">
     <div class="wrap">
       <ul class="chips">
         <li class="chip">EDA и A/B</li>
@@ -58,7 +71,7 @@ const featured = cases.filter((c) => c.featured);
       <p class="section-lead">
         Подключаюсь, когда важны измеримый эффект, прозрачные артефакты и возможность передать сопровождение внутрь команды.
       </p>
-      <div class="grid-cards">
+      <div class="grid-cards grid-cards--eq grid-cards--3col">
         <div class="card">
           <h3>Руководителю и продукту</h3>
           <p>
@@ -88,7 +101,7 @@ const featured = cases.filter((c) => c.featured);
       <p class="section-lead">
         В стоимость и сроки закладываю не «часы в никуда», а конкретные артефакты: отчёт, репозиторий, workflow, контейнер, инструкция по запуску — в зависимости от формата.
       </p>
-      <div class="grid-cards">
+      <div class="grid-cards grid-cards--eq grid-cards--includes">
         <div class="card">
           <h3>Диагностика и метрики успеха</h3>
           <p>Согласуем цель, ограничения данных и критерии «готово» — до разработки.</p>
@@ -109,7 +122,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section section--muted" id="portfolio" style="border-block: 1px solid var(--border);">
+  <section class="section section--muted" id="portfolio">
     <div class="wrap">
       <p class="section-label">Портфолио</p>
       <h2 class="section-title">То, что можно открыть и проверить</h2>
@@ -117,24 +130,24 @@ const featured = cases.filter((c) => c.featured);
         Ниже — флагманские кейсы с быстрыми ссылками на GitHub и прод/демо. Полный каталог с фильтром — на странице «Кейсы»; исходники — в монорепозитории.
       </p>
 
-      <div class="grid-cards">
+      <div class="grid-cards grid-cards--eq grid-cards--portfolio">
         {
           featured.map((c) => (
-            <div class="card">
+            <article class="card case-card">
               <span class="chip" style="align-self: flex-start;">
                 {c.categoryLabel}
               </span>
               <h3>{c.title}</h3>
               <p>{c.result}</p>
               <div class="card-actions">
-                <a href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer">
+                <a class="btn btn-ghost btn-sm" href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer">
                   GitHub
                 </a>
-                <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" data-ym-goal={`live_${c.id}`}>
+                <a class="btn btn-primary btn-sm" href={c.liveUrl} target="_blank" rel="noopener noreferrer" data-ym-goal={`live_${c.id}`}>
                   {c.liveLabel}
                 </a>
               </div>
-            </div>
+            </article>
           ))
         }
       </div>
@@ -148,6 +161,12 @@ const featured = cases.filter((c) => c.featured);
       <p class="section-lead">
         Слайд полезен для согласований. Чтобы сдвинуть метрику, обычно нужен запускаемый сценарий, данные и итерации — иначе вы платите за красивую картинку без рычага.
       </p>
+      <ul class="compare-highlights">
+        <li>Артефакты у вас</li>
+        <li>Прод и демо</li>
+        <li>Прозрачные этапы</li>
+        <li>Интеграции по задаче</li>
+      </ul>
       <div class="compare">
         <div class="compare-box compare-box--yes">
           <h3>Рабочий контур</h3>
@@ -171,7 +190,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section" id="process" style="background: var(--bg-elevated); border-block: 1px solid rgba(24, 24, 27, 0.08);">
+  <section class="section section--surface" id="process">
     <div class="wrap">
       <p class="section-label">Этапы</p>
       <h2 class="section-title">От первого сообщения до сдачи</h2>
@@ -253,7 +272,7 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 
-  <section class="section section--muted" id="brief" style="border-block: 1px solid rgba(24, 24, 27, 0.08);">
+  <section class="section section--muted" id="brief">
     <div class="wrap">
       <p class="section-label">Бриф</p>
       <h2 class="section-title">Что прислать, чтобы я ответил с оценкой, а не общими словами</h2>
@@ -267,7 +286,7 @@ const featured = cases.filter((c) => c.featured);
             <strong>Контекст</strong> — ссылка на текущий процесс, пример таблицы/выгрузки, доступ к тестовым данным (или описание полей), что уже пробовали.
           </li>
         </ol>
-        <div class="cta-row" style="justify-content: flex-start;">
+        <div class="cta-row cta-row--start">
           <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_brief">Отправить бриф в Telegram</a>
           <a class="btn btn-ghost" href={`${base}contact/`}>Страница контактов</a>
         </div>
