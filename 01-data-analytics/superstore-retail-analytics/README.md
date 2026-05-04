@@ -29,7 +29,7 @@
 - **Скидки:** глубокие скидки связаны с просадкой маржи — кандидат на пересмотр политики.
 - **География и сегменты:** различия по регионам и типам клиентов — основа для приоритизации.
 
-Подробности — в `superstore_eda.ipynb` и на слайдах `superstore_presentation.html`.
+Подробности — в `superstore_eda.ipynb`, на слайдах `superstore_presentation.html` и в [**INSIGHTS.md**](INSIGHTS.md) (три вывода для стейкхолдеров).
 
 ---
 
@@ -73,6 +73,8 @@ jupyter notebook superstore_eda.ipynb
 
 Откройте в браузере `superstore-dashboard.html` и `superstore_presentation.html` (при необходимости через Live Server в VS Code / Cursor).
 
+**Публичная ссылка (GitHub Pages):** в настройках репозитория на GitHub → **Pages** выберите ветку и папку, где рядом лежат `superstore-dashboard.html` и `Sample - Superstore.csv` (часто для монорепо заводят папку `docs/` в корне или отдельную ветку `gh-pages`). После деплоя URL будет вида `https://<user>.github.io/<repo>/.../superstore-dashboard.html`.
+
 **3. PowerPoint (по желанию)**
 
 ```bash
@@ -96,4 +98,4 @@ python html_to_pptx.py
 
 ---
 
-<sub>Итоговый проект курса ZeroCoder, модуль «AI в таблицах».</sub>
+<sub>Учебный кейс на датасете Sample Superstore.</sub>

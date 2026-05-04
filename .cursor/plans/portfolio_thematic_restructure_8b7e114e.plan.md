@@ -1,6 +1,6 @@
 ---
 name: Portfolio thematic restructure
-overview: "Сессия 1 (текущая): только реструктуризация — гигиена, переименование 30+ подпроектов на латиницу, перенос в 5 тематических направлений + архив, фиксирующий коммит. Сессия 2+ (отдельно): продакшен-доводка флагманов и корневой README."
+overview: "Сессия 1: реструктуризация и гигиена. Сессия 2: продакшен-доводка README/Docker/медиа для 8 флагов (верхний слой). Сессия 3+: вторая волна флагманов, корневая витрина README."
 todos:
   - id: gitignore-and-cleanup
     content: "Сессия 1: создать корневой .gitignore, удалить .venv/venv/node_modules/.next/__pycache__/.pytest_cache/логи (~30 000 файлов)"
@@ -28,28 +28,28 @@ todos:
     status: completed
   - id: flagship-leadgen
     content: "Сессия 2 — флагман A1: leadgen-n8n-system — обзор 11 workflow в README, mermaid-схема, скрины"
-    status: pending
+    status: completed
   - id: flagship-svo-pair
     content: "Сессия 2 — флагман A2: svo-payouts-website + svo-payments-bot — спарка лендинг+бот как один кейс"
-    status: pending
+    status: completed
   - id: flagship-yandex-google-sync
     content: "Сессия 2 — флагман A3: yandex-google-sync — Dockerfile, чистка .env, инструкция OAuth"
-    status: pending
+    status: completed
   - id: flagship-seo-mcp
     content: "Сессия 2 — флагман A4: seo-mcp-bot — описание MCP-сервера, инструкция подключения к Cursor/Claude"
-    status: pending
+    status: completed
   - id: flagship-wb-commercial
     content: "Сессия 2 — флагман A5: wb-sales-commercial-analysis — скрин отчёта, обезличить данные если нужно"
-    status: pending
+    status: completed
   - id: flagship-superstore
     content: "Сессия 2 — флагман A6: superstore-retail-analytics — скрины, GitHub Pages, INSIGHTS.md"
-    status: pending
+    status: completed
   - id: flagship-team-bot
     content: "Сессия 2 — флагман A7: team-ai-bot — Dockerfile, docker-compose, раздел «Деплой»"
-    status: pending
+    status: completed
   - id: flagship-rag-assistant
     content: "Сессия 2 — флагман A8: personal-rag-assistant — удалить .venv, Dockerfile, одна entrypoint"
-    status: pending
+    status: completed
   - id: flagship-wave-2
     content: "Сессия 3 — вторая волна: hotel-booking-tally-supabase, barista-payroll-sheets, audio-transcriber, fintech-ab-test, ai-in-accounting"
     status: pending

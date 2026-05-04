@@ -12,6 +12,12 @@
 
 ---
 
+## Парный продукт (Telegram-бот)
+
+Тот же сценарий «ориентир по выплатам и шагам» доступен в **Telegram** — репозиторий: [`03-ai-products/svo-payments-bot`](../../03-ai-products/svo-payments-bot/). Кратко о связке: [`RELATED.md`](RELATED.md).
+
+---
+
 ## Зачем нужен этот проект
 
 После трагической потери близкого человека семьям часто сложно:
@@ -60,7 +66,7 @@
 
 Техническая документация: **[web/README.md](web/README.md)** (запуск у себя на компьютере, переменные окружения, лиды, Telegram, вебхук, деплой, CI).
 
-Репозиторий на GitHub: [github.com/kaluginvit72/SVO_viplaty_site](https://github.com/kaluginvit72/SVO_viplaty_site)
+Код в составе портфолио: [github.com/kaluginvit-svg/Portfolio — `04-web/svo-payouts-website`](https://github.com/kaluginvit-svg/Portfolio/tree/main/04-web/svo-payouts-website)
 
 ---
 
