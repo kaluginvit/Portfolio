@@ -557,26 +557,6 @@ section[id] {
   border-top: 1px solid var(--border);
 }
 
-.showcase-frame {
-  display: block;
-  position: relative;
-  width: 100%;
-  aspect-ratio: 8 / 5;
-  background: var(--surface);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-.showcase-frame img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  background: var(--surface);
-}
-
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
