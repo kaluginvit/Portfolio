@@ -33,17 +33,6 @@
 | [`ai-automation-lessons/`](./ai-automation-lessons/) | Конвейер «транскрипт → ИИ → PDF-отчёт» |
 | [`ai-coding-lessons/`](./ai-coding-lessons/) | Демонстрация Python ↔ Go API-паритета: Flask `app.py` + `go-server/` (одинаковый контракт на двух языках) |
 
-## Что было удалено из репо (но осталось локально)
-
-Удалены из репозитория 15 учебных обрывков и дублей: они либо состоят из одного скрипта, либо повторяют то, что уже есть в основных направлениях, либо являются прямыми дублями более полных проектов:
-
-`api-testing-bot`, `auto-deploy-lesson`, `db-lessons`, `docker-lessons`, `langchain-lesson-1`, `langchain-lesson-2`, `llm-lessons`, `local-ai-agent`, `loki-grafana-stack`, `postgres-lessons`, `python-modules-lessons`, `python-oop-practice`, `recipe-search-bot`, `sql-lessons`, `sqlite-lesson`.
-
-Они зафиксированы в `.gitignore` и физически остаются на диске у автора — при необходимости любая папка может быть восстановлена и доведена до публикации.
-
-Также в Этапе 6 были выполнены:
-- **Дедуп**: `autonomous-agents-local` удалена как полная копия `autonomous-agents` (которая поднята в `03-ai-products/`).
-- **Слияние**: `go-server-mini` стал `ai-coding-lessons/go-server/` — Go-вариант рядом с Python-эквивалентом, демонстрация языкового паритета.
 
 ## Зачем такое деление
 
