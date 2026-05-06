@@ -11,12 +11,12 @@ const featured = cases.filter((c) => c.featured);
 
 <Layout
   title="Виталий Калугин — аналитика, автоматизация и ИИ до продакшена"
-  description="Отчёты и A/B, n8n и интеграции, Telegram-боты и RAG, веб-MVP с деплоем. Открытые кейсы на GitHub, прод-сайт СВО в органике. Первичная оценка по короткому брифу в Telegram."
+  description="Финансовая аналитика и автоматизация (учёт, отчётность, интеграции) + дата/бизнес‑аналитика для решений (EDA, воронки, A/B, дашборды). Все артефакты в репозитории: код, Docker, документация. Первичная оценка по короткому брифу в Telegram."
   current="home"
 >
   <section class="hero--landing" aria-label="Первый экран">
     <div class="wrap">
-    <p class="eyebrow">Аналитика · Автоматизация · ИИ-продукты · Веб-MVP</p>
+    <p class="eyebrow">Финансы + автоматизация · Дата/бизнес-аналитика</p>
     <h1>
       От данных и идеи —<br />
       к <span class="text-gold">работающему продукту</span>
@@ -24,23 +24,24 @@ const featured = cases.filter((c) => c.featured);
     <p class="lead hero-text">
       Сначала уточняем задачу и критерий успеха, затем — формат работы и горизонт. Код и сценарии остаются у вас: GitHub, Docker, документация — без «чёрного ящика».
     </p>
-    <p class="hero-tagline">
-      Prod-сайт с лидами · онлайн-демо · проверяемые кейсы и образы в GHCR — по ссылкам ниже.
-    </p>
-    <div class="stats-strip" role="list" aria-label="Кратко о витрине">
-      <div role="listitem">
-        <strong>22+</strong>
-        <span>кейсов в монорепозитории</span>
+
+    <div class="focus-grid" role="list" aria-label="Фокусные направления">
+      <div class="focus-card" role="listitem">
+        <p class="focus-card__label">Финансы + автоматизация</p>
+        <h2 class="focus-card__title">Учёт, отчётность, интеграции — меньше рутины</h2>
+        <p class="focus-card__text">
+          От таблиц и 1С-выгрузок до автосборки отчётов, сверок и уведомлений: n8n/скрипты, Postgres, API, контроль качества данных.
+        </p>
       </div>
-      <div role="listitem">
-        <strong>5</strong>
-        <span>направлений: от аналитики до веб-MVP</span>
-      </div>
-      <div role="listitem">
-        <strong>Prod + demo</strong>
-        <span>реальный трафик и онлайн-демо</span>
+      <div class="focus-card" role="listitem">
+        <p class="focus-card__label">Дата / бизнес-аналитика</p>
+        <h2 class="focus-card__title">Метрики, воронки, A/B и дашборды для решений</h2>
+        <p class="focus-card__text">
+          EDA, сегментации, юнит-экономика, продуктовые метрики: выводы для руководства + артефакты, которые можно передать команде.
+        </p>
       </div>
     </div>
+
     <div class="cta-row hero-cta">
       <a class="btn btn-primary" href={TELEGRAM} target="_blank" rel="noopener noreferrer" data-ym-goal="telegram_hero">Написать в Telegram</a>
       <a class="btn btn-ghost" href={`${base}cases/`} data-ym-goal="cases_hero">Каталог кейсов</a>
@@ -49,6 +50,8 @@ const featured = cases.filter((c) => c.featured);
       <a href={`${base}contact/`} data-ym-goal="contact_hero">Контакты</a>
       ·
       <a href="#brief">Бриф в три пункта</a>
+      ·
+      <a href="#formats">ИИ-консалтинг, сайты и прочее ниже</a>
     </p>
     <HomeAnchorNav />
     </div>
@@ -64,6 +67,25 @@ const featured = cases.filter((c) => c.featured);
         <li class="chip">Postgres · Docker</li>
         <li class="chip">Яндекс.Метрика в проде</li>
       </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-label="Кратко о витрине">
+    <div class="wrap">
+      <div class="stats-strip" role="list">
+        <div role="listitem">
+          <strong>22+</strong>
+          <span>кейсов в монорепозитории</span>
+        </div>
+        <div role="listitem">
+          <strong>Prod + demo</strong>
+          <span>реальный трафик и онлайн-демо</span>
+        </div>
+        <div role="listitem">
+          <strong>GHCR</strong>
+          <span>образы и воспроизводимые запуски</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -344,3 +366,81 @@ const featured = cases.filter((c) => c.featured);
     </div>
   </section>
 </Layout>
+
+<style>
+  .hero--landing > .wrap {
+    padding: calc(var(--header-h) + 2.1rem) 0 clamp(1.6rem, 3vw, 2.2rem);
+  }
+
+  .hero--landing h1 {
+    margin-bottom: 1rem;
+  }
+
+  .hero--landing .lead,
+  .hero-text {
+    margin-bottom: 1.25rem;
+  }
+
+  .focus-grid {
+    margin: 1.25rem auto 0;
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: 1fr;
+    max-width: 980px;
+    text-align: left;
+  }
+
+  @media (min-width: 860px) {
+    .focus-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .focus-card {
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 1.15rem 1.15rem;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(6px);
+  }
+
+  .focus-card__label {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .focus-card__title {
+    margin: 0 0 0.55rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--heading);
+  }
+
+  .focus-card__text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 760px) {
+    .focus-card {
+      padding: 1rem 1rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .focus-card__title {
+      font-size: 1.3rem;
+    }
+  }
+</style>
