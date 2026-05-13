@@ -1,0 +1,22 @@
+# Секреты
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Docker
+registry/data/
+
+# IDE
+.idea/
+.vscode/
+*.swp

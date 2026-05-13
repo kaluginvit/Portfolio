@@ -181,6 +181,16 @@ export const cases: CaseItem[] = [
     liveUrl: 'https://kaluginvit72.github.io/dostaffkin/',
   },
   {
+    id: 'autello-lead-capture',
+    category: '04',
+    categoryLabel: 'Веб',
+    title: 'Autello — сбор заявок',
+    result: 'Webpack frontend + FastAPI + PostgreSQL: форма заявок, услуги, бюджет и поведенческие метрики.',
+    repoPath: '04-web/autello-lead-capture',
+    liveLabel: 'Репозиторий',
+    liveUrl: `${tree}/04-web/autello-lead-capture`,
+  },
+  {
     id: 'postgres-work',
     category: '04',
     categoryLabel: 'Веб',

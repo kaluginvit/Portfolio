@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autéllo — Оставьте заявку</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <header class="hero">
+    <div class="hero__inner">
+      <h1 class="hero__title">Autéllo</h1>
+      <p class="hero__sub">Премиальные решения для вашего автомобиля</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="form-section">
+      <h2 class="form-section__title">Оставьте заявку</h2>
+      <p class="form-section__desc">Заполните форму, и мы свяжемся с вами в ближайшее время</p>
+
+      <form id="applicationForm" novalidate>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Имя <span class="req">*</span></label>
+            <input type="text" name="first_name" required placeholder="Никита" />
+          </div>
+          <div class="form-group">
+            <label>Фамилия <span class="req">*</span></label>
+            <input type="text" name="last_name" required placeholder="Иванов" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Отчество</label>
+          <input type="text" name="middle_name" placeholder="Вадимович" />
+        </div>
+
+        <div class="form-group service-group">
+          <label>Выберите услугу <span class="req">*</span></label>
+          <p class="form-hint">Выберите интересующую вас услугу из списка</p>
+          <select name="interested_service" id="serviceSelect" required>
+            <option value="">Загрузка услуг...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Бюджет: <span id="budgetValue">500 000 ₽</span></label>
+          <input type="range" name="budget" id="budgetSlider" min="50000" max="2000000" step="50000" value="500000" />
+          <div class="slider-labels">
+            <span>50 000 ₽</span>
+            <span>2 000 000 ₽</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ниша бизнеса</label>
+            <input type="text" name="business_niche" placeholder="IT, ритейл, производство..." />
+          </div>
+          <div class="form-group">
+            <label>Размер компании</label>
+            <input type="text" name="company_size" placeholder="До 10 / 10–100 / 100+ чел." />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Вы</label>
+            <select name="role">
+              <option value="">Выберите</option>
+              <option value="employee">Сотрудник</option>
+              <option value="manager">Руководитель</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Тип задачи</label>
+            <input type="text" name="task_type" placeholder="Разработка, интеграция..." />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Объём задачи</label>
+            <input type="text" name="task_volume" placeholder="Небольшая / Средняя / Большая" />
+          </div>
+          <div class="form-group">
+            <label>Срок</label>
+            <input type="text" name="deadline" placeholder="1 месяц, квартал..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Информация о бизнесе</label>
+          <textarea name="business_info" rows="3" placeholder="Расскажите о вашем бизнесе"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Предпочтительный способ связи</label>
+            <input type="text" name="preferred_contact" placeholder="Telegram, WhatsApp, звонок..." />
+          </div>
+          <div class="form-group">
+            <label>Удобное время</label>
+            <input type="text" name="contact_time" placeholder="10:00–18:00, вечером..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Комментарий</label>
+          <textarea name="comments" rows="3" placeholder="Дополнительная информация..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Отправить заявку</button>
+
+        <div id="formMessage" class="form-message hidden"></div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

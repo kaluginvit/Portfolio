@@ -1,0 +1,6 @@
+POSTGRES_DB=app_db
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=your_password_here
+
+PGADMIN_EMAIL=admin@admin.com
+PGADMIN_PASSWORD=your_password_here
