@@ -42,9 +42,6 @@
 <table>
 <tr>
 <td align="center" width="25%">
-  <a href="./Сертификаты/diploma24144040.png"><img src="./Сертификаты/diploma24144040.png" alt="Диплом" width="180"/></a><br/><sub>Диплом / программа</sub>
-</td>
-<td align="center" width="25%">
   <a href="./Сертификаты/AI_в_таблицах_рус.png"><img src="./Сертификаты/AI_в_таблицах_рус.png" alt="ИИ в таблицах" width="180"/></a><br/><sub>ИИ в таблицах</sub>
 </td>
 <td align="center" width="25%">

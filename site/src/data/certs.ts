@@ -5,7 +5,6 @@ const p = (name: string) =>
 
 /** Миниатюры сертификатов с raw.githubusercontent (ленивая загрузка на странице). */
 export const certificates: { src: string; label: string }[] = [
-  { src: p('diploma24144040.png'), label: 'Диплом / программа' },
   { src: p('AI_в_таблицах_рус.png'), label: 'ИИ в таблицах' },
   { src: p('Аналитик_данных_рус.png'), label: 'Аналитик данных' },
   { src: p('Автоматизатор_бизнес-процессов_рус.png'), label: 'Автоматизация' },
