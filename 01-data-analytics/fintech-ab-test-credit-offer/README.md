@@ -1,4 +1,4 @@
-# A/B-тест: перенос карточки «Кредитка дня» выше в ленте финтех-приложения
+﻿# A/B-тест: перенос карточки «Кредитка дня» выше в ленте финтех-приложения
 
 Этот репозиторий — законченный portfolio case по A/B-тесту в финтех-приложении.  
 Задача: проверить, улучшает ли перенос карточки `credit_of_day` в верхнюю часть домашнего экрана ключевые продуктовые метрики — в первую очередь `CR_apply`, а также `CTR`, `CR_home_apply`, `ARPU` и долю одобренных заявок.
@@ -24,7 +24,7 @@
 |------|----------------|
 | MDE 2.5%, мощность, размер выборки | Разделы **Methodology**, **MDE and sample size**, **Limitations** ниже; выгрузки в `data/processed/` (`mde_grid.csv`, `sample_size_recommendation.csv`) |
 | Статистика | User-level **Welch t-test** по основным метрикам |
-| Ноутбук с разбором | [`notebooks/ab_test_analysis_showcase.ipynb`](./notebooks/ab_test_analysis_showcase.ipynb) — просмотр онлайн после публикации репозитория: [открыть в nbviewer](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb) |
+| Ноутбук с разбором | [`notebooks/ab_test_analysis_showcase.ipynb`](./notebooks/ab_test_analysis_showcase.ipynb) — просмотр онлайн после публикации репозитория: [открыть в nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb) |
 | Пайплайн без UI | `make all` или шаги из **Quick start** |
 
 ## Business context
@@ -131,7 +131,7 @@ ab_test_credit_card_banner_repo/
 
 - [ ] `make all` завершается без ошибки.
 - [ ] Появляются файлы в `data/processed/` и `reports/final_report.md`.
-- [ ] Ноутбук открывается в [nbviewer](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb).
+- [ ] Ноутбук открывается в [nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb).
 
 ## Quick start
 

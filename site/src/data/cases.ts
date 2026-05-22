@@ -1,4 +1,4 @@
-export type CaseCategory = '01' | '02' | '03' | '04' | '05';
+﻿export type CaseCategory = '01' | '02' | '03' | '04' | '05';
 
 export interface CaseItem {
   id: string;
@@ -12,7 +12,7 @@ export interface CaseItem {
   featured?: boolean;
 }
 
-const tree = 'https://github.com/kaluginvit-svg/Portfolio/tree/main';
+const tree = 'https://github.com/kaluginvit/Portfolio/tree/main';
 
 export const cases: CaseItem[] = [
   {
@@ -34,7 +34,7 @@ export const cases: CaseItem[] = [
     result: 'Бот на проде: анкета, расчёт, заявки; GHCR.',
     repoPath: '03-ai-products/svo-payments-bot',
     liveLabel: 'Telegram + GHCR',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payments-bot',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payments-bot',
     featured: true,
   },
   {
@@ -56,7 +56,7 @@ export const cases: CaseItem[] = [
     result: 'Интерактивный дашборд Plotly + инсайты для стейкхолдеров.',
     repoPath: '01-data-analytics/superstore-retail-analytics',
     liveLabel: 'Дашборд на Pages',
-    liveUrl: 'https://kaluginvit-svg.github.io/Portfolio/superstore/',
+    liveUrl: 'https://kaluginvit.github.io/Portfolio/superstore/',
     featured: true,
   },
   {
@@ -68,7 +68,7 @@ export const cases: CaseItem[] = [
     repoPath: '01-data-analytics/fintech-ab-test-credit-offer',
     liveLabel: 'nbviewer',
     liveUrl:
-      'https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb',
+      'https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb',
   },
   {
     id: 'wb',
@@ -88,7 +88,7 @@ export const cases: CaseItem[] = [
     result: 'Двусторонний sync, конфликты, cron.',
     repoPath: '02-automation/yandex-google-sync',
     liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/yandex-google-sync',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/yandex-google-sync',
   },
   {
     id: 'hotel-tally',
@@ -108,7 +108,7 @@ export const cases: CaseItem[] = [
     result: 'Типовой деплой одной строкой.',
     repoPath: '02-automation/github-actions-setup',
     liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/github-actions-setup',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/github-actions-setup',
   },
   {
     id: 'google-sheets-report',
@@ -128,7 +128,7 @@ export const cases: CaseItem[] = [
     result: 'Семантика и частотности в Cursor / Claude.',
     repoPath: '03-ai-products/seo-mcp-bot',
     liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/yandex-wordstat-mcp',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/yandex-wordstat-mcp',
   },
   {
     id: 'team-bot',
@@ -138,7 +138,7 @@ export const cases: CaseItem[] = [
     result: 'Память команды, корпоративный контур.',
     repoPath: '03-ai-products/team-ai-bot',
     liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/team-ai-bot',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/team-ai-bot',
   },
   {
     id: 'personal-rag',
@@ -148,7 +148,7 @@ export const cases: CaseItem[] = [
     result: 'Ассистент по личной базе (Pinecone).',
     repoPath: '03-ai-products/personal-rag-assistant',
     liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/personal-rag-assistant',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/personal-rag-assistant',
   },
   {
     id: 'autonomous-agents',
@@ -158,7 +158,7 @@ export const cases: CaseItem[] = [
     result: 'Парсинг + кластеризация через ProxyAPI.',
     repoPath: '03-ai-products/autonomous-agents',
     liveLabel: 'GHCR backend',
-    liveUrl: 'https://github.com/kaluginvit-svg/Portfolio/pkgs/container/autonomous-agents-backend',
+    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/autonomous-agents-backend',
   },
   {
     id: 'mcp-lesson',

@@ -1,9 +1,9 @@
-# Сайт-визитка на GitHub Pages
+﻿# Сайт-визитка на GitHub Pages
 
 После включения **GitHub Actions** как источника Pages:
 
-- **Сайт-визитка (Astro):** корень проекта Pages, для репозитория `Portfolio` это `https://kaluginvit-svg.github.io/Portfolio/`
-- **Superstore dashboard:** `https://kaluginvit-svg.github.io/Portfolio/superstore/`
+- **Сайт-визитка (Astro):** корень проекта Pages, для репозитория `Portfolio` это `https://kaluginvit.github.io/Portfolio/`
+- **Superstore dashboard:** `https://kaluginvit.github.io/Portfolio/superstore/`
 
 Сборка и публикация — workflow [`.github/workflows/portfolio-github-pages.yml`](../.github/workflows/portfolio-github-pages.yml) (любой push в `main` или **Run workflow** вручную).
 

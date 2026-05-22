@@ -1,4 +1,4 @@
-# Юнит-экономика маркетплейса
+﻿# Юнит-экономика маркетплейса
 
 **Что это:** расчёт и визуализация юнит-экономики и когорт продавцов на маркетплейсе.
 
@@ -11,7 +11,7 @@
 3. Открыть `marketplace_unit_economics.ipynb` и выполнить ячейки (CSV в той же папке).
 
 **Просмотр ноутбука онлайн (nbviewer):**  
-[marketplace_unit_economics.ipynb](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/marketplace-unit-economics/marketplace_unit_economics.ipynb)
+[marketplace_unit_economics.ipynb](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/marketplace-unit-economics/marketplace_unit_economics.ipynb)
 
 ### Smoke-чеклист
 

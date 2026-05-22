@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # Сайт для семей: выплаты и ориентиры
 
@@ -69,7 +69,7 @@
 
 Техническая документация: **[web/README.md](web/README.md)** (запуск у себя на компьютере, переменные окружения, лиды, Telegram, вебхук, деплой, CI).
 
-Код в составе портфолио: [github.com/kaluginvit-svg/Portfolio — `04-web/svo-payouts-website`](https://github.com/kaluginvit-svg/Portfolio/tree/main/04-web/svo-payouts-website)
+Код в составе портфолио: [github.com/kaluginvit/Portfolio — `04-web/svo-payouts-website`](https://github.com/kaluginvit/Portfolio/tree/main/04-web/svo-payouts-website)
 
 ---
 

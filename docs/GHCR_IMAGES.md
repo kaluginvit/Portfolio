@@ -1,15 +1,15 @@
-# Образы GHCR (монорепозиторий Portfolio)
+﻿# Образы GHCR (монорепозиторий Portfolio)
 
 Workflow: [`build-images.yml`](../.github/workflows/build-images.yml)  
-Бейдж: [![Build Docker images](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/build-images.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/build-images.yml)
+Бейдж: [![Build Docker images](https://github.com/kaluginvit/Portfolio/actions/workflows/build-images.yml/badge.svg)](https://github.com/kaluginvit/Portfolio/actions/workflows/build-images.yml)
 
-Владелец репозитория: **`kaluginvit-svg`**. Замените при форке.
+Владелец репозитория: **`kaluginvit`**. Замените при форке.
 
 ## Pull / run (шаблон)
 
 ```bash
-docker pull ghcr.io/kaluginvit-svg/<image>:latest
-docker run --rm -it --env-file .env ghcr.io/kaluginvit-svg/<image>:latest
+docker pull ghcr.io/kaluginvit/<image>:latest
+docker run --rm -it --env-file .env ghcr.io/kaluginvit/<image>:latest
 ```
 
 Порты и переменные — в README соответствующего проекта.

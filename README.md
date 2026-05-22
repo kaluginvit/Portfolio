@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # Виталий Калугин
 
@@ -6,8 +6,8 @@
 
 **1 prod-сайт + 2 онлайн-демо** · **22+ кейсов по 5 направлениям** · **Docker-образы в GHCR** → [svorazbor.ru](https://svorazbor.ru)
 
-[![Build Docker images](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/build-images.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/build-images.yml)
-[![GitHub Pages — визитка + Superstore](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml)
+[![Build Docker images](https://github.com/kaluginvit/Portfolio/actions/workflows/build-images.yml/badge.svg)](https://github.com/kaluginvit/Portfolio/actions/workflows/build-images.yml)
+[![GitHub Pages — визитка + Superstore](https://github.com/kaluginvit/Portfolio/actions/workflows/portfolio-github-pages.yml/badge.svg)](https://github.com/kaluginvit/Portfolio/actions/workflows/portfolio-github-pages.yml)
 
 **Сайт-визитка на Pages →** [`docs/PORTFOLIO_SITE.md`](./docs/PORTFOLIO_SITE.md) · **Запуск кейсов локально →** [`docs/RUN_LOCAL.md`](./docs/RUN_LOCAL.md) · **Образы GHCR →** [`docs/GHCR_IMAGES.md`](./docs/GHCR_IMAGES.md)
 
@@ -83,10 +83,10 @@
 
 | Проект | Ссылка | Тип | Стек |
 |--------|--------|-----|------|
-| **Сайт-визитка (маркетинг)** | **[kaluginvit-svg.github.io/Portfolio/](https://kaluginvit-svg.github.io/Portfolio/)** | многостраничный Astro: услуги, кейсы, FAQ, CTA | Astro (статика) |
+| **Сайт-визитка (маркетинг)** | **[kaluginvit.github.io/Portfolio/](https://kaluginvit.github.io/Portfolio/)** | многостраничный Astro: услуги, кейсы, FAQ, CTA | Astro (статика) |
 | **СВО — выплаты семьям** | **[svorazbor.ru](https://svorazbor.ru)** | прод-сайт + Telegram-бот, реальные лиды | Next.js + Telegram |
 | **Dostaffkin — доставка** | **[kaluginvit72.github.io/dostaffkin](https://kaluginvit72.github.io/dostaffkin/)** | онлайн-демо фронта (backend локально) | Angular + Express + Postgres |
-| **Superstore Dashboard** | **[kaluginvit-svg.github.io/Portfolio/superstore/](https://kaluginvit-svg.github.io/Portfolio/superstore/)** | интерактивный HTML-дашборд (после деплоя Pages) | Plotly + HTML |
+| **Superstore Dashboard** | **[kaluginvit.github.io/Portfolio/superstore/](https://kaluginvit.github.io/Portfolio/superstore/)** | интерактивный HTML-дашборд (после деплоя Pages) | Plotly + HTML |
 
 Все четыре открываются по клику без локальной установки (кроме backend у Dostaffkin). Подробнее — в таблицах ниже и в [`docs/PORTFOLIO_SITE.md`](./docs/PORTFOLIO_SITE.md).
 
@@ -113,7 +113,7 @@
 Один продукт в двух артефактах: **сайт** [svorazbor.ru](https://svorazbor.ru) (Next.js, квиз, лид-форма) и **Telegram-бот** (анкета, расчёт, заявки). На проде, реальный трафик из органики.
 
 - Веб → [`04-web/svo-payouts-website`](./04-web/svo-payouts-website/)
-- Бот → [`03-ai-products/svo-payments-bot`](./03-ai-products/svo-payments-bot/) · [GHCR-образ](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payments-bot)
+- Бот → [`03-ai-products/svo-payments-bot`](./03-ai-products/svo-payments-bot/) · [GHCR-образ](https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payments-bot)
 
 ---
 
@@ -123,8 +123,8 @@
 
 | Кейс | Результат / роль | Ссылка | Live |
 |------|------------------|--------|------|
-| A/B-тест в финтех | Полный отчёт по A/B с MDE и продуктовой рекомендацией — уровень product-аналитика | [`fintech-ab-test-credit-offer`](./01-data-analytics/fintech-ab-test-credit-offer/) | [nbviewer](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb) |
-| Retail-аналитика и дашборд | Интерактивный дашборд + 3 инсайта для стейкхолдеров | [`superstore-retail-analytics`](./01-data-analytics/superstore-retail-analytics/) | [GitHub Pages `/superstore/`](https://kaluginvit-svg.github.io/Portfolio/superstore/) |
+| A/B-тест в финтех | Полный отчёт по A/B с MDE и продуктовой рекомендацией — уровень product-аналитика | [`fintech-ab-test-credit-offer`](./01-data-analytics/fintech-ab-test-credit-offer/) | [nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb) |
+| Retail-аналитика и дашборд | Интерактивный дашборд + 3 инсайта для стейкхолдеров | [`superstore-retail-analytics`](./01-data-analytics/superstore-retail-analytics/) | [GitHub Pages `/superstore/`](https://kaluginvit.github.io/Portfolio/superstore/) |
 | Коммерческий анализ Wildberries | Реальный кейс продавца: где теряем маржу, что менять | [`wb-sales-commercial-analysis`](./01-data-analytics/wb-sales-commercial-analysis/) | локально / скрипты |
 
 ### [02 — Автоматизация](./02-automation/)
@@ -132,28 +132,28 @@
 | Кейс | Результат / роль | Ссылка | Live |
 |------|------------------|--------|------|
 | Лидогенерация на n8n | **11 связанных workflow** для воронки B2B: интент → обогащение → касание → отчётность | [`leadgen-n8n-system`](./02-automation/leadgen-n8n-system/) | `docker compose` в проекте |
-| Яндекс.Диск ↔ Google Drive | Двусторонний sync с конфликтами и cron-расписанием | [`yandex-google-sync`](./02-automation/yandex-google-sync/) | [GHCR](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/yandex-google-sync) |
+| Яндекс.Диск ↔ Google Drive | Двусторонний sync с конфликтами и cron-расписанием | [`yandex-google-sync`](./02-automation/yandex-google-sync/) | [GHCR](https://github.com/kaluginvit/Portfolio/pkgs/container/yandex-google-sync) |
 | Бронирования Tally → Supabase → почта | Полный flow «форма → дедуп → бронь → письма» без ручного Excel | [`hotel-booking-tally-supabase`](./02-automation/hotel-booking-tally-supabase/) | документация + workflow JSON |
-| CI/CD-шаблон | GitHub Actions → GHCR → SSH-deploy: типовой деплой одной строкой | [`github-actions-setup`](./02-automation/github-actions-setup/) | [GHCR](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/github-actions-setup) |
+| CI/CD-шаблон | GitHub Actions → GHCR → SSH-deploy: типовой деплой одной строкой | [`github-actions-setup`](./02-automation/github-actions-setup/) | [GHCR](https://github.com/kaluginvit/Portfolio/pkgs/container/github-actions-setup) |
 | Google Sheets — учебный отчёт | Сервисный аккаунт, форматирование листа, GUI-симулятор | [`google-sheets-report`](./02-automation/google-sheets-report/) | локально / Python |
 
 ### [03 — ИИ-продукты](./03-ai-products/)
 
 | Кейс | Результат / роль | Ссылка | Live |
 |------|------------------|--------|------|
-| Telegram-бот выплат (парный с сайтом СВО) | **Бот на проде**, парный с [svorazbor.ru](https://svorazbor.ru) | [`svo-payments-bot`](./03-ai-products/svo-payments-bot/) | прод в Telegram · [GHCR](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payments-bot) |
-| MCP + Yandex Wordstat | MCP-сервер: семантика и частотности прямо в Cursor / Claude | [`seo-mcp-bot`](./03-ai-products/seo-mcp-bot/) | [GHCR `yandex-wordstat-mcp`](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/yandex-wordstat-mcp) |
-| Команда в чате: Haystack + Pinecone | Корпоративный RAG-бот с памятью команды | [`team-ai-bot`](./03-ai-products/team-ai-bot/) | [GHCR](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/team-ai-bot) |
-| Персональный RAG в Telegram | RAG-ассистент по личной базе знаний (Pinecone) | [`personal-rag-assistant`](./03-ai-products/personal-rag-assistant/) | [GHCR](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/personal-rag-assistant) |
-| ИИ-агент сбора SEO-ядра по списку URL | Автоматический парсинг + кластеризация запросов через ProxyAPI | [`autonomous-agents`](./03-ai-products/autonomous-agents/) | [GHCR backend](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/autonomous-agents-backend) |
+| Telegram-бот выплат (парный с сайтом СВО) | **Бот на проде**, парный с [svorazbor.ru](https://svorazbor.ru) | [`svo-payments-bot`](./03-ai-products/svo-payments-bot/) | прод в Telegram · [GHCR](https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payments-bot) |
+| MCP + Yandex Wordstat | MCP-сервер: семантика и частотности прямо в Cursor / Claude | [`seo-mcp-bot`](./03-ai-products/seo-mcp-bot/) | [GHCR `yandex-wordstat-mcp`](https://github.com/kaluginvit/Portfolio/pkgs/container/yandex-wordstat-mcp) |
+| Команда в чате: Haystack + Pinecone | Корпоративный RAG-бот с памятью команды | [`team-ai-bot`](./03-ai-products/team-ai-bot/) | [GHCR](https://github.com/kaluginvit/Portfolio/pkgs/container/team-ai-bot) |
+| Персональный RAG в Telegram | RAG-ассистент по личной базе знаний (Pinecone) | [`personal-rag-assistant`](./03-ai-products/personal-rag-assistant/) | [GHCR](https://github.com/kaluginvit/Portfolio/pkgs/container/personal-rag-assistant) |
+| ИИ-агент сбора SEO-ядра по списку URL | Автоматический парсинг + кластеризация запросов через ProxyAPI | [`autonomous-agents`](./03-ai-products/autonomous-agents/) | [GHCR backend](https://github.com/kaluginvit/Portfolio/pkgs/container/autonomous-agents-backend) |
 | End-to-end MCP: каталог-БД ↔ Telegram-бот | Рабочий шаблон «LLM ↔ MCP ↔ SQLite» под любой каталог | [`mcp-lesson`](./03-ai-products/mcp-lesson/) | `docker compose` в проекте |
 
 ### [04 — Веб](./04-web/)
 
 | Кейс | Результат / роль | Ссылка | Live |
 |------|------------------|--------|------|
-| Сайт СВО (прод) | **Прод-сайт** с квизом, лид-формой и Telegram-ботом-парой | [`svo-payouts-website`](./04-web/svo-payouts-website/) | [svorazbor.ru](https://svorazbor.ru) · [GHCR](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/svo-payouts-website) |
-| Dostaffkin: Angular + Express, доставка | Full-stack минимализм с трекингом статусов; **демо онлайн** | [`dostaffkin`](./04-web/dostaffkin/) | **[Сайт](https://kaluginvit72.github.io/dostaffkin/)** · `docker compose` · [GHCR backend](https://github.com/kaluginvit-svg/Portfolio/pkgs/container/dostaffkin-backend) |
+| Сайт СВО (прод) | **Прод-сайт** с квизом, лид-формой и Telegram-ботом-парой | [`svo-payouts-website`](./04-web/svo-payouts-website/) | [svorazbor.ru](https://svorazbor.ru) · [GHCR](https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payouts-website) |
+| Dostaffkin: Angular + Express, доставка | Full-stack минимализм с трекингом статусов; **демо онлайн** | [`dostaffkin`](./04-web/dostaffkin/) | **[Сайт](https://kaluginvit72.github.io/dostaffkin/)** · `docker compose` · [GHCR backend](https://github.com/kaluginvit/Portfolio/pkgs/container/dostaffkin-backend) |
 | Telegram-бот ↔ PostgreSQL | Каркас «бот ↔ Postgres ↔ бэкап» под анкеты, лиды, заявки | [`postgres-work`](./04-web/postgres-work/) | `docker compose` + бот локально |
 | Мини-CRM (учебная) | FastAPI + React, OAuth Google, выгрузка в Sheets | [`mini-crm-fastapi-react`](./04-web/mini-crm-fastapi-react/) | `docker compose` + `npm run dev` |
 
@@ -188,7 +188,7 @@
 
 Краткие оглавления по направлениям: [`01-data-analytics/README.md`](./01-data-analytics/README.md), [`02-automation/README.md`](./02-automation/README.md), [`03-ai-products/README.md`](./03-ai-products/README.md), [`04-web/README.md`](./04-web/README.md), [`05-ai-consulting/README.md`](./05-ai-consulting/README.md) · **сертификаты:** [`Сертификаты/README.md`](./Сертификаты/README.md).
 
-Базовый URL на GitHub: `https://github.com/kaluginvit-svg/Portfolio/tree/main/`
+Базовый URL на GitHub: `https://github.com/kaluginvit/Portfolio/tree/main/`
 
 ---
 

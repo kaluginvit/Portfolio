@@ -1,4 +1,4 @@
-# Бизнес-кейсы на Python (EDA)
+﻿# Бизнес-кейсы на Python (EDA)
 
 **Что это:** серия Jupyter-презентаций с разведочным анализом: банк, Amazon Marketplace, Netflix.
 
@@ -12,9 +12,9 @@
 
 **nbviewer (основные ноутбуки):**
 
-- [bank_analysis_portfolio.ipynb](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/python-business-case/bank_analysis_portfolio.ipynb)
-- [amazon_market_eda_presentation.ipynb](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/python-business-case/amazon_market_eda_presentation.ipynb)
-- [netflix_eda_presentation.ipynb](https://nbviewer.org/github/kaluginvit-svg/Portfolio/blob/main/01-data-analytics/python-business-case/netflix_eda_presentation.ipynb)
+- [bank_analysis_portfolio.ipynb](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/python-business-case/bank_analysis_portfolio.ipynb)
+- [amazon_market_eda_presentation.ipynb](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/python-business-case/amazon_market_eda_presentation.ipynb)
+- [netflix_eda_presentation.ipynb](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/python-business-case/netflix_eda_presentation.ipynb)
 
 ### Smoke-чеклист
 

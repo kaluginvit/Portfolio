@@ -1,6 +1,6 @@
-# Сайт-визитка (GitHub Pages)
+﻿# Сайт-визитка (GitHub Pages)
 
-Статический маркетинговый сайт на [Astro](https://astro.build/). Публикуется в корень `https://kaluginvit-svg.github.io/Portfolio/`; дашборд Superstore — по пути `/Portfolio/superstore/`.
+Статический маркетинговый сайт на [Astro](https://astro.build/). Публикуется в корень `https://kaluginvit.github.io/Portfolio/`; дашборд Superstore — по пути `/Portfolio/superstore/`.
 
 ## Локально
 

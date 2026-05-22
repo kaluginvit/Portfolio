@@ -1,4 +1,4 @@
-# 📊 Retail Analytics — Sample Superstore
+﻿# 📊 Retail Analytics — Sample Superstore
 
 **Виталий** · аналитика данных · визуализация · упаковка инсайтов для команды и стейкхолдеров
 
@@ -73,9 +73,9 @@ jupyter notebook superstore_eda.ipynb
 
 Откройте в браузере `superstore-dashboard.html` и `superstore_presentation.html` (при необходимости через Live Server в VS Code / Cursor).
 
-**Live (GitHub Pages):** workflow [Deploy Portfolio site](../../.github/workflows/portfolio-github-pages.yml) публикует **сайт-визитку** в корень Pages и дашборд по пути **`/Portfolio/superstore/`**. Включите **Settings → Pages → Build and deployment: GitHub Actions**. После успешного прогона дашборд: **[https://kaluginvit-svg.github.io/Portfolio/superstore/](https://kaluginvit-svg.github.io/Portfolio/superstore/)**. Кнопка для README:
+**Live (GitHub Pages):** workflow [Deploy Portfolio site](../../.github/workflows/portfolio-github-pages.yml) публикует **сайт-визитку** в корень Pages и дашборд по пути **`/Portfolio/superstore/`**. Включите **Settings → Pages → Build and deployment: GitHub Actions**. После успешного прогона дашборд: **[https://kaluginvit.github.io/Portfolio/superstore/](https://kaluginvit.github.io/Portfolio/superstore/)**. Кнопка для README:
 
-[![GitHub Pages — визитка + Superstore](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml/badge.svg)](https://github.com/kaluginvit-svg/Portfolio/actions/workflows/portfolio-github-pages.yml)
+[![GitHub Pages — визитка + Superstore](https://github.com/kaluginvit/Portfolio/actions/workflows/portfolio-github-pages.yml/badge.svg)](https://github.com/kaluginvit/Portfolio/actions/workflows/portfolio-github-pages.yml)
 
 **3. PowerPoint (по желанию)**
 
