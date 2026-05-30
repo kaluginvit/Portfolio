@@ -39,39 +39,34 @@
 <b>Социальное доказательство:</b> курсы и программы (полный каталог с подписями — <a href="./Сертификаты/README.md"><strong>Сертификаты/README.md</strong></a>).
 </p>
 
-<table>
+<table align="center">
 <tr>
 <td align="center" width="25%">
-  <a href="./Сертификаты/AI_в_таблицах_рус.png"><img src="./Сертификаты/AI_в_таблицах_рус.png" alt="ИИ в таблицах" width="180"/></a><br/><sub>ИИ в таблицах</sub>
+  <a href="./Сертификаты/AI_в_таблицах_рус.png"><img src="./Сертификаты/AI_в_таблицах_рус.png" alt="ИИ в таблицах" width="160"/></a><br/><sub>ИИ в таблицах</sub>
 </td>
 <td align="center" width="25%">
-  <a href="./Сертификаты/Аналитик_данных_рус.png"><img src="./Сертификаты/Аналитик_данных_рус.png" alt="Аналитик данных" width="180"/></a><br/><sub>Аналитик данных</sub>
+  <a href="./Сертификаты/Аналитик_данных_рус.png"><img src="./Сертификаты/Аналитик_данных_рус.png" alt="Аналитик данных" width="160"/></a><br/><sub>Аналитик данных</sub>
 </td>
 <td align="center" width="25%">
-  <a href="./Сертификаты/Автоматизатор_бизнес-процессов_рус.png"><img src="./Сертификаты/Автоматизатор_бизнес-процессов_рус.png" alt="Автоматизатор" width="180"/></a><br/><sub>Автоматизация процессов</sub>
+  <a href="./Сертификаты/Автоматизатор_бизнес-процессов_рус.png"><img src="./Сертификаты/Автоматизатор_бизнес-процессов_рус.png" alt="Автоматизатор" width="160"/></a><br/><sub>Автоматизация процессов</sub>
+</td>
+<td align="center" width="25%">
+  <a href="./Сертификаты/Автоматизация_n8n_рус.png"><img src="./Сертификаты/Автоматизация_n8n_рус.png" alt="Автоматизация на n8n" width="160"/></a><br/><sub>Автоматизация на n8n</sub>
 </td>
 </tr>
 <tr>
-<td align="center">
-  <a href="./Сертификаты/Vibe-Coding_и_агенты_рус.png"><img src="./Сертификаты/Vibe-Coding_и_агенты_рус.png" alt="Vibe-Coding и агенты" width="180"/></a><br/><sub>Vibe-Coding и агенты</sub>
+<td align="center" width="25%">
+  <a href="./Сертификаты/Vibe-Coding_и_агенты_рус.png"><img src="./Сертификаты/Vibe-Coding_и_агенты_рус.png" alt="Vibe-Coding и агенты" width="160"/></a><br/><sub>Vibe-Coding и агенты</sub>
 </td>
-<td align="center">
-  <a href="./Сертификаты/Perplexity_рус.png"><img src="./Сертификаты/Perplexity_рус.png" alt="Perplexity" width="180"/></a><br/><sub>Perplexity</sub>
+<td align="center" width="25%">
+  <a href="./Сертификаты/Perplexity_рус.png"><img src="./Сертификаты/Perplexity_рус.png" alt="Perplexity" width="160"/></a><br/><sub>Perplexity</sub>
 </td>
-<td align="center">
-  <a href="./Сертификаты/ИИ-презентации_рус.png"><img src="./Сертификаты/ИИ-презентации_рус.png" alt="ИИ-презентации" width="180"/></a><br/><sub>ИИ-презентации</sub>
+<td align="center" width="25%">
+  <a href="./Сертификаты/ИИ-презентации_рус.png"><img src="./Сертификаты/ИИ-презентации_рус.png" alt="ИИ-презентации" width="160"/></a><br/><sub>ИИ-презентации</sub>
 </td>
-<td align="center">
-  <a href="./Сертификаты/Лендинг.png"><img src="./Сертификаты/Лендинг.png" alt="Лендинг" width="180"/></a><br/><sub>Лендинг</sub>
+<td align="center" width="25%">
+  <a href="./Сертификаты/Лендинг.png"><img src="./Сертификаты/Лендинг.png" alt="Лендинг" width="160"/></a><br/><sub>Лендинг</sub>
 </td>
-</tr>
-<tr>
-<td align="center">
-  <a href="./Сертификаты/Автоматизация_n8n_рус.png"><img src="./Сертификаты/Автоматизация_n8n_рус.png" alt="Автоматизация на n8n" width="180"/></a><br/><sub>Автоматизация на n8n</sub>
-</td>
-<td></td>
-<td></td>
-<td></td>
 </tr>
 </table>
 
