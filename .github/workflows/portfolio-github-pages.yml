@@ -45,8 +45,12 @@ jobs:
       - name: Assemble Pages artifact
         run: |
           mkdir -p _site/superstore
+          mkdir -p _site/rf-macro-risk-ai
+          mkdir -p _site/fintech-ab-test
           cp -r site/dist/. _site/
           cp "01-data-analytics/superstore-retail-analytics/superstore-dashboard.html" _site/superstore/index.html
+          cp -r "03-ai-products/rf-macro-risk-ai/docs/." _site/rf-macro-risk-ai/
+          cp "01-data-analytics/fintech-ab-test-credit-offer/reports/presentation.html" _site/fintech-ab-test/index.html
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

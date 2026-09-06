@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 style="margin:0 0 8px; font-size:20px;">Пайплайн</h2>
+<p class="text-muted" style="margin:0 0 20px;">Статус обновляется каждые 3 секунды.</p>
+
+<div class="card">
+  <table class="pipeline-table" id="pipeline-table">
+    <thead>
+      <tr>
+        <th>Этап</th>
+        <th>Записей</th>
+        <th>Действие</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- messages -->
+      <tr>
+        <td><strong>messages</strong><br><span class="text-muted" style="font-size:12px;">Все посты из Telegram</span></td>
+        <td class="count-cell" id="cnt-messages">—</td>
+        <td class="pipeline-actions">
+          <button class="btn btn-green btn-sm" onclick="runStep('import-json')">📥 Импорт JSON</button>
+          <button class="btn btn-secondary btn-sm" onclick="runStep('collect')">📡 Собрать из TG</button>
+        </td>
+      </tr>
+      <!-- messages_filtered -->
+      <tr>
+        <td><strong>messages_filtered</strong><br><span class="text-muted" style="font-size:12px;">После фильтрации</span></td>
+        <td class="count-cell" id="cnt-filtered">—</td>
+        <td class="pipeline-actions">
+          <button class="btn btn-secondary btn-sm" onclick="runStep('gate')">🔄 Перестроить фильтр</button>
+        </td>
+      </tr>
+      <!-- enrichments -->
+      <tr>
+        <td><strong>enrichments</strong><br><span class="text-muted" style="font-size:12px;">LLM-обогащение</span></td>
+        <td class="count-cell" id="cnt-enrichments">—</td>
+        <td class="pipeline-actions">
+          <input class="limit-input" type="number" id="analyze-limit" value="300" min="1" max="10000" title="Лимит постов">
+          <button class="btn btn-green btn-sm" onclick="runStep('analyze')">🤖 Анализ</button>
+        </td>
+      </tr>
+      <!-- vectors -->
+      <tr>
+        <td><strong>vectors</strong><br><span class="text-muted" style="font-size:12px;">FAISS / Pinecone</span></td>
+        <td class="count-cell"><span id="cnt-vectors">—</span><br><span style="font-size:11px;color:#555;">Pinecone: <span id="cnt-pinecone">—</span></span></td>
+        <td class="pipeline-actions">
+          <button class="btn btn-green btn-sm" onclick="runStep('embed')">🗂 Построить индекс</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Статус запущенного процесса -->
+  <div id="run-status" style="margin-top:14px; font-size:13px; color:#137333; display:none;"></div>
+</div>
+
+<!-- Прогресс коллектора -->
+<div id="collect-block" style="display:none; margin-top:16px;" class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <strong id="collect-title">Коллектор</strong>
+    <span id="collect-badge" style="font-size:12px; padding:2px 10px; border-radius:12px; background:#e8f5e9; color:#2e7d32;">●&nbsp;работает</span>
+  </div>
+  <div style="background:#f0f0f0; border-radius:6px; height:10px; overflow:hidden; margin-bottom:8px;">
+    <div id="collect-bar" style="height:100%; background:#1a73e8; border-radius:6px; transition:width .5s;"></div>
+  </div>
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:#555;">
+    <span id="collect-current">—</span>
+    <span id="collect-stats">—</span>
+  </div>
+</div>
+
+<script>
+// Карта кнопок: step -> id кнопки (для отключения)
+const BTN_MAP = {
+  "import-json": document.querySelectorAll(".btn-green, .btn-secondary")[0],
+};
+
+// Статус последнего запуска
+let lastRun = null;
+
+async function fetchStatus() {
+  try {
+    const resp = await fetch("/pipeline/status");
+    const data = await resp.json();
+
+    document.getElementById("cnt-messages").textContent     = fmt(data.messages);
+    document.getElementById("cnt-filtered").textContent     = fmt(data.messages_filtered);
+    document.getElementById("cnt-enrichments").textContent  = fmt(data.enrichments);
+    document.getElementById("cnt-vectors").textContent      = fmt(data.vectors);
+    if (data.vectors_pinecone >= 0) {
+      document.getElementById("cnt-pinecone").textContent = fmt(data.vectors_pinecone);
+    }
+
+    const cp = data.collect_progress;
+    const block = document.getElementById("collect-block");
+    if (cp && cp.total) {
+      block.style.display = "block";
+      const pct = cp.pct || 0;
+      document.getElementById("collect-bar").style.width = pct + "%";
+      document.getElementById("collect-title").textContent =
+        `Коллектор — ${cp.since || ""} — ${pct}%`;
+      document.getElementById("collect-current").textContent =
+        cp.done ? "✅ Завершено" : `[${cp.current}/${cp.total}] ${cp.current_title || ""}`;
+      document.getElementById("collect-stats").textContent =
+        `Просмотрено: ${fmt(cp.fetched)} · В очередь: ${fmt(cp.inserted)}`;
+      const badge = document.getElementById("collect-badge");
+      if (cp.done) {
+        badge.style.background = "#e8f5e9"; badge.style.color = "#2e7d32";
+        badge.textContent = "✓ готово";
+      } else {
+        badge.style.background = "#e8f0fe"; badge.style.color = "#1558b0";
+        badge.textContent = "● работает";
+      }
+    }
+  } catch(e) {
+    // тихо — нет смысла спамить
+  }
+}
+
+function fmt(n) {
+  if (n === null || n === undefined) return "—";
+  return n.toLocaleString("ru-RU");
+}
+
+async function runStep(step) {
+  const limit = parseInt(document.getElementById("analyze-limit")?.value || "300");
+
+  // Найдём все кнопки и отключим
+  const allBtns = document.querySelectorAll(".pipeline-actions .btn");
+  allBtns.forEach(b => b.disabled = true);
+
+  const statusEl = document.getElementById("run-status");
+  statusEl.style.display = "block";
+  statusEl.textContent = "⏳ Запущено: " + step + "…";
+
+  try {
+    const resp = await fetch("/pipeline/run", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({step, limit})
+    });
+    const data = await resp.json();
+
+    if (data.ok) {
+      statusEl.textContent = `✅ Запущено: ${step} (PID ${data.pid}). Статус обновится автоматически.`;
+    } else {
+      statusEl.style.color = "#c5221f";
+      statusEl.textContent = "❌ Ошибка: " + (data.error || "неизвестная");
+    }
+  } catch(e) {
+    statusEl.style.color = "#c5221f";
+    statusEl.textContent = "❌ Ошибка запроса: " + e;
+  }
+
+  // Разблокируем кнопки через 3 секунды
+  setTimeout(() => {
+    allBtns.forEach(b => b.disabled = false);
+  }, 3000);
+}
+
+// Автообновление каждые 3 секунды
+fetchStatus();
+setInterval(fetchStatus, 3000);
+</script>
+
+{% endblock %}

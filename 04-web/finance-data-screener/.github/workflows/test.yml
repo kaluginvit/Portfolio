@@ -1,0 +1,23 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: screener
+          POSTGRES_PASSWORD: screener_pass
+          POSTGRES_DB: screener_db
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r backend/requirements.txt
+      - run: cd backend && pytest tests/ -v
+        env:
+          DATABASE_URL: postgresql://screener:screener_pass@localhost:5432/screener_db
+          PROXYAPI_KEY: fake_key_for_ci

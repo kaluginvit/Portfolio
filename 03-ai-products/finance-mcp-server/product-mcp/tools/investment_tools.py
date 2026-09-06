@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from services.investment_service import (
@@ -9,6 +10,8 @@ from services.investment_service import (
     evaluate_investment as evaluate_investment_svc,
     list_investment_projects as list_investment_projects_svc,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def list_investment_projects() -> dict[str, Any]:

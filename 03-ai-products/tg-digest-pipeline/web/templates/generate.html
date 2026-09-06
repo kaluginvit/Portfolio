@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.gen-layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+.gen-panel { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px; }
+.gen-panel h3 { margin: 0 0 16px; font-size: 16px; color: #333; }
+label { display: block; font-size: 13px; color: #555; margin-bottom: 6px; margin-top: 14px; }
+label:first-of-type { margin-top: 0; }
+textarea, select, input[type=text] {
+  width: 100%; box-sizing: border-box; border: 1px solid #ddd; border-radius: 6px;
+  padding: 8px 10px; font-size: 13px; font-family: inherit; resize: vertical;
+}
+textarea:focus, select:focus, input:focus { outline: none; border-color: #1a73e8; }
+.btn-generate {
+  width: 100%; margin-top: 18px; padding: 11px; background: #1a73e8; color: #fff;
+  border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.btn-generate:hover { background: #1558b0; }
+.btn-generate:disabled { background: #aaa; cursor: default; }
+.divider { text-align: center; color: #aaa; font-size: 12px; margin: 14px 0; }
+.draft-box {
+  background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px;
+  min-height: 300px;
+}
+.draft-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.draft-header h3 { margin: 0; font-size: 16px; }
+.draft-meta { font-size: 11px; color: #aaa; }
+.draft-textarea {
+  width: 100%; box-sizing: border-box; min-height: 320px; border: 1px solid #e8e8e8;
+  border-radius: 8px; padding: 14px; font-size: 14px; line-height: 1.6;
+  font-family: inherit; resize: vertical; background: #fafafa;
+}
+.draft-textarea:focus { outline: none; border-color: #1a73e8; background: #fff; }
+.draft-actions { display: flex; gap: 10px; margin-top: 14px; }
+.btn-copy {
+  padding: 8px 20px; background: #34a853; color: #fff; border: none;
+  border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.btn-regen {
+  padding: 8px 20px; background: #fff; color: #1a73e8; border: 1px solid #1a73e8;
+  border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.status-msg { font-size: 13px; color: #888; margin-top: 10px; min-height: 20px; }
+.error-msg { color: #c5221f; }
+.cluster-option-niche { color: #888; font-size: 11px; }
+</style>
+
+<h2 style="margin-bottom:20px;">Написать пост</h2>
+
+<div class="gen-layout">
+
+  <!-- Левая панель: параметры -->
+  <div class="gen-panel">
+    <h3>Параметры</h3>
+
+    <label>Тема (свободный текст)</label>
+    <input type="text" id="topic-input" placeholder="например: ключевая ставка ЦБ, рубль" />
+
+    <div class="divider">— или выбери из трендов —</div>
+
+    <label>Кластер из трендов</label>
+    <select id="cluster-select">
+      <option value="">— не выбрано —</option>
+      {% for c in clusters %}
+      <option value="{{ c.id }}">
+        #{{ loop.index }} [{{ c.niche }}] {{ c.label[:60] }}{% if c.label|length > 60 %}…{% endif %}
+        ({{ c.channel_count }}ч)
+      </option>
+      {% endfor %}
+    </select>
+
+    <button class="btn-generate" id="btn-gen" onclick="generate()">
+      ✍ Сгенерировать пост
+    </button>
+    <div class="status-msg" id="status"></div>
+  </div>
+
+  <!-- Правая панель: черновик -->
+  <div class="draft-box" id="draft-box">
+    <div class="draft-header">
+      <h3>Черновик</h3>
+      <span class="draft-meta" id="draft-meta"></span>
+    </div>
+    <textarea class="draft-textarea" id="draft-text" placeholder="Здесь появится сгенерированный пост…"></textarea>
+    <div class="draft-actions">
+      <button class="btn-copy" onclick="copyDraft()">Скопировать</button>
+      <button class="btn-regen" onclick="generate()">Перегенерировать</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function generate() {
+  const topic     = document.getElementById('topic-input').value.trim();
+  const clusterId = document.getElementById('cluster-select').value;
+  const btn       = document.getElementById('btn-gen');
+  const status    = document.getElementById('status');
+  const draftText = document.getElementById('draft-text');
+  const draftMeta = document.getElementById('draft-meta');
+
+  if (!topic && !clusterId) {
+    status.textContent = 'Введи тему или выбери кластер.';
+    status.className = 'status-msg error-msg';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Генерирую…';
+  status.textContent = 'Ищу похожие авторские посты и отправляю в LLM…';
+  status.className = 'status-msg';
+  draftText.value = '';
+  draftMeta.textContent = '';
+
+  try {
+    const body = {};
+    if (topic)     body.topic      = topic;
+    if (clusterId) body.cluster_id = parseInt(clusterId);
+
+    const r = await fetch('/generate/run', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body),
+    });
+    const d = await r.json();
+
+    if (d.ok) {
+      draftText.value = d.draft;
+      draftMeta.textContent =
+        `Модель: ${d.model} · Примеров автора: ${d.author_examples_used} · Постов кластера: ${d.cluster_posts_used}`;
+      status.textContent = 'Готово!';
+      status.className = 'status-msg';
+    } else {
+      status.textContent = 'Ошибка: ' + (d.error || 'неизвестная');
+      status.className = 'status-msg error-msg';
+    }
+  } catch(e) {
+    status.textContent = 'Ошибка сети: ' + e.message;
+    status.className = 'status-msg error-msg';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✍ Сгенерировать пост';
+  }
+}
+
+function copyDraft() {
+  const text = document.getElementById('draft-text').value;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Скопировано';
+    setTimeout(() => btn.textContent = 'Скопировать', 2000);
+  });
+}
+</script>
+{% endblock %}

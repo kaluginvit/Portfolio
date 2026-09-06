@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.incoming-layout { display: flex; gap: 20px; }
+.sidebar { width: 220px; flex-shrink: 0; }
+.sidebar-section { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+.sidebar-section h4 { margin: 0 0 10px; font-size: 13px; color: #555; text-transform: uppercase; letter-spacing: .5px; }
+.niche-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; cursor: pointer; border-radius: 4px; padding: 4px 6px; }
+.niche-row:hover, .niche-row.active { background: #e8f0fe; }
+.niche-bar { height: 4px; background: #4285f4; border-radius: 2px; margin-top: 2px; }
+.niche-count { font-weight: 600; color: #333; }
+.channel-row { font-size: 12px; padding: 3px 0; display: flex; justify-content: space-between; }
+.stats-bar { display: flex; gap: 16px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+.stat-item { text-align: center; }
+.stat-num { font-size: 22px; font-weight: 700; color: #333; }
+.stat-label { font-size: 11px; color: #777; }
+.stat-item.pending .stat-num { color: #1a73e8; }
+.stat-item.approved .stat-num { color: #137333; }
+.stat-item.rejected .stat-num { color: #c5221f; }
+.filters { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; }
+.filters select, .filters input { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
+.queue-list { flex: 1; }
+.qcard { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+.qcard.approved { border-left: 3px solid #34a853; }
+.qcard.rejected { border-left: 3px solid #ea4335; opacity: .6; }
+.qcard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.qcard-source { font-weight: 600; font-size: 13px; color: #1a73e8; }
+.qcard-date { font-size: 12px; color: #777; }
+.qcard-text { font-size: 14px; line-height: 1.5; color: #222; margin-bottom: 10px; max-height: 100px; overflow: hidden; position: relative; }
+.qcard-text.expanded { max-height: none; }
+.qcard-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.meta-chip { font-size: 12px; background: #f1f3f4; border-radius: 12px; padding: 3px 10px; color: #444; }
+.meta-chip.centroid { background: #e8f0fe; color: #1a73e8; font-weight: 600; }
+.meta-views { font-size: 12px; color: #555; }
+.qcard-actions { display: flex; gap: 8px; margin-top: 10px; }
+.btn-approve { background: #137333; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer; font-size: 13px; }
+.btn-approve:hover { background: #0d5c2a; }
+.btn-reject { background: #fff; color: #c5221f; border: 1px solid #c5221f; border-radius: 6px; padding: 6px 16px; cursor: pointer; font-size: 13px; }
+.btn-reject:hover { background: #fce8e6; }
+.btn-expand { background: none; border: none; color: #1a73e8; cursor: pointer; font-size: 12px; padding: 0; }
+.empty-state { text-align: center; padding: 60px 20px; color: #777; font-size: 15px; }
+</style>
+
+<!-- Статистика -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">{{ stats.total }}</div><div class="stat-label">Всего</div></div>
+  <div class="stat-item pending"><div class="stat-num">{{ stats.pending }}</div><div class="stat-label">Ожидают</div></div>
+  <div class="stat-item approved"><div class="stat-num">{{ stats.approved }}</div><div class="stat-label">Одобрено</div></div>
+  <div class="stat-item rejected"><div class="stat-num">{{ stats.rejected }}</div><div class="stat-label">Отклонено</div></div>
+  <div class="stat-item" style="margin-left:auto;text-align:right">
+    <form method="post" action="/incoming/collect" style="display:inline">
+      <button type="submit" style="background:#1a73e8;color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px">⬇ Собрать за 24ч</button>
+    </form>
+  </div>
+</div>
+
+<div class="incoming-layout">
+  <!-- Сайдбар -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h4>По нишам</h4>
+      {% set max_niche = niches[0].count if niches else 1 %}
+      {% for n in niches %}
+      <div class="niche-row {% if selected_niche == n.label %}active{% endif %}"
+           onclick="location.href='/incoming?niche={{ n.label|urlencode }}&status={{ selected_status }}'">
+        <span>{{ n.label }}</span>
+        <span class="niche-count">{{ n.count }}</span>
+      </div>
+      <div class="niche-bar" style="width:{{ (n.count / max_niche * 100)|int }}%"></div>
+      {% endfor %}
+      {% if selected_niche %}
+      <div style="margin-top:8px"><a href="/incoming?status={{ selected_status }}" style="font-size:12px;color:#777">× сброс</a></div>
+      {% endif %}
+    </div>
+
+    <div class="sidebar-section">
+      <h4>Топ каналов</h4>
+      {% for ch in top_channels %}
+      <div class="channel-row">
+        <span>{{ ch.title[:22] }}</span>
+        <span style="color:#777">{{ ch.count }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Лента -->
+  <div class="queue-list">
+    <div class="filters">
+      <select onchange="applyFilter('status', this.value)">
+        <option value="pending"  {% if selected_status=='pending'  %}selected{% endif %}>Ожидают</option>
+        <option value="approved" {% if selected_status=='approved' %}selected{% endif %}>Одобрено</option>
+        <option value="rejected" {% if selected_status=='rejected' %}selected{% endif %}>Отклонено</option>
+        <option value=""         {% if selected_status==''         %}selected{% endif %}>Все</option>
+      </select>
+      <span style="font-size:13px;color:#555">{{ posts|length }} постов</span>
+    </div>
+
+    {% if not posts %}
+    <div class="empty-state">
+      Нет постов для отображения.<br>
+      <small>Запустите сбор или измените фильтр.</small>
+    </div>
+    {% endif %}
+
+    {% for p in posts %}
+    <div class="qcard {{ p.status }}" id="card-{{ p.id }}">
+      <div class="qcard-header">
+        <div>
+          <span class="qcard-source">
+            {% if p.channel_username %}@{{ p.channel_username }}{% else %}{{ p.channel_title }}{% endif %}
+          </span>
+          <span style="font-size:12px;color:#999;margin-left:8px">{{ p.date[:16].replace('T',' ') }}</span>
+        </div>
+        <div class="qcard-date">id {{ p.id }}</div>
+      </div>
+
+      <div class="qcard-text" id="text-{{ p.id }}">{{ p.text }}</div>
+      {% if p.text|length > 300 %}
+      <button class="btn-expand" onclick="toggleText({{ p.id }})">развернуть ▾</button>
+      {% endif %}
+
+      <div class="qcard-meta" style="margin-top:8px">
+        <span class="meta-chip centroid">{{ p.centroid_label }} {{ "%.2f"|format(p.centroid_score) }}</span>
+        {% if p.views %}<span class="meta-views">👁 {{ "{:,}".format(p.views).replace(",", " ") }}</span>{% endif %}
+        {% if p.forwards %}<span class="meta-views">🔄 {{ p.forwards }}</span>{% endif %}
+        {% if p.has_photo %}<span class="meta-chip">📷 фото</span>{% endif %}
+        <span class="meta-chip">{{ p.keyword_match }}</span>
+      </div>
+
+      {% if p.status == 'pending' %}
+      <div class="qcard-actions">
+        <button class="btn-approve" onclick="review({{ p.id }}, 'approve')">✓ Одобрить</button>
+        <button class="btn-reject"  onclick="review({{ p.id }}, 'reject')">✗ Отклонить</button>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Аналитика -->
+<div style="margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+  <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;">
+    <h4 style="margin:0 0 12px;font-size:13px;color:#555;text-transform:uppercase;letter-spacing:.5px">Топ каналов по просмотрам</h4>
+    <canvas id="chartViews" height="200"></canvas>
+  </div>
+  <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;">
+    <h4 style="margin:0 0 12px;font-size:13px;color:#555;text-transform:uppercase;letter-spacing:.5px">Активность по часам</h4>
+    <canvas id="chartHours" height="200"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script>
+const viewsData = {{ top_by_views | tojson }};
+const hoursData = {{ by_hour | tojson }};
+
+new Chart(document.getElementById('chartViews'), {
+  type: 'bar',
+  data: {
+    labels: viewsData.map(d => d.title.substring(0, 20)),
+    datasets: [{
+      data: viewsData.map(d => d.views),
+      backgroundColor: '#4285f4',
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: { x: { ticks: { callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v } } }
+  }
+});
+
+const allHours = Array.from({length:24}, (_,i) => String(i).padStart(2,'0'));
+const hourMap = Object.fromEntries(hoursData.map(d => [d.hour, d.count]));
+new Chart(document.getElementById('chartHours'), {
+  type: 'bar',
+  data: {
+    labels: allHours,
+    datasets: [{
+      data: allHours.map(h => hourMap[h] || 0),
+      backgroundColor: '#34a853',
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+</script>
+
+<script>
+function applyFilter(key, val) {
+  const url = new URL(window.location);
+  url.searchParams.set(key, val);
+  window.location = url;
+}
+
+function toggleText(id) {
+  const el = document.getElementById('text-' + id);
+  el.classList.toggle('expanded');
+}
+
+async function review(id, action) {
+  const card = document.getElementById('card-' + id);
+  const resp = await fetch(`/incoming/${id}/${action}`, {method: 'POST'});
+  if (resp.ok) {
+    if (action === 'approve') {
+      card.classList.remove('pending'); card.classList.add('approved');
+    } else {
+      card.classList.remove('pending'); card.classList.add('rejected');
+    }
+    card.querySelector('.qcard-actions')?.remove();
+  }
+}
+</script>
+{% endblock %}

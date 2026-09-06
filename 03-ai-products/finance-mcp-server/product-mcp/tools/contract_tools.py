@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from services.contract_service import contract_risk_scan as contract_risk_scan_svc
 from services.contract_service import list_contracts as list_contracts_svc
+
+logger = logging.getLogger(__name__)
 
 
 def list_contracts(active_only: bool = False) -> dict[str, Any]:

@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from config import DB_PATH
 from db import get_connection, table_counts
 from schemas import tool_bundles
+
+logger = logging.getLogger(__name__)
 
 
 def health_check() -> dict[str, Any]:

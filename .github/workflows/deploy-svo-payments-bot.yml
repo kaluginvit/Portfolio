@@ -1,0 +1,104 @@
+# Деплой svo-payments-bot: GHCR → SSH → docker compose up.
+# Запускается только при изменениях в 03-ai-products/svo-payments-bot/.
+#
+# Секреты (Settings → Secrets → Actions):
+#   SSH_HOST              — IP или домен сервера
+#   SSH_USER              — пользователь SSH
+#   SSH_PRIVATE_KEY       — приватный ключ (PEM, включая BEGIN/END)
+#   SVO_BOT_DEPLOY_PATH   — каталог на сервере (должен содержать .env и docker-compose.deploy.yml)
+#   GHCR_USERNAME         — GitHub логин для docker login на сервере
+#   GHCR_READ_TOKEN       — PAT с правом read:packages
+
+name: Deploy svo-payments-bot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "03-ai-products/svo-payments-bot/**"
+      - ".github/workflows/deploy-svo-payments-bot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: svo-payments-bot
+
+jobs:
+  build-and-push:
+    name: Build & push image
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    outputs:
+      image: ${{ steps.vars.outputs.image }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Image ref
+        id: vars
+        run: |
+          OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
+          IMAGE="${{ env.REGISTRY }}/${OWNER}/${{ env.IMAGE_NAME }}"
+          echo "image=${IMAGE}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: 03-ai-products/svo-payments-bot
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.image }}:latest
+            ${{ steps.vars.outputs.image }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ env.IMAGE_NAME }}
+          cache-to: type=gha,mode=max,scope=${{ env.IMAGE_NAME }}
+
+  deploy:
+    name: Deploy via SSH
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Проверка секретов
+        run: |
+          missing=""
+          [ -z "${{ secrets.SSH_HOST }}" ]            && missing="${missing} SSH_HOST"
+          [ -z "${{ secrets.SSH_USER }}" ]            && missing="${missing} SSH_USER"
+          [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]     && missing="${missing} SSH_PRIVATE_KEY"
+          [ -z "${{ secrets.SVO_BOT_DEPLOY_PATH }}" ] && missing="${missing} SVO_BOT_DEPLOY_PATH"
+          if [ -n "$missing" ]; then
+            echo "::error::Задайте секреты:${missing}"
+            exit 1
+          fi
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_USER: ${{ secrets.GHCR_USERNAME }}
+          GHCR_TOKEN: ${{ secrets.GHCR_READ_TOKEN }}
+          IMAGE: ${{ needs.build-and-push.outputs.image }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: GHCR_USER,GHCR_TOKEN,IMAGE
+          script: |
+            set -euo pipefail
+            DEPLOY_PATH='${{ secrets.SVO_BOT_DEPLOY_PATH }}'
+            cd "$DEPLOY_PATH"
+            test -f .env || { echo "Нет .env — создайте из .env.example"; exit 1; }
+            [ -n "${GHCR_TOKEN:-}" ] && echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            export APP_IMAGE="${IMAGE}:latest"
+            docker compose -f docker-compose.deploy.yml pull
+            docker compose -f docker-compose.deploy.yml up -d --remove-orphans
+            docker image prune -f
+            echo "✅ svo-payments-bot deployed"

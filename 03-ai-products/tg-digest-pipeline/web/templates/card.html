@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if not post %}
+  <div class="empty-state"><p>Пост не найден.</p></div>
+{% else %}
+
+<!-- Заголовок -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="card-meta">
+    <span class="date">{{ (post.date or "")[:19].replace("T", " ") }}</span>
+    {% if post.forwarded_from %}
+    <span class="fwd-source">↗ {{ post.forwarded_from }}</span>
+    {% endif %}
+    <span class="text-muted" style="margin-left:auto; font-size:12px;">#{{ post.message_id }}</span>
+  </div>
+
+  <!-- Фото -->
+  {% if post.photo %}
+  <img src="/{{ post.photo }}" alt="фото поста"
+       style="max-width:100%;max-height:400px;object-fit:contain;border-radius:8px;margin:12px 0;">
+  {% endif %}
+
+  <!-- Описание фото (из photo_enrichments) -->
+  {% if post.photo_description %}
+  <div class="section-title">Что на фото</div>
+  <p style="margin:4px 0 8px;">{{ post.photo_description }}</p>
+  {% if post.photo_objects %}
+  <div class="tags" style="margin-bottom:8px;">
+    {% for obj in post.photo_objects %}
+    <span class="tag" style="background:#f0f4ff;">{{ obj }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if post.photo_text_on_image %}
+  <p style="font-size:13px;color:#555;font-style:italic;">Текст на изображении: «{{ post.photo_text_on_image }}»</p>
+  {% endif %}
+  {% endif %}
+
+  <!-- Инсайт -->
+  {% if post.insight %}
+  <div class="section-title">Инсайт</div>
+  <div class="card-insight large">{{ post.insight }}</div>
+  {% endif %}
+
+  <!-- Оригинальный текст (свёртывается) -->
+  {% if post.text %}
+  <details>
+    <summary>Оригинальный текст поста</summary>
+    <p>{{ post.text }}</p>
+  </details>
+  {% endif %}
+
+  <!-- Entities -->
+  {% if post.entities %}
+  <div class="section-title">Сущности</div>
+  <ul class="entity-list">
+    {% for entity in post.entities %}
+    <li>
+      {% if entity is mapping %}
+        {% if entity.get("name") %}<strong>{{ entity.name }}</strong>{% endif %}
+        {% if entity.get("type") %} <span class="text-muted">({{ entity.type }})</span>{% endif %}
+        {% if entity.get("value") %} — {{ entity.value }}{% endif %}
+      {% else %}
+        {{ entity }}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <!-- Теги из enrichments -->
+  {% if post.tags %}
+  <div class="section-title">Теги</div>
+  <div class="tags">
+    {% for tag in post.tags %}
+    <span class="tag">{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<!-- Мои теги -->
+<div class="card">
+  <div class="section-title">Мои теги</div>
+
+  {% if user_tags %}
+  <div class="tags" style="margin-bottom:12px;">
+    {% for ut in user_tags %}
+    <span class="tag user">{{ ut.tag }}</span>
+    <button
+      class="tag del-btn"
+      title="Удалить тег"
+      onclick="deleteTag({{ ut.id }}, {{ post.message_id }}, this)"
+    >✕</button>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted" style="margin:0 0 12px;">Нет пользовательских тегов.</p>
+  {% endif %}
+
+  <!-- Форма добавления тега -->
+  <form class="form-inline" method="post" action="/card/{{ post.message_id }}/tags">
+    <input type="text" name="tag" placeholder="Новый тег…" required autocomplete="off">
+    <button type="submit" class="btn btn-green btn-sm">+ Добавить тег</button>
+  </form>
+
+  <!-- Заметки -->
+  {% if user_tags %}
+  <div class="section-title mt-16">Заметка (к последнему тегу)</div>
+  {% if user_tags[-1].note %}
+  <p style="margin: 4px 0 10px; font-size:14px; color:#333;">{{ user_tags[-1].note }}</p>
+  {% endif %}
+  <form class="form-inline" method="post" action="/card/{{ post.message_id }}/note">
+    <input type="text" name="note" placeholder="Добавить заметку…" autocomplete="off">
+    <button type="submit" class="btn btn-secondary btn-sm">Сохранить</button>
+  </form>
+  {% endif %}
+</div>
+
+<div style="margin-top:16px; display:flex; gap:8px; align-items:center;">
+  <a href="/" class="btn btn-secondary btn-sm">← Лента</a>
+  <a href="javascript:history.back()" class="btn btn-secondary btn-sm">← Назад</a>
+  <button onclick="skipPost({{ post.message_id }})" class="btn-dismiss" style="margin-left:auto; padding:6px 14px; font-size:13px;">
+    ✕ Скрыть пост
+  </button>
+</div>
+
+<script>
+async function skipPost(id) {
+  if (!confirm("Скрыть этот пост из ленты?")) return;
+  await fetch("/card/" + id + "/dismiss", {method: "POST"});
+  window.location.href = "/";
+}
+</script>
+
+<script>
+async function deleteTag(tagId, messageId, btn) {
+  if (!confirm("Удалить тег?")) return;
+  btn.disabled = true;
+  try {
+    const resp = await fetch(`/card/${messageId}/tags/${tagId}`, {method: "DELETE"});
+    const data = await resp.json();
+    if (data.ok) location.reload();
+  } catch(e) {
+    btn.disabled = false;
+    alert("Ошибка удаления: " + e);
+  }
+}
+</script>
+
+{% endif %}
+{% endblock %}

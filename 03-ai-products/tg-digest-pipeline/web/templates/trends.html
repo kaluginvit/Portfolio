@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.trends-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.trends-header h2 { margin: 0; font-size: 20px; }
+.trends-meta { font-size: 12px; color: #888; }
+.recluster-btn { margin-left: auto; padding: 7px 16px; background: #1a73e8; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.recluster-btn:hover { background: #1558b0; }
+
+.niche-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.niche-chip { padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #ddd; background: #fff; cursor: pointer; text-decoration: none; color: #333; }
+.niche-chip:hover { background: #e8f0fe; border-color: #1a73e8; }
+.niche-chip.active { background: #1a73e8; color: #fff; border-color: #1a73e8; }
+
+.noise-note { font-size: 12px; color: #999; margin-bottom: 16px; }
+
+.cluster-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.cluster-head { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
+.cluster-head:hover { background: #f8f9fa; }
+.cluster-rank { font-size: 22px; font-weight: 800; color: #1a73e8; min-width: 36px; text-align: center; }
+.cluster-info { flex: 1; min-width: 0; }
+.cluster-label { font-size: 15px; font-weight: 600; color: #222; margin-bottom: 6px; line-height: 1.4; }
+.cluster-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.badge-niche { background: #e8f0fe; color: #1558b0; }
+.badge-channels { background: #e6f4ea; color: #137333; }
+.badge-views { background: #fce8e6; color: #c5221f; }
+.cluster-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.btn-approve { padding: 6px 14px; background: #34a853; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.btn-approve:hover { background: #1e7e34; }
+.btn-reject  { padding: 6px 14px; background: #fff; color: #c5221f; border: 1px solid #c5221f; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.btn-reject:hover { background: #fce8e6; }
+.btn-done  { padding: 6px 14px; background: #e8f0fe; color: #1a73e8; border: none; border-radius: 6px; font-size: 13px; cursor: default; }
+.btn-write { padding: 6px 14px; background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.btn-write:hover { background: #ffe0b2; }
+
+/* Модальное окно генерации */
+.gen-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; align-items:center; justify-content:center; }
+.gen-modal-overlay.open { display:flex; }
+.gen-modal { background:#fff; border-radius:12px; width:min(680px,95vw); max-height:90vh; overflow:auto; padding:24px; position:relative; }
+.gen-modal h3 { margin:0 0 16px; font-size:17px; }
+.gen-modal-close { position:absolute; top:14px; right:16px; font-size:20px; cursor:pointer; color:#888; background:none; border:none; }
+.gen-draft { width:100%; box-sizing:border-box; min-height:260px; border:1px solid #ddd; border-radius:8px; padding:12px; font-size:14px; line-height:1.6; font-family:inherit; resize:vertical; margin-top:10px; }
+.gen-modal-actions { display:flex; gap:10px; margin-top:14px; }
+.btn-gen-run { flex:1; padding:10px; background:#1a73e8; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; }
+.btn-gen-run:disabled { background:#aaa; }
+.btn-gen-copy { padding:10px 20px; background:#34a853; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px; }
+.gen-modal-meta { font-size:11px; color:#aaa; margin-top:8px; }
+
+.cluster-posts { display: none; border-top: 1px solid #f0f0f0; }
+.cluster-posts.open { display: block; }
+.post-item { padding: 10px 16px 10px 64px; border-bottom: 1px solid #f5f5f5; }
+.post-item:last-child { border-bottom: none; }
+.post-item.approved { background: #f0fff4; }
+.post-item.rejected { opacity: .5; }
+.post-source { font-size: 12px; font-weight: 600; color: #1a73e8; margin-bottom: 4px; }
+.post-meta { font-size: 11px; color: #888; margin-bottom: 4px; }
+.post-text { font-size: 13px; color: #333; line-height: 1.5; white-space: pre-wrap; }
+
+.empty { text-align: center; padding: 60px 20px; color: #888; font-size: 15px; }
+.empty a { color: #1a73e8; }
+</style>
+
+<div class="trends-header">
+  <h2>Тренды</h2>
+  {% if clustered_at %}
+    <span class="trends-meta">Кластеризация: {{ clustered_at[:16] }}</span>
+  {% endif %}
+  <button class="recluster-btn" onclick="recluster(this)">⟳ Перекластеризовать</button>
+</div>
+
+{% if niches %}
+<div class="niche-filters">
+  <a href="/trends" class="niche-chip {% if not selected_niche %}active{% endif %}">Все</a>
+  {% for n in niches %}
+  <a href="/trends?niche={{ n }}" class="niche-chip {% if n == selected_niche %}active{% endif %}">{{ n }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+{% if not clusters %}
+  <div class="empty">
+    Кластеров нет. <a href="#" onclick="recluster(this); return false;">Запустить кластеризацию</a>
+    или сначала соберите посты через <a href="/incoming">Входящие</a>.
+  </div>
+{% else %}
+{% for c in clusters %}
+<div class="cluster-card" id="cluster-{{ c.id }}">
+  <div class="cluster-head" onclick="togglePosts({{ c.id }})">
+    <div class="cluster-rank">#{{ loop.index }}</div>
+    <div class="cluster-info">
+      <div class="cluster-label">{{ c.label }}</div>
+      <div class="cluster-badges">
+        <span class="badge badge-niche">{{ c.niche }}</span>
+        <span class="badge badge-channels">{{ c.channel_count }} источн.</span>
+        <span class="badge badge-views">{{ "{:,}".format(c.total_views).replace(",", " ") }} views</span>
+        <span style="font-size:11px;color:#aaa;">{{ c.post_count }} постов</span>
+      </div>
+    </div>
+    <div class="cluster-actions" onclick="event.stopPropagation()">
+      <button class="btn-write"   onclick="openGenerate({{ c.id }})">✍ Пост</button>
+      <button class="btn-approve" id="btn-approve-{{ c.id }}"
+              onclick="clusterAction({{ c.id }}, 'approve')">Одобрить</button>
+      <button class="btn-reject"  id="btn-reject-{{ c.id }}"
+              onclick="clusterAction({{ c.id }}, 'reject')">Отклонить</button>
+    </div>
+  </div>
+  <div class="cluster-posts" id="posts-{{ c.id }}">
+    {% for p in c.posts %}
+    <div class="post-item {{ p.status }}">
+      <div class="post-source">
+        {% if p.channel_username %}@{{ p.channel_username }}{% else %}{{ p.channel_title }}{% endif %}
+      </div>
+      <div class="post-meta">{{ p.date[:16] }} · {{ "{:,}".format(p.views).replace(",", " ") }} views</div>
+      <div class="post-text">{{ p.text }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if noise_posts %}
+{% set ns = namespace(prev_niche="") %}
+<div style="margin-top:28px;">
+  <h3 style="font-size:15px;color:#666;margin-bottom:16px;">
+    Одиночные посты — {{ noise_posts|length }} шт.
+    <span style="font-size:12px;font-weight:400;">(не вошли ни в одну историю)</span>
+  </h3>
+
+  {% for p in noise_posts|sort(attribute='centroid_label') %}
+    {% if p.centroid_label != ns.prev_niche %}
+      {% if not loop.first %}</div>{% endif %}
+      {% set ns.prev_niche = p.centroid_label %}
+      <div style="margin-bottom:6px;margin-top:{% if loop.first %}0{% else %}20px{% endif %};">
+        <div style="font-size:13px;font-weight:700;color:#555;padding:6px 10px;background:#f5f5f5;border-radius:6px;margin-bottom:8px;">
+          {{ p.centroid_label }}
+        </div>
+      <div>
+    {% endif %}
+
+    <div id="noise-{{ p.id }}" style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:12px 14px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start;">
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:600;color:#1a73e8;">
+            {% if p.channel_username %}@{{ p.channel_username }}{% else %}{{ p.channel_title }}{% endif %}
+          </span>
+          <span style="font-size:11px;color:#aaa;">{{ p.date[:16] }} · {{ "{:,}".format(p.views).replace(",", " ") }} views</span>
+        </div>
+        <div style="font-size:13px;color:#444;line-height:1.5;white-space:pre-wrap;">{{ p.text }}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+        <button class="btn-approve" onclick="noiseAction({{ p.id }}, 'approve')">✓</button>
+        <button class="btn-reject"  onclick="noiseAction({{ p.id }}, 'reject')">✗</button>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<script>
+function togglePosts(id) {
+  const el = document.getElementById('posts-' + id);
+  el.classList.toggle('open');
+}
+
+async function clusterAction(id, action) {
+  const btn = document.getElementById('btn-' + action + '-' + id);
+  btn.disabled = true;
+  btn.textContent = '…';
+  try {
+    const r = await fetch('/trends/' + id + '/' + action, {method: 'POST'});
+    const d = await r.json();
+    if (d.ok) {
+      const card = document.getElementById('cluster-' + id);
+      if (action === 'reject') {
+        card.style.opacity = '0.4';
+      } else {
+        card.style.borderLeft = '3px solid #34a853';
+      }
+      btn.closest('.cluster-actions').innerHTML =
+        '<span class="btn-done">' + (action === 'approve' ? '✓ Одобрено' : '✗ Отклонено') + '</span>';
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = action === 'approve' ? 'Одобрить' : 'Отклонить';
+  }
+}
+
+async function noiseAction(id, action) {
+  const card = document.getElementById('noise-' + id);
+  try {
+    const r = await fetch('/incoming/' + id + '/' + action, {method: 'POST'});
+    const d = await r.json();
+    if (d.ok) card.style.opacity = '0.3';
+  } catch(e) {}
+}
+
+function openGenerate(clusterId) {
+  document.getElementById('gen-cluster-id').value = clusterId;
+  document.getElementById('gen-draft').value = '';
+  document.getElementById('gen-meta').textContent = '';
+  document.getElementById('gen-modal').classList.add('open');
+}
+
+function closeGenerate() {
+  document.getElementById('gen-modal').classList.remove('open');
+}
+
+async function runGenerate() {
+  const clusterId = document.getElementById('gen-cluster-id').value;
+  const btn = document.getElementById('btn-gen-run');
+  const draft = document.getElementById('gen-draft');
+  const meta = document.getElementById('gen-meta');
+  btn.disabled = true;
+  btn.textContent = '⏳ Генерирую…';
+  draft.value = '';
+  meta.textContent = '';
+  try {
+    const r = await fetch('/generate/run', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({cluster_id: parseInt(clusterId)}),
+    });
+    const d = await r.json();
+    if (d.ok) {
+      draft.value = d.draft;
+      meta.textContent = `Модель: ${d.model} · Примеров: ${d.author_examples_used} · Постов кластера: ${d.cluster_posts_used}`;
+    } else {
+      draft.value = 'Ошибка: ' + (d.error || 'неизвестная');
+    }
+  } catch(e) {
+    draft.value = 'Ошибка сети: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✍ Сгенерировать';
+  }
+}
+
+function copyGenDraft() {
+  const text = document.getElementById('gen-draft').value;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Скопировано';
+    setTimeout(() => btn.textContent = 'Скопировать', 2000);
+  });
+}
+
+async function recluster(btn) {
+  btn.disabled = true;
+  btn.textContent = '⟳ Запускаю…';
+  try {
+    const r = await fetch('/trends/recluster', {method: 'POST'});
+    const d = await r.json();
+    if (d.ok) {
+      btn.textContent = '⟳ Кластеризую (~1 мин)…';
+      setTimeout(() => location.reload(), 70000);
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '⟳ Перекластеризовать';
+  }
+}
+</script>
+<!-- Модальное окно генерации поста -->
+<div class="gen-modal-overlay" id="gen-modal" onclick="if(event.target===this)closeGenerate()">
+  <div class="gen-modal">
+    <button class="gen-modal-close" onclick="closeGenerate()">✕</button>
+    <h3>✍ Написать пост по теме кластера</h3>
+    <input type="hidden" id="gen-cluster-id" />
+    <textarea class="gen-draft" id="gen-draft" placeholder="Нажми «Сгенерировать» — черновик появится здесь…"></textarea>
+    <div class="gen-modal-meta" id="gen-meta"></div>
+    <div class="gen-modal-actions">
+      <button class="btn-gen-run" id="btn-gen-run" onclick="runGenerate()">✍ Сгенерировать</button>
+      <button class="btn-gen-copy" onclick="copyGenDraft()">Скопировать</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

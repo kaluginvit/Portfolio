@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from services.reporting_service import export_report as export_report_svc
+
+logger = logging.getLogger(__name__)
 from services.treasury_service import (
     liquidity_forecast as liquidity_forecast_svc,
     list_cash_positions as list_cash_positions_svc,

@@ -1,0 +1,61 @@
+# CI для fintech-ab-test-credit-offer: генерация данных + запуск анализа + проверка артефактов.
+# Запускается только при изменениях в этом проекте.
+
+name: CI — fintech-ab-test-credit-offer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "01-data-analytics/fintech-ab-test-credit-offer/**"
+      - ".github/workflows/test-fintech.yml"
+  pull_request:
+    paths:
+      - "01-data-analytics/fintech-ab-test-credit-offer/**"
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: 01-data-analytics/fintech-ab-test-credit-offer
+
+jobs:
+  analyse:
+    name: Run AB analysis
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: 01-data-analytics/fintech-ab-test-credit-offer/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate expanded dataset
+        run: python src/augment_dataset.py
+
+      - name: Run analysis
+        run: python src/run_analysis.py
+
+      - name: Verify outputs
+        run: |
+          test -f data/processed/ab_results.csv            || { echo "::error::ab_results.csv not found"; exit 1; }
+          test -f data/processed/sample_size_recommendation.csv || { echo "::error::sample_size_recommendation.csv not found"; exit 1; }
+          test -f reports/final_report.md                   || { echo "::error::final_report.md not found"; exit 1; }
+          echo "✅ All expected outputs present"
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ab-analysis-report-${{ github.sha }}
+          path: |
+            01-data-analytics/fintech-ab-test-credit-offer/reports/final_report.md
+            01-data-analytics/fintech-ab-test-credit-offer/data/processed/
+          retention-days: 30

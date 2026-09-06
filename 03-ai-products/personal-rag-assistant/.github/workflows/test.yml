@@ -1,0 +1,15 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt pytest
+      - run: pytest tests/ test_bot_logic.py -v
+        env:
+          PINECONE_API_KEY: fake_key_for_ci
+          TELEGRAM_BOT_TOKEN: fake_token_for_ci
+          OPENAI_API_KEY: fake_key_for_ci

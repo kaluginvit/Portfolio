@@ -6,3 +6,6 @@ scrapling[fetchers]>=0.4.2
 
 # db_review_server.py
 flask>=3.0
+
+# dev / tests
+pytest>=8.0

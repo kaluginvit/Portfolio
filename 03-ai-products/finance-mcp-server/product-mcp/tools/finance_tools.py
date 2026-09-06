@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from services.finance_service import (
@@ -13,6 +14,8 @@ from services.finance_service import (
     plan_vs_fact as plan_vs_fact_svc,
 )
 from utils.helpers import plan_vs_fact_value_error, records_value_error
+
+logger = logging.getLogger(__name__)
 
 
 def list_companies() -> dict[str, Any]:

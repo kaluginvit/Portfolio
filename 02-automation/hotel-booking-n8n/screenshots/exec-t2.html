@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<title>Execution T2 (not found)</title><style>
+body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5;color:#333}
+.card{background:white;border-radius:8px;padding:20px;margin:15px 0;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+.header{background:#FF6D5A;color:white;padding:15px 20px;border-radius:8px;margin-bottom:20px}
+h1,h2{margin:0 0 10px}h1{font-size:1.4em}h2{color:#FF6D5A;font-size:1.1em}
+.badge{display:inline-block;padding:3px 8px;border-radius:4px;font-size:0.85em;font-weight:bold}
+.ok{background:#28a745;color:white}.err{background:#dc3545;color:white}
+.warn{background:#ffc107;color:#333}.info{background:#17a2b8;color:white}
+table{width:100%;border-collapse:collapse;margin:10px 0}
+th{background:#FF6D5A;color:white;padding:8px;text-align:left}
+td{padding:8px;border-bottom:1px solid #eee}tr:nth-child(even){background:#f9f9f9}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 0}
+.node-box{background:#e8f4fd;border:1px solid #bee3f8;border-radius:4px;padding:4px 10px;font-size:0.82em}
+.node-err{background:#fde8e8;border-color:#f8bebe}
+.node-stop{background:#e8fde8;border-color:#bef8be}
+.arrow{color:#aaa}.note{background:#fff8e1;border-left:4px solid #ffc107;padding:10px;margin:10px 0;border-radius:0 4px 4px 0}
+pre{background:#f4f4f4;padding:12px;border-radius:4px;font-size:0.82em;overflow-x:auto;border:1px solid #ddd}
+</style></head><body>
+<div class="header"><h1>n8n Execution Log — T2: NOT FOUND</h1></div>
+<div class="card">
+  <h2>Параметры теста</h2>
+  <table><tr><th>Параметр</th><th>Значение</th></tr>
+  <tr><td>Тест</td><td><b>T2</b> — not found</td></tr>
+  <tr><td>Execution ID</td><td>672</td></tr>
+  <tr><td>Workflow</td><td>Hotel booking A — request processing (pCYE7tn7EhWs3W2D)</td></tr>
+  <tr><td>Запрос</td><td>Hotel_Aurora / suite / 2026-07-05–10</td></tr>
+  <tr><td>Запущен</td><td>2026-06-18T14:32:41.782Z</td></tr>
+  <tr><td>Завершён</td><td>2026-06-18T14:32:42.143Z</td></tr>
+  <tr><td>Статус</td><td><span class="badge err">ERROR (Gmail auth)</span></td></tr>
+  <tr><td>Последний узел</td><td>Email client (no room)</td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>Цепочка выполненных узлов</h2>
+  <div class="chain"><span class="node-box">Tally Webhook</span> <span class="arrow">→</span> <span class="node-box">Normalize+Validate</span> <span class="arrow">→</span> <span class="node-box">IF — input valid?</span> <span class="arrow">→</span> <span class="node-box">Lookup booking by request_id</span> <span class="arrow">→</span> <span class="node-box">IF — duplicate?</span> <span class="arrow">→</span> <span class="node-box">Find free room</span> <span class="arrow">→</span> <span class="node-box">IF — room found?</span> <span class="arrow">→</span> <span class="node-box node-err">Email client (no room)</span></div>
+</div>
+<div class="card">
+  <h2>Результат</h2>
+  <div class="note">Свободного номера не найдено. Gmail credential не авторизован — письмо не отправлено.</div>
+</div>
+</body></html>

@@ -1,6 +1,6 @@
-# Create_CRM
+# Mini CRM
 
-Учебный кейс / курс ZeroCoder (модуль 8). Это **не коммерческий продукт**, а домашнее задание по мини-CRM: FastAPI + SQLite + Google Drive/Sheets (OAuth пользователя) + веб-интерфейс на React (**без Tkinter**).
+Мини-CRM система: FastAPI + SQLite + интеграция с Google Drive/Sheets (OAuth) + веб-интерфейс на React.
 
 ### Публичный репозиторий (портфолио)
 
@@ -10,7 +10,7 @@
 
 1. Перейдите в корень этого проекта (где лежат `docker-compose.yml` и `requirements.txt`). В монорепозитории Portfolio путь: `04-web/mini-crm-fastapi-react/`.
 
-2. **Бэкенд — из Docker (основной вариант для ДЗ):**
+2. **Бэкенд — из Docker:**
 
 ```powershell
 docker compose up --build

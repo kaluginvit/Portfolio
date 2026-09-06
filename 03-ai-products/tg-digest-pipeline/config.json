@@ -1,0 +1,31 @@
+{
+  "topic": "infopovod",
+  "channel": "@infopovod",
+  "session": "infopovod.session",
+  "sections": {
+    "1": "Экономика России",
+    "2": "Санкции / внешняя торговля",
+    "3": "Энергетика / сырьё",
+    "4": "Геополитика",
+    "5": "Финансы / банки / ЦБ",
+    "6": "Бизнес / рынки",
+    "7": "Технологии",
+    "8": "Социальная политика",
+    "9": "Другое"
+  },
+  "local_gate": {
+    "min_len": 150,
+    "keywords": []
+  },
+  "batch_size": 80,
+  "max_tokens": 12000,
+  "temperature": 0.3,
+  "llm_model_vision": "minimax/minimax-m3:free",
+  "llm_models_text": ["nvidia/nemotron-3-ultra-550b-a55b:free", "poolside/laguna-s-2.1:free"],
+  "embed_model_text": "deepvk/USER-bge-m3",
+  "embed_model_vision": "nvidia/llama-nemotron-embed-vl-1b-v2:free",
+  "result_json": "result.json",
+  "data_dir": "data",
+  "vectors_dir": "vectors",
+  "web_port": 8766
+}

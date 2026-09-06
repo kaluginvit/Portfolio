@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><title>Workflow B — Daily Report</title>
+<style>
+body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5;color:#333}
+.card{background:white;border-radius:8px;padding:20px;margin:15px 0;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+.header{background:#6366f1;color:white;padding:15px 20px;border-radius:8px;margin-bottom:20px}
+h1{margin:0;font-size:1.4em}h2{color:#6366f1;font-size:1.1em;margin:0 0 10px}
+table{width:100%;border-collapse:collapse}
+th{background:#6366f1;color:white;padding:8px;text-align:left}
+td{padding:8px;border-bottom:1px solid #eee}tr:nth-child(even){background:#f9f9f9}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 0}
+.node-ok{background:#e8f4fd;border:1px solid #bee3f8;border-radius:4px;padding:4px 10px;font-size:0.85em}
+.node-err{background:#fde8e8;border:1px solid #f8bebe;border-radius:4px;padding:4px 10px;font-size:0.85em}
+.arrow{color:#aaa}
+.warn{background:#fff8e1;border-left:4px solid #ffc107;padding:10px;margin:10px 0;border-radius:0 4px 4px 0}
+</style>
+</head><body>
+<div class="header"><h1>Workflow B &#8212; Ежедневный отчёт (Daily Report 18:00)</h1></div>
+<div class="card">
+  <h2>История выполнений</h2>
+  <p>Workflow B запускается автоматически каждый день в 18:00 UTC/MSK. Execution ID 670 &#8212; последний запуск (2026-06-18 13:00 UTC).</p>
+  <table>
+  <tr><th>Execution ID</th><th>Дата</th><th>Статус</th><th>Причина</th></tr>
+  <tr><td>670</td><td>2026-06-18 13:00 UTC</td><td>&#x274C; error</td><td>Merge node bug (mode: waitForAllInputs → нужен combine)</td></tr>
+  <tr><td>669</td><td>2026-06-17 13:00 UTC</td><td>&#x274C; error</td><td>То же</td></tr>
+  <tr><td>668</td><td>2026-06-16 13:00 UTC</td><td>&#x274C; error</td><td>То же</td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>Цепочка выполненных узлов (execution 670)</h2>
+  <div class="chain">
+    <span class="node-ok">Schedule 18:00</span><span class="arrow">→</span>
+    <span class="node-ok">Bookings (last 24h)</span><span class="arrow">→</span>
+    <span class="node-ok">Bookings (pending)</span><span class="arrow">→</span>
+    <span class="node-ok">Rooms (reserved)</span><span class="arrow">→</span>
+    <span class="node-err">Merge [ERROR]</span>
+  </div>
+</div>
+<div class="card">
+  <h2>Собранные данные (до ошибки)</h2>
+  <table>
+  <tr><th>Запрос</th><th>Строк</th></tr>
+  <tr><td>Bookings (last 24h)</td><td>1</td></tr>
+  <tr><td>Bookings (pending)</td><td>3</td></tr>
+  <tr><td>Rooms (reserved)</td><td>9</td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>Ошибка Merge node</h2>
+  <div class="warn">
+    <b>TypeError:</b> Cannot read properties of undefined (reading 'execute')<br>
+    <b>Причина:</b> В n8n v3 режим <code>waitForAllInputs</code> был переименован в <code>combine</code>.<br>
+    <b>Исправление:</b> В n8n UI &#8212; открыть Workflow B, найти узел Merge, изменить mode на <code>combine</code>.<br>
+    <b>Данные собираются корректно</b> &#8212; все 3 Supabase-запроса выполняются успешно.
+  </div>
+</div>
+</body></html>

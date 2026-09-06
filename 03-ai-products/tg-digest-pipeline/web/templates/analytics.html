@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 style="margin:0 0 24px; font-size:20px;">Аналитика</h2>
+
+<!-- График по месяцам -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="section-title">Активность по месяцам</div>
+  {% if posts_per_month %}
+  <div class="bar-chart">
+    {% for row in posts_per_month %}
+    {% set pct = (row.cnt / max_month * 100)|round(1) %}
+    <div class="bar-row">
+      <span class="bar-label">{{ row.month }}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: {{ pct }}%"></div>
+      </div>
+      <span class="bar-value">{{ "{:,}".format(row.cnt).replace(",", " ") }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">Нет данных.</p>
+  {% endif %}
+</div>
+
+<!-- Топ источников репостов -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="section-title">Топ-10 источников репостов</div>
+  {% if top_forwarded %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Источник</th>
+        <th>Репостов</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in top_forwarded %}
+      <tr>
+        <td class="text-muted">{{ loop.index }}</td>
+        <td>{{ row.forwarded_from }}</td>
+        <td><strong>{{ "{:,}".format(row.cnt).replace(",", " ") }}</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="text-muted">Нет данных.</p>
+  {% endif %}
+</div>
+
+<!-- Облако тегов -->
+<div class="card">
+  <div class="section-title">Облако тегов (топ-20)</div>
+  {% if top_tags %}
+  {% set max_cnt = top_tags[0].cnt %}
+  {% set min_cnt = top_tags[-1].cnt %}
+  <div class="tag-cloud">
+    {% for t in top_tags %}
+    {% if max_cnt > min_cnt %}
+      {% set ratio = (t.cnt - min_cnt) / (max_cnt - min_cnt) %}
+    {% else %}
+      {% set ratio = 1 %}
+    {% endif %}
+    {# Размер шрифта от 12 до 22px #}
+    {% set fsize = (12 + ratio * 10)|round|int %}
+    <span class="tc-tag" style="font-size: {{ fsize }}px;" title="{{ t.cnt }} упоминаний">
+      {{ t.tag }}
+    </span>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">Нет тегов для отображения.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

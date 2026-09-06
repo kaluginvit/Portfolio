@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from services.contract_service import import_contract as import_contract_svc
 from services.import_service import import_csv as import_csv_svc
+
+logger = logging.getLogger(__name__)
 
 
 def import_csv(

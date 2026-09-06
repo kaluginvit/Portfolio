@@ -106,4 +106,3 @@ docker run -p 8001:8001 --env-file .env seo-crew-api
 - `docker-compose.yml` — конфигурация для docker-compose
 - `.env` — ключи ProxyAPI (не коммитится)
 
-Подробнее: [HOW_CREW_WORKS.md](HOW_CREW_WORKS.md)

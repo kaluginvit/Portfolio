@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict, deque
+import logging
 import math
 import os
 import re
@@ -26,6 +27,8 @@ from pinecone_manager import PineconeManager
 DEFAULT_USER_MEMORY_NAMESPACE = "user-memory"
 DEFAULT_KB_NAMESPACE = "knowledge-base"
 
+_logger = logging.getLogger(__name__)
+
 
 def _short(text: str, limit: int = 140) -> str:
     """Shorten text for compact logs."""
@@ -37,7 +40,7 @@ def _log(event: str, **fields: Any) -> None:
     parts = [f"[ASSISTANT:{event}]"]
     for key, value in fields.items():
         parts.append(f"{key}={value}")
-    print(" ".join(parts))
+    _logger.debug(" ".join(parts))
 
 
 def _safe_get_metadata_text(match: Any) -> str:

@@ -1,0 +1,8 @@
+# Каждый бот управляет зависимостями независимо через uv.
+# Установка для конкретного бота:
+#   cd core/<бот>
+#   uv sync
+
+# core/модератор/pyproject.toml  — httpx, python-dotenv, modal
+# core/репортер/pyproject.toml   — см. README репортера
+# core/сторож/pyproject.toml    — см. файл проекта

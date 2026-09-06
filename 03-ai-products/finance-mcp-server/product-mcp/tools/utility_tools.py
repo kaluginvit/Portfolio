@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from utils.safe_calc import SafeCalcError, safe_calculate
+
+logger = logging.getLogger(__name__)
 
 
 def calculate(expression: str) -> dict[str, Any]:

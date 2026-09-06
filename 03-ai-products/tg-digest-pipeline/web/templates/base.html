@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ИнфоПовод</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav>
+  <span class="brand">ИнфоПовод</span>
+  <a href="/" {% if request.url.path == "/" %}class="active"{% endif %}>Лента</a>
+  <a href="/analytics" {% if request.url.path == "/analytics" %}class="active"{% endif %}>Аналитика</a>
+  <a href="/incoming" {% if request.url.path == "/incoming" %}class="active"{% endif %}>Входящие</a>
+  <a href="/trends" {% if request.url.path == "/trends" %}class="active"{% endif %}>Тренды</a>
+  <a href="/pipeline" {% if request.url.path == "/pipeline" %}class="active"{% endif %}>Пайплайн</a>
+  <a href="/generate" {% if request.url.path == "/generate" %}class="active"{% endif %}>Написать пост</a>
+</nav>
+<main>{% block content %}{% endblock %}</main>
+</body>
+</html>

@@ -1,0 +1,18 @@
+[project]
+name = "money-alert-ai"
+version = "0.1.0"
+description = "Economic stability monitoring agent — analysis engine"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.2.1",
+    "langchain>=1.2.10",
+    "langchain-gigachat-lc1>=0.4.0b4",
+    "langchain-anthropic>=0.3.0",
+    "langchain-openai>=0.3.0",
+    "langchain-google-genai>=2.1.0",
+    "langgraph>=1.0.8",
+    "httpx>=0.27.0",
+    "langchain-tavily>=0.2.17",
+    "tzdata>=2026.2",
+]

@@ -1,9 +1,31 @@
-# Валюта в путешествиях (Telegram + API курсов)
+# Валюта для путешественника (Telegram-бот)
 
-**Что это:** Telegram-бот и утилиты для запроса **кросс-курсов** через [exchangerate.host](https://exchangerate.host) (ключ в `.env`: `EXCHANGERATE_API_KEY`).
+Telegram-бот для конвертации валют в поездках: кросс-курсы через [exchangerate.host](https://exchangerate.host), история запросов в SQLite.
 
-**Стек:** Python, python-telegram-bot / aiogram (см. код в репозитории), `requests`, SQLite при необходимости.
+## Стек
 
-**Запуск:** создайте `.env` по образцу (если есть `.env.example`), установите `requirements.txt`, запустите точку входа бота (`bot.py`).
+Python, pyTelegramBotAPI, SQLite, exchangerate.host API
 
-**Статус:** учебно-продуктовый мини-сервис для демонстрации работы с внешним FX API и ботом.
+## Быстрый старт
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env   # заполнить токены
+python bot.py
+```
+
+## Настройка `.env`
+
+```env
+TELEGRAM_BOT_TOKEN=your_bot_token
+EXCHANGERATE_API_KEY=your_api_key
+```
+
+## Структура
+
+| Файл | Назначение |
+|------|-----------|
+| `bot.py` | Точка входа, FSM-диалог с пользователем |
+| `current_api.py` | Запросы к exchangerate.host |
+| `currencies.py` | Справочник валют и пар |
+| `database.py` | История запросов (SQLite) |

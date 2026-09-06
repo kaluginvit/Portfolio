@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Hotel Booking</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
+    header { background: #1e293b; color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 18px; font-weight: 600; }
+    header span { font-size: 13px; color: #94a3b8; margin-left: auto; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 20px 24px 0; }
+    .stat { background: #fff; border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .stat .label { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+    .stat .value { font-size: 28px; font-weight: 700; }
+    .stat.blue .value { color: #2563eb; }
+    .stat.orange .value { color: #ea580c; }
+    .stat.green .value { color: #16a34a; }
+    .stat.gray .value { color: #475569; }
+    .tabs { display: flex; gap: 4px; padding: 20px 24px 0; }
+    .tab { padding: 8px 18px; border-radius: 8px 8px 0 0; font-size: 14px; font-weight: 500; cursor: pointer; border: none; background: #e2e8f0; color: #475569; }
+    .tab.active { background: #fff; color: #1e293b; }
+    .panel { background: #fff; margin: 0 24px 24px; border-radius: 0 10px 10px 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+    .toolbar { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; display: flex; gap: 10px; align-items: center; }
+    .toolbar input { padding: 7px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; width: 240px; }
+    .toolbar select { padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; }
+    .toolbar button { margin-left: auto; padding: 7px 14px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    .toolbar button:hover { background: #1d4ed8; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 10px 16px; background: #f8fafc; font-weight: 600; color: #475569; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+    td { padding: 10px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .badge.reserved { background: #dbeafe; color: #1d4ed8; }
+    .badge.free { background: #dcfce7; color: #15803d; }
+    .badge.pending { background: #fef3c7; color: #b45309; }
+    .badge.paid { background: #dcfce7; color: #15803d; }
+    .badge.cancelled { background: #fee2e2; color: #b91c1c; }
+    .empty { padding: 40px; text-align: center; color: #94a3b8; font-size: 14px; }
+    .loading { padding: 40px; text-align: center; color: #94a3b8; }
+    .hidden { display: none; }
+    .action-btn { padding: 4px 10px; font-size: 12px; border: 1px solid #e2e8f0; border-radius: 5px; cursor: pointer; background: #fff; color: #475569; }
+    .action-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .action-btn.danger { color: #dc2626; border-color: #fecaca; }
+    .action-btn.danger:hover { background: #fef2f2; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Hotel Booking — Admin</h1>
+  <span id="lastRefresh">загрузка...</span>
+</header>
+
+<div class="stats">
+  <div class="stat blue"><div class="label">Всего броней</div><div class="value" id="s-total">—</div></div>
+  <div class="stat orange"><div class="label">Ожидают оплаты</div><div class="value" id="s-pending">—</div></div>
+  <div class="stat green"><div class="label">Оплачено</div><div class="value" id="s-paid">—</div></div>
+  <div class="stat gray"><div class="label">Занято номеров</div><div class="value" id="s-rooms">—</div></div>
+</div>
+
+<div class="tabs" style="margin-top:20px;">
+  <button class="tab active" onclick="showTab('bookings', this)">Бронирования</button>
+  <button class="tab" onclick="showTab('rooms', this)">Номера</button>
+</div>
+
+<div class="panel">
+  <!-- Bookings tab -->
+  <div id="tab-bookings">
+    <div class="toolbar">
+      <input type="text" id="search-bookings" placeholder="Поиск по имени, email, отелю..." oninput="filterBookings()">
+      <select id="filter-status" onchange="filterBookings()">
+        <option value="">Все статусы</option>
+        <option value="reserved">reserved</option>
+        <option value="confirmed">confirmed</option>
+        <option value="cancelled">cancelled</option>
+      </select>
+      <select id="filter-payment" onchange="filterBookings()">
+        <option value="">Все оплаты</option>
+        <option value="pending">pending</option>
+        <option value="paid">paid</option>
+      </select>
+      <button onclick="loadAll()">↻ Обновить</button>
+    </div>
+    <div id="bookings-container"><div class="loading">Загрузка...</div></div>
+  </div>
+
+  <!-- Rooms tab -->
+  <div id="tab-rooms" class="hidden">
+    <div class="toolbar">
+      <input type="text" id="search-rooms" placeholder="Поиск по отелю, типу..." oninput="filterRooms()">
+      <select id="filter-room-status" onchange="filterRooms()">
+        <option value="">Все статусы</option>
+        <option value="free">free</option>
+        <option value="reserved">reserved</option>
+      </select>
+      <button onclick="loadAll()">↻ Обновить</button>
+    </div>
+    <div id="rooms-container"><div class="loading">Загрузка...</div></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://supabase.kalugin-consulting.ru';
+const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UiLCJpYXQiOjE3NzM1MTQ4MDAsImV4cCI6MTkzMTI4MTIwMH0.ETEQ8-bSDZX41mxtI868vfwzC34u2mWw86zoFB678-I';
+
+let allBookings = [];
+let allRooms = [];
+
+async function apiFetch(path) {
+  const res = await fetch(SUPABASE_URL + path, {
+    headers: { 'apikey': SERVICE_KEY, 'Authorization': 'Bearer ' + SERVICE_KEY }
+  });
+  if (!res.ok) throw new Error(res.status + ' ' + await res.text());
+  return res.json();
+}
+
+async function patchRow(table, id, data) {
+  const res = await fetch(SUPABASE_URL + `/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SERVICE_KEY,
+      'Authorization': 'Bearer ' + SERVICE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error(res.status);
+}
+
+async function loadAll() {
+  document.getElementById('lastRefresh').textContent = 'обновление...';
+  try {
+    const [bookings, rooms] = await Promise.all([
+      apiFetch('/rest/v1/bookings?select=*&order=created_at.desc'),
+      apiFetch('/rest/v1/rooms?select=*&order=hotel_name,room_type')
+    ]);
+    allBookings = bookings;
+    allRooms = rooms;
+    updateStats();
+    renderBookings(allBookings);
+    renderRooms(allRooms);
+    document.getElementById('lastRefresh').textContent = 'обновлено ' + new Date().toLocaleTimeString('ru');
+  } catch(e) {
+    document.getElementById('lastRefresh').textContent = 'ошибка: ' + e.message;
+  }
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = allBookings.length;
+  document.getElementById('s-pending').textContent = allBookings.filter(b => b.payment_status === 'pending').length;
+  document.getElementById('s-paid').textContent = allBookings.filter(b => b.payment_status === 'paid').length;
+  document.getElementById('s-rooms').textContent = allRooms.filter(r => r.status === 'reserved').length;
+}
+
+function badge(val) {
+  return `<span class="badge ${val}">${val}</span>`;
+}
+
+function fmt(dt) {
+  if (!dt) return '—';
+  return dt.slice(0, 10);
+}
+
+function renderBookings(list) {
+  const c = document.getElementById('bookings-container');
+  if (!list.length) { c.innerHTML = '<div class="empty">Нет бронирований</div>'; return; }
+  c.innerHTML = `<table>
+    <thead><tr>
+      <th>Клиент</th><th>Email</th><th>Отель</th><th>Тип</th>
+      <th>Заезд</th><th>Выезд</th><th>Статус</th><th>Оплата</th>
+      <th>Создана</th><th></th>
+    </tr></thead>
+    <tbody>${list.map(b => `<tr>
+      <td>${esc(b.client_name)}</td>
+      <td>${esc(b.email)}</td>
+      <td>${esc(b.hotel_name)}</td>
+      <td>${esc(b.room_type)}</td>
+      <td>${fmt(b.date_from)}</td>
+      <td>${fmt(b.date_to)}</td>
+      <td>${badge(b.status || '—')}</td>
+      <td>${badge(b.payment_status || '—')}</td>
+      <td>${fmt(b.created_at)}</td>
+      <td>
+        ${b.payment_status !== 'paid' ? `<button class="action-btn" onclick="markPaid('${b.id}')">Оплачено</button>` : ''}
+        ${b.status !== 'cancelled' ? `<button class="action-btn danger" onclick="cancelBooking('${b.id}', '${b.room_id}')">Отмена</button>` : ''}
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function renderRooms(list) {
+  const c = document.getElementById('rooms-container');
+  if (!list.length) { c.innerHTML = '<div class="empty">Нет номеров</div>'; return; }
+  c.innerHTML = `<table>
+    <thead><tr>
+      <th>Отель</th><th>Тип</th><th>Цена (₽/ночь)</th><th>Статус</th>
+      <th>Доступен с</th><th>Доступен по</th><th></th>
+    </tr></thead>
+    <tbody>${list.map(r => `<tr>
+      <td>${esc(r.hotel_name)}</td>
+      <td>${esc(r.room_type)}</td>
+      <td>${r.price || '—'}</td>
+      <td>${badge(r.status)}</td>
+      <td>${fmt(r.date_from)}</td>
+      <td>${fmt(r.date_to)}</td>
+      <td>${r.status === 'reserved' ? `<button class="action-btn" onclick="freeRoom('${r.id}')">Освободить</button>` : ''}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function filterBookings() {
+  const q = document.getElementById('search-bookings').value.toLowerCase();
+  const st = document.getElementById('filter-status').value;
+  const py = document.getElementById('filter-payment').value;
+  const filtered = allBookings.filter(b =>
+    (!q || [b.client_name, b.email, b.hotel_name].some(v => (v||'').toLowerCase().includes(q))) &&
+    (!st || b.status === st) &&
+    (!py || b.payment_status === py)
+  );
+  renderBookings(filtered);
+}
+
+function filterRooms() {
+  const q = document.getElementById('search-rooms').value.toLowerCase();
+  const st = document.getElementById('filter-room-status').value;
+  const filtered = allRooms.filter(r =>
+    (!q || [r.hotel_name, r.room_type].some(v => (v||'').toLowerCase().includes(q))) &&
+    (!st || r.status === st)
+  );
+  renderRooms(filtered);
+}
+
+async function markPaid(id) {
+  try {
+    await patchRow('bookings', id, { payment_status: 'paid', status: 'confirmed' });
+    await loadAll();
+  } catch(e) { alert('Ошибка: ' + e.message); }
+}
+
+async function cancelBooking(bookingId, roomId) {
+  if (!confirm('Отменить бронирование?')) return;
+  try {
+    await patchRow('bookings', bookingId, { status: 'cancelled' });
+    if (roomId) await patchRow('rooms', roomId, { status: 'free' });
+    await loadAll();
+  } catch(e) { alert('Ошибка: ' + e.message); }
+}
+
+async function freeRoom(id) {
+  if (!confirm('Освободить номер?')) return;
+  try {
+    await patchRow('rooms', id, { status: 'free' });
+    await loadAll();
+  } catch(e) { alert('Ошибка: ' + e.message); }
+}
+
+function showTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-bookings').classList.toggle('hidden', name !== 'bookings');
+  document.getElementById('tab-rooms').classList.toggle('hidden', name !== 'rooms');
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+loadAll();
+setInterval(loadAll, 60000);
+</script>
+</body>
+</html>

@@ -48,6 +48,9 @@ jobs:
           - { image: autonomous-agents-backend, context: 03-ai-products/autonomous-agents/backend }
           - { image: svo-payouts-website, context: 04-web/svo-payouts-website/web }
           - { image: dostaffkin-backend, context: 04-web/dostaffkin, file: 04-web/dostaffkin/Dockerfile.backend }
+          - { image: finsight-backend, context: 04-web/finsight/backend }
+          - { image: finsight-frontend, context: 04-web/finsight/frontend }
+          - { image: mini-crm-backend, context: 04-web/mini-crm-fastapi-react/backend }
     concurrency:
       group: ghcr-${{ github.ref }}-${{ matrix.image }}
       cancel-in-progress: true
