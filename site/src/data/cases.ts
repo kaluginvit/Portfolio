@@ -1,4 +1,4 @@
-﻿export type CaseCategory = '01' | '02' | '03' | '04' | '05';
+export type CaseCategory = '01' | '02' | '03' | '04';
 
 export interface CaseItem {
   id: string;
@@ -15,15 +15,29 @@ export interface CaseItem {
 const tree = 'https://github.com/kaluginvit/Portfolio/tree/main';
 
 export const cases: CaseItem[] = [
+  // ── ВИТРИНА (12 проектов, featured) ─────────────────────────────────────
+
+  // score 9
   {
-    id: 'svo-web',
+    id: 'hr-breaker',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'HR-Breaker — оптимизация резюме',
+    result: 'Pydantic-AI + FastAPI: любой формат резюме → ATS-оптимизированный PDF. 32 теста, 8 фильтров, без галлюцинаций.',
+    repoPath: '03-ai-products/hr-breaker',
+    liveLabel: 'FastAPI + CLI',
+    liveUrl: `${tree}/03-ai-products/hr-breaker`,
+    featured: true,
+  },
+  {
+    id: 'finance-data-screener',
     category: '04',
     categoryLabel: 'Веб',
-    title: 'Сайт СВО — выплаты семьям',
-    result: 'Прод-сайт: квиз, лид-форма, органика; пара с Telegram-ботом.',
-    repoPath: '04-web/svo-payouts-website',
-    liveLabel: 'svorazbor.ru',
-    liveUrl: 'https://svorazbor.ru',
+    title: 'ИИ-скринер финансовых данных',
+    result: 'FastAPI + React + LLM: текстовый запрос → данные MOEX/ЦБ/ТАСС + интерактивный график + аудит запросов.',
+    repoPath: '04-web/finance-data-screener',
+    liveLabel: 'docker compose',
+    liveUrl: `${tree}/04-web/finance-data-screener`,
     featured: true,
   },
   {
@@ -31,10 +45,94 @@ export const cases: CaseItem[] = [
     category: '03',
     categoryLabel: 'ИИ-продукты',
     title: 'Telegram-бот выплат (СВО)',
-    result: 'Бот на проде: анкета, расчёт, заявки; GHCR.',
+    result: 'Production FSM-бот: анкета, расчёт, заявки; 57 файлов, Docker, CI/CD.',
     repoPath: '03-ai-products/svo-payments-bot',
-    liveLabel: 'Telegram + GHCR',
+    liveLabel: 'GHCR',
     liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payments-bot',
+    featured: true,
+  },
+
+  // score 8
+  {
+    id: 'finance-mcp-server',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'Finance MCP Server',
+    result: '19 MCP-инструментов: P&L, Cash Flow, KPI, платежи — AI-ассистент работает с данными без экспорта.',
+    repoPath: '03-ai-products/finance-mcp-server',
+    liveLabel: 'Claude / Cursor',
+    liveUrl: `${tree}/03-ai-products/finance-mcp-server`,
+    featured: true,
+  },
+  {
+    id: 'svo-web',
+    category: '04',
+    categoryLabel: 'Веб',
+    title: 'Сайт СВО — выплаты семьям',
+    result: 'Production Next.js 15 + TypeScript: квиз, лид-форма, органика; пара с Telegram-ботом.',
+    repoPath: '04-web/svo-payouts-website',
+    liveLabel: 'svorazbor.ru',
+    liveUrl: 'https://svorazbor.ru',
+    featured: true,
+  },
+  {
+    id: 'rf-macro-risk',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'RF Macro Outlook AI',
+    result: 'LangChain-агент: 35 макро-критериев → риск кризисного сценария на 6 месяцев + еженедельный live-отчёт.',
+    repoPath: '03-ai-products/rf-macro-risk-ai',
+    liveLabel: 'Live-отчёт',
+    liveUrl: 'https://kaluginvit.github.io/rf-macro-risk-ai/',
+    featured: true,
+  },
+
+  // score 7
+  {
+    id: 'fintech-ab',
+    category: '01',
+    categoryLabel: 'Аналитика',
+    title: 'A/B-тест в финтех',
+    result: 'Статистический отчёт с MDE, power-анализом и продуктовой рекомендацией.',
+    repoPath: '01-data-analytics/fintech-ab-test-credit-offer',
+    liveLabel: 'nbviewer',
+    liveUrl:
+      'https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb',
+    featured: true,
+  },
+  {
+    id: 'tg-digest',
+    category: '03',
+    categoryLabel: 'ИИ-продукты',
+    title: 'ИнфоПовод — RAG-пайплайн',
+    result: 'Neo4j + Pinecone + LLM-vision: глубокий анализ Telegram-канала, граф знаний, подготовка к файнтюну.',
+    repoPath: '03-ai-products/tg-digest-pipeline',
+    liveLabel: 'Репозиторий',
+    liveUrl: `${tree}/03-ai-products/tg-digest-pipeline`,
+    featured: true,
+  },
+
+  // score 6
+  {
+    id: 'finsight',
+    category: '04',
+    categoryLabel: 'Веб',
+    title: 'ФинАналитик',
+    result: 'FastAPI + React + Claude: загрузи CSV/Excel — топ-3 инсайта и чат с данными за 30 секунд.',
+    repoPath: '04-web/finsight',
+    liveLabel: 'GitHub',
+    liveUrl: 'https://github.com/kaluginvit/finsight',
+    featured: true,
+  },
+  {
+    id: 'fedresurs',
+    category: '01',
+    categoryLabel: 'Аналитика',
+    title: 'Fedresurs MVP — оценка лотов банкротства',
+    result: 'Chrome-закладки → P25/P50/P75 по аналогам + LLM-агент с web-поиском для любых типов активов.',
+    repoPath: '01-data-analytics/fedresurs-mvp',
+    liveLabel: 'Flask UI',
+    liveUrl: `${tree}/01-data-analytics/fedresurs-mvp`,
     featured: true,
   },
   {
@@ -42,12 +140,14 @@ export const cases: CaseItem[] = [
     category: '02',
     categoryLabel: 'Автоматизация',
     title: 'Лидогенерация на n8n',
-    result: '11 workflow: интент → обогащение → касание → отчётность.',
+    result: '11 воркфлоу: интент → обогащение → касание → отчётность.',
     repoPath: '02-automation/leadgen-n8n-system',
     liveLabel: 'docker compose',
     liveUrl: `${tree}/02-automation/leadgen-n8n-system`,
     featured: true,
   },
+
+  // score 5
   {
     id: 'superstore',
     category: '01',
@@ -59,16 +159,18 @@ export const cases: CaseItem[] = [
     liveUrl: 'https://kaluginvit.github.io/Portfolio/superstore/',
     featured: true,
   },
+
+  // ── ОСТАЛЬНЫЕ (каталог, без featured) ────────────────────────────────────
+
   {
-    id: 'fintech-ab',
-    category: '01',
-    categoryLabel: 'Аналитика',
-    title: 'A/B-тест в финтех',
-    result: 'Отчёт с MDE и продуктовой рекомендацией.',
-    repoPath: '01-data-analytics/fintech-ab-test-credit-offer',
-    liveLabel: 'nbviewer',
-    liveUrl:
-      'https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb',
+    id: 'bankrot-scraper',
+    category: '02',
+    categoryLabel: 'Автоматизация',
+    title: 'Парсер торгов банкротства',
+    result: 'Мониторинг лотов Федресурса: фильтры, уведомления, история торгов.',
+    repoPath: '02-automation/bankrot-trades-scraper',
+    liveLabel: 'Репозиторий',
+    liveUrl: `${tree}/02-automation/bankrot-trades-scraper`,
   },
   {
     id: 'wb',
@@ -89,36 +191,6 @@ export const cases: CaseItem[] = [
     repoPath: '02-automation/yandex-google-sync',
     liveLabel: 'GHCR',
     liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/yandex-google-sync',
-  },
-  {
-    id: 'hotel-tally',
-    category: '02',
-    categoryLabel: 'Автоматизация',
-    title: 'Бронирования Tally → Supabase',
-    result: 'Форма → дедуп → бронь → письма без Excel.',
-    repoPath: '02-automation/hotel-booking-tally-supabase',
-    liveLabel: 'Документация',
-    liveUrl: `${tree}/02-automation/hotel-booking-tally-supabase`,
-  },
-  {
-    id: 'gha-setup',
-    category: '02',
-    categoryLabel: 'Автоматизация',
-    title: 'CI/CD: Actions → GHCR → SSH',
-    result: 'Типовой деплой одной строкой.',
-    repoPath: '02-automation/github-actions-setup',
-    liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/github-actions-setup',
-  },
-  {
-    id: 'google-sheets-report',
-    category: '02',
-    categoryLabel: 'Автоматизация',
-    title: 'Google Sheets — отчёт',
-    result: 'Сервисный аккаунт, оформленный лист, tkinter-симулятор.',
-    repoPath: '02-automation/google-sheets-report',
-    liveLabel: 'Репозиторий',
-    liveUrl: `${tree}/02-automation/google-sheets-report`,
   },
   {
     id: 'seo-mcp',
@@ -157,18 +229,8 @@ export const cases: CaseItem[] = [
     title: 'ИИ-агент SEO-ядра по URL',
     result: 'Парсинг + кластеризация через ProxyAPI.',
     repoPath: '03-ai-products/autonomous-agents',
-    liveLabel: 'GHCR backend',
+    liveLabel: 'GHCR',
     liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/autonomous-agents-backend',
-  },
-  {
-    id: 'mcp-lesson',
-    category: '03',
-    categoryLabel: 'ИИ-продукты',
-    title: 'End-to-end MCP: каталог ↔ Telegram',
-    result: 'Шаблон LLM ↔ MCP ↔ SQLite.',
-    repoPath: '03-ai-products/mcp-lesson',
-    liveLabel: 'docker compose',
-    liveUrl: `${tree}/03-ai-products/mcp-lesson`,
   },
   {
     id: 'dostaffkin',
@@ -181,27 +243,7 @@ export const cases: CaseItem[] = [
     liveUrl: 'https://kaluginvit72.github.io/dostaffkin/',
   },
   {
-    id: 'autello-lead-capture',
-    category: '04',
-    categoryLabel: 'Веб',
-    title: 'Autello — сбор заявок',
-    result: 'Webpack frontend + FastAPI + PostgreSQL: форма заявок, услуги, бюджет и поведенческие метрики.',
-    repoPath: '04-web/autello-lead-capture',
-    liveLabel: 'Репозиторий',
-    liveUrl: `${tree}/04-web/autello-lead-capture`,
-  },
-  {
-    id: 'postgres-work',
-    category: '04',
-    categoryLabel: 'Веб',
-    title: 'Telegram-бот ↔ PostgreSQL',
-    result: 'Каркас бот ↔ Postgres ↔ бэкап.',
-    repoPath: '04-web/postgres-work',
-    liveLabel: 'Репозиторий',
-    liveUrl: `${tree}/04-web/postgres-work`,
-  },
-  {
-    id: 'mini-crm-google',
+    id: 'mini-crm',
     category: '04',
     categoryLabel: 'Веб',
     title: 'Мини-CRM + Google',
@@ -209,16 +251,6 @@ export const cases: CaseItem[] = [
     repoPath: '04-web/mini-crm-fastapi-react',
     liveLabel: 'Репозиторий',
     liveUrl: `${tree}/04-web/mini-crm-fastapi-react`,
-  },
-  {
-    id: 'ai-accounting',
-    category: '05',
-    categoryLabel: 'Консалтинг',
-    title: 'Стратегия ИИ в бухгалтерии',
-    result: 'Презентация и дорожная карта пилота.',
-    repoPath: '05-ai-consulting/ai-in-accounting-strategic-plan',
-    liveLabel: 'PDF',
-    liveUrl: `${tree}/05-ai-consulting/ai-in-accounting-strategic-plan/presentation.pdf`,
   },
 ];
 
@@ -228,5 +260,4 @@ export const categoryFilters: { id: CaseCategory | 'all'; label: string }[] = [
   { id: '02', label: '02 Автоматизация' },
   { id: '03', label: '03 ИИ-продукты' },
   { id: '04', label: '04 Веб' },
-  { id: '05', label: '05 Консалтинг' },
 ];
