@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fedresurs MVP — Demo</title>
+<style>
+:root{
+  --bg:#f0f2f5;--surface:#fff;--border:#d8e0ea;--text:#1f2933;--muted:#667085;
+  --blue:#1d3557;--green:#178a4a;--red:#c84646;--yellow:#9a6000;
+  --shadow:0 2px 8px rgba(0,0,0,.07)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.5 Arial,sans-serif;color:var(--text);background:var(--bg)}
+
+/* ── Demo banner ─────────────────────────── */
+.demo-banner{
+  background:#fff8e1;border-bottom:2px solid #f9c920;
+  padding:8px 20px;text-align:center;font-size:13px;
+  color:#5c3a00;font-weight:600;position:sticky;top:0;z-index:20
+}
+.demo-banner span{opacity:.7;font-weight:400;margin-left:8px}
+
+/* ── Header ─────────────────────────────── */
+header{
+  position:sticky;top:38px;z-index:10;
+  background:rgba(255,255,255,.96);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(8px)
+}
+.top{
+  max-width:1100px;margin:0 auto;padding:12px 20px;
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center
+}
+.header-title h1{font-size:19px;color:var(--blue)}
+.header-title p{font-size:12px;color:var(--muted);margin-top:2px}
+
+.lot-select-wrap{display:flex;align-items:center;gap:8px;margin-left:auto}
+.lot-select-wrap label{font-size:12px;color:var(--muted);white-space:nowrap}
+#lot-select{
+  height:36px;padding:0 12px;border:1px solid var(--border);
+  border-radius:6px;font-size:13px;outline:none;background:#fff;
+  min-width:300px;cursor:pointer
+}
+
+/* ── Main ────────────────────────────────── */
+main{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+
+/* ── Card ────────────────────────────────── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;box-shadow:var(--shadow);padding:18px
+}
+.card-title{font-size:13px;font-weight:700;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;letter-spacing:.4px}
+
+/* ── Lot info fields ─────────────────────── */
+.field-list{display:flex;flex-direction:column;gap:8px}
+.field{display:grid;grid-template-columns:140px 1fr;gap:8px;font-size:13px}
+.field dt{color:var(--muted)}
+.field dd{font-weight:600;overflow-wrap:anywhere}
+.field.desc{grid-template-columns:1fr}
+.field.desc dt{margin-bottom:4px}
+.field.desc dd{font-weight:400;font-size:12px;line-height:1.5;color:#444}
+
+/* ── Decision block ──────────────────────── */
+.decision-block{
+  border-radius:8px;padding:14px 16px;margin-bottom:16px;
+  border-left:4px solid
+}
+.decision-block.interesting{background:#e8f5e9;border-color:var(--green)}
+.decision-block.overpriced{background:#fff5f5;border-color:var(--red)}
+.decision-block.reached{background:#fff8e1;border-color:#e6a800}
+.decision-block.wait{background:#f5f5f5;border-color:var(--muted)}
+.decision-icon{font-size:22px;margin-bottom:4px}
+.decision-label{font-size:16px;font-weight:700;margin-bottom:4px}
+.decision-sub{font-size:12px;color:#555;line-height:1.5}
+.interesting .decision-label{color:var(--green)}
+.overpriced .decision-label{color:var(--red)}
+.reached .decision-label{color:var(--yellow)}
+.wait .decision-label{color:var(--muted)}
+
+/* ── Price comparison ────────────────────── */
+.price-compare{
+  display:flex;align-items:center;gap:10px;font-size:13px;
+  padding:10px 12px;background:#f8fafd;border-radius:6px;margin-bottom:14px
+}
+.price-item{text-align:center;flex:1}
+.price-item .val{font-size:17px;font-weight:700;color:var(--blue)}
+.price-item .lbl{font-size:11px;color:var(--muted)}
+.price-sep{color:var(--muted);font-size:18px;flex-shrink:0}
+.price-vs{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
+.price-vs.below{background:#e8f5e9;color:var(--green)}
+.price-vs.above{background:#fff5f5;color:var(--red)}
+.price-vs.equal{background:#fff8e1;color:var(--yellow)}
+
+/* ── P25/P50/P75 bar ─────────────────────── */
+.quantile-section{margin-bottom:16px}
+.quantile-label{font-size:12px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.quantile-bar-wrap{position:relative;height:48px;margin-bottom:4px}
+.quantile-track{
+  position:absolute;top:16px;left:0;right:0;height:8px;
+  background:#e2e8f0;border-radius:4px
+}
+.quantile-range{
+  position:absolute;top:16px;height:8px;
+  background:var(--blue);border-radius:4px;opacity:.35
+}
+.quantile-tick{
+  position:absolute;top:10px;width:2px;height:20px;
+  transform:translateX(-1px);border-radius:1px
+}
+.q-p25{background:#667085}
+.q-p50{background:var(--blue)}
+.q-p75{background:#667085}
+.q-start{background:var(--red);z-index:2}
+.quantile-tooltip{
+  position:absolute;top:34px;font-size:10px;font-weight:700;
+  white-space:nowrap;transform:translateX(-50%)
+}
+.q-lbl-p25{color:#667085}
+.q-lbl-p50{color:var(--blue)}
+.q-lbl-p75{color:#667085}
+.q-lbl-start{color:var(--red)}
+.quantile-table{width:100%;border-collapse:collapse;font-size:12px}
+.quantile-table th{
+  text-align:left;padding:5px 8px;color:var(--muted);
+  font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap
+}
+.quantile-table td{padding:5px 8px;border-bottom:1px solid #f0f2f5}
+.quantile-table tr:last-child td{border:none}
+.quantile-table .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* ── Scenarios ───────────────────────────── */
+.scenarios{margin-bottom:16px}
+.scenarios-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scenario-card{
+  padding:10px 12px;border-radius:6px;background:#f8fafd;
+  border:1px solid var(--border)
+}
+.scenario-card.highlight{
+  background:#edf4ff;border-color:#bad3f7
+}
+.sc-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px;letter-spacing:.3px}
+.sc-value{font-size:14px;font-weight:700;color:var(--blue)}
+
+/* ── Confidence ──────────────────────────── */
+.conf-badge{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:11px;font-weight:700;text-transform:uppercase
+}
+.conf-high{background:#e8f5e9;color:var(--green)}
+.conf-medium{background:#fff8e1;color:var(--yellow)}
+.conf-low{background:#fff5f5;color:var(--red)}
+
+/* ── Engine badge ────────────────────────── */
+.engine-badge{
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  background:#eef2f6;color:var(--muted);margin-bottom:12px;letter-spacing:.3px
+}
+
+/* ── Key factors ─────────────────────────── */
+.factors{margin-bottom:14px}
+.factor{
+  display:flex;gap:8px;font-size:12px;line-height:1.5;
+  padding:4px 0;color:#444
+}
+.factor::before{content:"•";color:var(--blue);flex-shrink:0;margin-top:1px}
+
+/* ── Reasoning ───────────────────────────── */
+.reasoning{
+  font-size:12px;color:#555;line-height:1.6;
+  padding:10px 12px;background:#f8fafd;border-radius:6px;
+  border-left:3px solid var(--blue)
+}
+
+/* ── Engine note ─────────────────────────── */
+.engine-note{
+  font-size:11px;color:var(--muted);
+  padding-top:12px;border-top:1px solid var(--border);
+  margin-top:12px;line-height:1.5
+}
+
+/* ── Footer ──────────────────────────────── */
+footer{
+  text-align:center;padding:24px;font-size:11px;color:var(--muted);
+  border-top:1px solid var(--border);margin-top:20px
+}
+footer a{color:var(--blue);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  ⚠ Demo Mode — synthetic data, no live valuation calls
+  <span>All lots and valuations are illustrative, generated from demo_seed.py with precomputed results</span>
+</div>
+
+<header>
+  <div class="top">
+    <div class="header-title">
+      <h1>Fedresurs MVP</h1>
+      <p>Оценка лотов банкротства по рыночным аналогам · P25 / P50 / P75 + 4 сценария цены</p>
+    </div>
+    <div class="lot-select-wrap">
+      <label for="lot-select">Выбрать лот:</label>
+      <select id="lot-select">
+        <option value="0">DEMO-001 · Квартира 54 м², Екатеринбург</option>
+        <option value="1">DEMO-002 · МАЗ-6430, 2015 г.</option>
+        <option value="2">DEMO-003 · Фрезерный станок ГФ2171</option>
+        <option value="3">DEMO-004 · Нежилое помещение 120 м², Москва</option>
+        <option value="4">DEMO-005 · Дебиторская задолженность 3.2 млн</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <div id="lot-info"></div>
+    <div id="lot-valuation"></div>
+  </div>
+</main>
+
+<footer>
+  <strong>Fedresurs MVP</strong> · Static demo uses synthetic lots and precomputed valuation results ·
+  <a href="https://github.com/kaluginvit/Portfolio/tree/main/01-data-analytics/fedresurs-mvp">GitHub</a>
+</footer>
+
+<script>
+/* ── Precomputed demo data ──────────────────────────────────────────────── */
+const LOTS = [
+  {
+    id: "DEMO-001",
+    title: "Квартира 2-комнатная, 54 м², г. Екатеринбург, ул. Малышева",
+    asset_type: "Недвижимость жилая",
+    start_price: 3_500_000,
+    auction_type: "Открытый аукцион",
+    description: "Квартира, общая площадь 54.0 кв.м, жилая 32 кв.м, кухня 9 кв.м. Этаж 4/9. Кирпичный дом 1986 г.",
+    engine: "statistical",
+    engine_label: "Статистический движок",
+
+    // Statistical engine: P25/P50/P75 from N1 + ЦИАН analogues
+    area: 54,
+    analogues_count: 8,
+    sources_count: 2,
+    sources_list: ["ЦИАН", "Авито"],
+    confidence: "medium",
+
+    // P25/P50/P75 price per sq.m (₽/м²)
+    p25: 85_000,
+    p50: 97_000,
+    p75: 112_000,
+    p_unit: "₽/м²",
+
+    // Derived: pXX * area
+    market_min: 4_590_000,   // P25 * 54
+    market_mid: 5_238_000,   // P50 * 54
+    market_max: 6_048_000,   // P75 * 54
+
+    // target_price = market_min * 0.90
+    target_price: 4_131_000,
+
+    scenarios: {
+      auction: [3_800_000, 4_400_000],
+      quick_lot: [3_200_000, 3_800_000],
+      wholesale: [3_800_000, 4_500_000],
+      retail: [4_800_000, 5_600_000],
+    },
+    decision: "auction_interesting",
+    key_factors: [
+      "Стартовая цена 3.5М ниже целевой 4.13М на 631 000 ₽",
+      "Этаж 4/9 — хорошее расположение",
+      "Кирпичный дом 1986 г., состояние стабильное",
+      "54 м² — ликвидный формат для Екатеринбурга",
+      "8 аналогов из 2 источников — уверенная оценка",
+    ],
+    reasoning: "По 8 аналогам 2-комнатных квартир на ЦИАН и Авито в районе ул. Малышева, Екатеринбург: медиана цены за м² — 97 000 ₽, диапазон P25–P75: 85 000–112 000 ₽. Стартовая цена 3 500 000 ₽ ниже целевой цены торгов 4 131 000 ₽. Рекомендуется участие в аукционе.",
+  },
+
+  {
+    id: "DEMO-002",
+    title: "Грузовой автомобиль МАЗ-6430, 2015 г.в.",
+    asset_type: "Транспорт",
+    start_price: 1_200_000,
+    auction_type: "Публичное предложение",
+    description: "Грузовой тягач МАЗ-6430A9-520-031, 2015 г.в., пробег 380 000 км, двигатель ЯМЗ-651, 412 л.с.",
+    engine: "llm",
+    engine_label: "LLM-агент",
+
+    area: null,
+    analogues_count: 5,
+    sources_count: 1,
+    sources_list: ["Авто.ру"],
+    confidence: "low",
+
+    // Аналоги: диапазон цен схожих тягачей
+    p25: 1_300_000,
+    p50: 1_750_000,
+    p75: 2_400_000,
+    p_unit: "₽",
+
+    market_min: 1_300_000,
+    market_mid: 1_750_000,
+    market_max: 2_400_000,
+    target_price: 1_200_000,   // auction_price mid ≈ 1 050 000–1 400 000
+
+    scenarios: {
+      auction: [1_000_000, 1_400_000],
+      quick_lot: [700_000, 1_000_000],
+      wholesale: null,
+      retail: [1_300_000, 2_400_000],
+    },
+    decision: "public_offer_price_reached",
+    key_factors: [
+      "Текущая цена 1.2М попадает в целевой диапазон торгов 1.0–1.4М",
+      "Пробег 380 000 км — высокий, снижает ликвидность",
+      "МАЗ-6430 — востребованная модель на вторичном рынке",
+      "Публичное предложение продолжит снижение — можно ждать",
+      "5 аналогов из 1 источника — уверенность низкая",
+    ],
+    reasoning: "По 5 аналогам МАЗ-6430 2013–2016 г.в. с пробегом 300–450 тыс. км на Авто.ру: медиана 1 750 000 ₽, диапазон 1 300 000–2 400 000 ₽. Текущая цена публичного предложения 1 200 000 ₽ находится в диапазоне целевой цены торгов (1 000 000–1 400 000 ₽). Можно входить или дождаться следующего шага снижения.",
+  },
+
+  {
+    id: "DEMO-003",
+    title: "Производственное оборудование: фрезерный станок ГФ2171",
+    asset_type: "Оборудование",
+    start_price: 450_000,
+    auction_type: "Открытый аукцион",
+    description: "Горизонтально-фрезерный станок ГФ2171, 1989 г.в. Рабочее состояние, требует технического обслуживания.",
+    engine: "llm",
+    engine_label: "LLM-агент",
+
+    area: null,
+    analogues_count: 3,
+    sources_count: 1,
+    sources_list: ["Авито", "spb.hh.ru"],
+    confidence: "low",
+
+    // Аналоги: б/у станки ГФ2171 и аналоги
+    p25: 120_000,
+    p50: 220_000,
+    p75: 380_000,
+    p_unit: "₽",
+
+    market_min: 120_000,
+    market_mid: 220_000,
+    market_max: 380_000,
+    target_price: 110_000,   // 30–50% от P50 = 66k–110k, берём верхнюю границу
+
+    scenarios: {
+      auction: [60_000, 150_000],
+      quick_lot: [40_000, 100_000],
+      wholesale: [60_000, 130_000],
+      retail: [120_000, 380_000],
+    },
+    decision: "overpriced_skip",
+    key_factors: [
+      "Стартовая цена 450 000 ₽ превышает верхний диапазон оценки в 3× раза",
+      "Станок 1989 г.в. — возраст 35+ лет, моральный износ",
+      "Требует ТО: дополнительные расходы покупателя",
+      "Рынок б/у советских фрезерных станков узкий",
+      "Ликвидность низкая — инструментальные цеха не закупают новые единицы",
+    ],
+    reasoning: "По 3 аналогам горизонтально-фрезерных станков советского производства на Авито: медиана 220 000 ₽, максимум 380 000 ₽. Целевая цена торгов (30–50% от розницы) = 60 000–150 000 ₽. Стартовая цена 450 000 ₽ выше в 3× относительно разумного диапазона. Пропустить.",
+  },
+
+  {
+    id: "DEMO-004",
+    title: "Нежилое помещение 120 м², г. Москва, р-н Выхино",
+    asset_type: "Недвижимость коммерческая",
+    start_price: 8_900_000,
+    auction_type: "Открытый аукцион",
+    description: "Нежилое помещение на 1 этаже жилого дома, площадь 120 кв.м. Отдельный вход. Подходит под торговлю / офис.",
+    engine: "statistical",
+    engine_label: "Статистический движок",
+
+    area: 120,
+    analogues_count: 12,
+    sources_count: 3,
+    sources_list: ["ЦИАН", "Авито", "Яндекс Недвижимость"],
+    confidence: "high",
+
+    // P25/P50/P75 price per sq.m (коммерческая недвижимость, Москва Выхино)
+    p25: 155_000,
+    p50: 180_000,
+    p75: 215_000,
+    p_unit: "₽/м²",
+
+    // Derived: pXX * area
+    market_min: 18_600_000,   // P25 * 120
+    market_mid: 21_600_000,   // P50 * 120
+    market_max: 25_800_000,   // P75 * 120
+
+    // target_price = market_min * 0.90
+    target_price: 16_740_000,
+
+    scenarios: {
+      auction: [9_500_000, 14_500_000],
+      quick_lot: [8_000_000, 11_000_000],
+      wholesale: [11_000_000, 15_000_000],
+      retail: [18_000_000, 25_800_000],
+    },
+    decision: "auction_interesting",
+    key_factors: [
+      "Стартовая цена 8.9М значительно ниже целевой 16.7М — потенциал дохода высокий",
+      "1 этаж + отдельный вход — максимальная ликвидность для стрит-ретейла",
+      "Р-н Выхино: метро, высокий пешеходный трафик",
+      "12 аналогов из 3 источников — высокая уверенность оценки",
+      "Площадь 120 м² — стандартный формат под торговлю / кафе / офис",
+    ],
+    reasoning: "По 12 аналогам нежилых помещений 80–160 м² на 1 этажах в районе Выхино-Жулебино на ЦИАН, Авито и Яндекс Недвижимости: медиана 180 000 ₽/м², P25=155 000 ₽/м², P75=215 000 ₽/м². Стартовая цена 8 900 000 ₽ значительно ниже нижнего порога диапазона оценки. Очень интересный лот.",
+  },
+
+  {
+    id: "DEMO-005",
+    title: "Дебиторская задолженность ООО «Вектор» — 3 200 000 ₽",
+    asset_type: "Дебиторская задолженность",
+    start_price: 320_000,
+    auction_type: "Публичное предложение",
+    description: "Право требования к ООО «Вектор» (ИНН: XXXXXXXXXX) на сумму 3 200 000 руб. Документально подтверждено, в суде не оспорено.",
+    engine: "llm",
+    engine_label: "LLM-агент",
+
+    area: null,
+    analogues_count: 4,
+    sources_count: 2,
+    sources_list: ["fedresurs.ru", "torg.gov.ru"],
+    confidence: "low",
+
+    // Дебиторка: 3–15% от номинала
+    p25: 96_000,    // 3% от 3 200 000
+    p50: 256_000,   // 8% от 3 200 000
+    p75: 480_000,   // 15% от 3 200 000
+    p_unit: "₽",
+
+    market_min: 96_000,
+    market_mid: 256_000,
+    market_max: 480_000,
+    target_price: 200_000,   // ≈ 6% от номинала — консервативная точка входа
+
+    scenarios: {
+      auction: [96_000, 480_000],
+      quick_lot: [64_000, 160_000],
+      wholesale: null,
+      retail: [200_000, 480_000],
+    },
+    decision: "public_offer_price_reached",
+    key_factors: [
+      "Текущая цена 320 000 ₽ = 10% номинала — в допустимом диапазоне рынка",
+      "Задолженность документально подтверждена, не оспорена",
+      "ООО «Вектор» — финансовое состояние должника неизвестно",
+      "Взыскание требует судебных расходов и времени",
+      "4 аналогичные дебиторки из 2 источников — уверенность низкая",
+    ],
+    reasoning: "Рынок банкротной дебиторки: 3–15% от номинала в зависимости от реальности взыскания и состояния должника. Диапазон оценки: 96 000–480 000 ₽. Текущая цена публичного предложения 320 000 ₽ (10% номинала) попадает в диапазон. Перед покупкой — проверить ЕФРСБ на ООО «Вектор».",
+  },
+];
+
+/* ── Formatting helpers ─────────────────────────────────────────────────── */
+function fmt(n) {
+  if (n == null) return "—";
+  return Math.round(n).toLocaleString("ru-RU") + " ₽";
+}
+function fmtRange(arr) {
+  if (!arr) return "—";
+  return fmt(arr[0]) + " — " + fmt(arr[1]);
+}
+function pct(part, whole) {
+  return Math.round(part / whole * 100);
+}
+
+/* ── Decision config ────────────────────────────────────────────────────── */
+const DECISIONS = {
+  auction_interesting: {
+    cls: "interesting",
+    icon: "✅",
+    label: "Участвовать",
+    sub: "Стартовая цена ниже целевой — аукцион интересен"
+  },
+  overpriced_skip: {
+    cls: "overpriced",
+    icon: "❌",
+    label: "Пропустить",
+    sub: "Стартовая цена выше рыночного диапазона торгов"
+  },
+  public_offer_price_reached: {
+    cls: "reached",
+    icon: "⚡",
+    label: "Цена достигнута — покупать",
+    sub: "Текущая цена публичного предложения в целевом диапазоне"
+  },
+  public_offer_wait_until_target: {
+    cls: "wait",
+    icon: "⏳",
+    label: "Ждать снижения",
+    sub: "Цена публичного предложения пока выше целевой"
+  },
+};
+
+/* ── Bar chart ──────────────────────────────────────────────────────────── */
+function buildBar(lot) {
+  const max = lot.p75 * 1.15;
+  const pctOf = v => Math.max(2, Math.min(98, pct(v, max)));
+
+  const p25x = pctOf(lot.p25);
+  const p50x = pctOf(lot.p50);
+  const p75x = pctOf(lot.p75);
+  const startx = pctOf(lot.start_price);
+
+  const tickHtml = (x, cls, lbl, val) => `
+    <div class="quantile-tick ${cls}" style="left:${x}%"></div>
+    <div class="quantile-tooltip ${cls.replace('q-','q-lbl-')}" style="left:${x}%">
+      ${lbl}<br><span style="font-weight:400">${typeof val==='number'?val.toLocaleString("ru-RU")+" ₽":val}</span>
+    </div>`;
+
+  const unitLabel = lot.p_unit === "₽/м²" ? "₽/м²" : "₽";
+
+  return `
+    <div class="quantile-section">
+      <div class="quantile-label">
+        Диапазон аналогов
+        ${lot.area ? `(${unitLabel})` : `(${unitLabel})`}
+        · ${lot.analogues_count} аналогов из ${lot.sources_count} источников
+        (${lot.sources_list.join(", ")})
+      </div>
+      <div class="quantile-bar-wrap">
+        <div class="quantile-track">
+          <div class="quantile-range" style="left:${p25x}%;width:${p75x-p25x}%"></div>
+          ${tickHtml(p25x, "q-p25", "P25", lot.p25)}
+          ${tickHtml(p50x, "q-p50", "P50", lot.p50)}
+          ${tickHtml(p75x, "q-p75", "P75", lot.p75)}
+          ${tickHtml(startx, "q-start", "Старт", lot.start_price)}
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ── Render ─────────────────────────────────────────────────────────────── */
+function renderLotInfo(lot) {
+  return `
+    <div class="card">
+      <div class="card-title">Лот ${lot.id}</div>
+      <dl class="field-list">
+        <div class="field"><dt>Тип актива</dt><dd>${lot.asset_type}</dd></div>
+        <div class="field"><dt>Тип торгов</dt><dd>${lot.auction_type}</dd></div>
+        <div class="field">
+          <dt>Начальная цена</dt>
+          <dd style="font-size:18px;color:var(--blue)">${fmt(lot.start_price)}</dd>
+        </div>
+        ${lot.area ? `<div class="field"><dt>Площадь</dt><dd>${lot.area} м²</dd></div>` : ""}
+        <div class="field desc">
+          <dt>Описание</dt>
+          <dd>${lot.description}</dd>
+        </div>
+      </dl>
+    </div>`;
+}
+
+function renderValuation(lot) {
+  const dec = DECISIONS[lot.decision];
+
+  // Price comparison block
+  const startFmt = lot.start_price.toLocaleString("ru-RU") + " ₽";
+  const targetFmt = lot.target_price.toLocaleString("ru-RU") + " ₽";
+  const diff = lot.start_price - lot.target_price;
+  let vsClass = diff < 0 ? "below" : diff > 0 ? "above" : "equal";
+  let vsLabel = diff < 0
+    ? `−${Math.abs(diff).toLocaleString("ru-RU")} ₽ ниже цели`
+    : diff > 0
+      ? `+${Math.abs(diff).toLocaleString("ru-RU")} ₽ выше цели`
+      : "= целевой";
+
+  // Quantile table rows
+  let qTableRows = "";
+  if (lot.engine === "statistical") {
+    qTableRows = `
+      <tr>
+        <td>P25</td>
+        <td class="num">${lot.p25.toLocaleString("ru-RU")} ₽/м²</td>
+        <td class="num" style="color:var(--blue)">${lot.market_min.toLocaleString("ru-RU")} ₽</td>
+      </tr>
+      <tr>
+        <td><strong>P50 (медиана)</strong></td>
+        <td class="num"><strong>${lot.p50.toLocaleString("ru-RU")} ₽/м²</strong></td>
+        <td class="num" style="color:var(--blue)"><strong>${lot.market_mid.toLocaleString("ru-RU")} ₽</strong></td>
+      </tr>
+      <tr>
+        <td>P75</td>
+        <td class="num">${lot.p75.toLocaleString("ru-RU")} ₽/м²</td>
+        <td class="num" style="color:var(--blue)">${lot.market_max.toLocaleString("ru-RU")} ₽</td>
+      </tr>
+      <tr>
+        <td><strong>Целевая цена торгов</strong></td>
+        <td class="num" colspan="2" style="color:var(--green);font-weight:700">${lot.target_price.toLocaleString("ru-RU")} ₽</td>
+      </tr>`;
+  } else {
+    qTableRows = `
+      <tr>
+        <td>P25 (нижняя граница)</td>
+        <td class="num" colspan="2" style="color:var(--blue)">${lot.p25.toLocaleString("ru-RU")} ₽</td>
+      </tr>
+      <tr>
+        <td><strong>P50 (медиана)</strong></td>
+        <td class="num" colspan="2" style="color:var(--blue)"><strong>${lot.p50.toLocaleString("ru-RU")} ₽</strong></td>
+      </tr>
+      <tr>
+        <td>P75 (верхняя граница)</td>
+        <td class="num" colspan="2" style="color:var(--blue)">${lot.p75.toLocaleString("ru-RU")} ₽</td>
+      </tr>`;
+  }
+
+  // Scenarios
+  const sc = lot.scenarios;
+  const scHtml = (lbl, key, highlight) => sc[key]
+    ? `<div class="scenario-card${highlight ? " highlight" : ""}">
+        <div class="sc-label">${lbl}</div>
+        <div class="sc-value">${fmtRange(sc[key])}</div>
+       </div>`
+    : "";
+
+  // Key factors
+  const factors = lot.key_factors.map(f => `<div class="factor">${f}</div>`).join("");
+
+  // Engine note
+  const engineNote = lot.engine === "statistical"
+    ? `<strong>Статистический движок:</strong> market_min = P25 × площадь; target_price = market_min × 0.90. Confidence зависит от числа аналогов и источников.`
+    : `<strong>LLM-агент:</strong> формирует поисковые запросы, находит аналоги и возвращает 4 сценария цены. Agentic loop — 2–5 итераций поиска.`;
+
+  const confHtml = `<span class="conf-badge conf-${lot.confidence}">${lot.confidence}</span>`;
+
+  return `
+    <div class="card">
+      <div class="card-title">Оценка</div>
+      <div class="engine-badge">${lot.engine_label}</div>
+
+      <div class="decision-block ${dec.cls}">
+        <div class="decision-icon">${dec.icon}</div>
+        <div class="decision-label">${dec.label}</div>
+        <div class="decision-sub">${dec.sub}</div>
+      </div>
+
+      <div class="price-compare">
+        <div class="price-item">
+          <div class="val">${startFmt}</div>
+          <div class="lbl">Стартовая цена</div>
+        </div>
+        <div class="price-sep">↔</div>
+        <div class="price-item">
+          <div class="val">${targetFmt}</div>
+          <div class="lbl">Целевая цена торгов</div>
+        </div>
+        <span class="price-vs ${vsClass}">${vsLabel}</span>
+      </div>
+
+      ${buildBar(lot)}
+
+      <table class="quantile-table">
+        <thead>
+          <tr>
+            <th>Квантиль</th>
+            ${lot.engine === "statistical" ? "<th>₽/м²</th><th>Итого</th>" : "<th colspan=\"2\">Цена аналогов</th>"}
+          </tr>
+        </thead>
+        <tbody>${qTableRows}</tbody>
+      </table>
+
+      <div class="scenarios" style="margin-top:14px">
+        <div class="card-title" style="margin-bottom:8px">Ценовые сценарии</div>
+        <div class="scenarios-grid">
+          ${scHtml("Цена торгов (auction)", "auction", true)}
+          ${scHtml("Срочная продажа (quick lot)", "quick_lot", false)}
+          ${scHtml("Опт партиями (wholesale)", "wholesale", false)}
+          ${scHtml("Розничная цена (retail)", "retail", false)}
+        </div>
+      </div>
+
+      <div style="margin-top:14px;margin-bottom:8px">
+        <span class="card-title" style="margin-right:8px">Уверенность:</span>
+        ${confHtml}
+        <span style="font-size:11px;color:var(--muted);margin-left:8px">
+          ${lot.analogues_count} аналогов · ${lot.sources_count} источника (-ов)
+        </span>
+      </div>
+
+      <div class="factors">${factors}</div>
+
+      <div class="reasoning">${lot.reasoning}</div>
+
+      <div class="engine-note">${engineNote}</div>
+    </div>`;
+}
+
+function render(idx) {
+  const lot = LOTS[idx];
+  document.getElementById("lot-info").innerHTML = renderLotInfo(lot);
+  document.getElementById("lot-valuation").innerHTML = renderValuation(lot);
+}
+
+document.getElementById("lot-select").addEventListener("change", e => render(+e.target.value));
+render(0);
+</script>
+</body>
+</html>

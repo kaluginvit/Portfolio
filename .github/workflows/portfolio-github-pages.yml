@@ -58,12 +58,14 @@ jobs:
           mkdir -p _site/rf-macro-risk-ai
           mkdir -p _site/fintech-ab-test
           mkdir -p _site/finance-data-screener
+          mkdir -p _site/fedresurs-mvp
           cp -r site/dist/. _site/
           cp "01-data-analytics/superstore-retail-analytics/superstore-dashboard.html" _site/superstore/index.html
           cp "01-data-analytics/superstore-retail-analytics/title-bg.png" _site/superstore/title-bg.png
           cp -r "03-ai-products/rf-macro-risk-ai/docs/." _site/rf-macro-risk-ai/
           cp "01-data-analytics/fintech-ab-test-credit-offer/reports/presentation.html" _site/fintech-ab-test/index.html
           cp -r "04-web/finance-data-screener/frontend/dist/." _site/finance-data-screener/
+          cp "01-data-analytics/fedresurs-mvp/demo/index.html" _site/fedresurs-mvp/index.html
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

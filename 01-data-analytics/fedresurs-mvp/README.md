@@ -181,6 +181,12 @@ python demo_seed.py
 - **DEMO-004:** нежилое помещение 120 м², Москва — `python valuate.py DEMO-004`
 - **DEMO-005:** дебиторская задолженность — `python valuate.py DEMO-005`
 
+## Live Demo
+
+**Live Demo:** https://kaluginvit.github.io/Portfolio/fedresurs-mvp/
+
+Static demo uses synthetic lots and precomputed valuation results.
+
 ## Screenshots
 
 → `docs/SCREENSHOTS_TODO.md`
