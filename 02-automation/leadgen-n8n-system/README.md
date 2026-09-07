@@ -153,6 +153,12 @@ docker compose up -d
 }
 ```
 
+## Live Demo
+
+**Live Demo:** https://kaluginvit.github.io/Portfolio/leadgen-n8n-system/
+
+Static architecture demo — no live outreach, credentials, or external API calls.
+
 ## Screenshots
 
 → `docs/SCREENSHOTS_TODO.md`

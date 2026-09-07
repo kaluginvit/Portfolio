@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leadgen n8n System — Architecture Demo</title>
+<style>
+:root{
+  --bg:#f0f2f5;--surface:#fff;--border:#d8e0ea;--text:#1f2933;--muted:#667085;
+  --blue:#1d3557;--green:#178a4a;--red:#c84646;--yellow:#9a6000;--orange:#b85c00;
+  --blue-light:#edf4ff;--green-light:#e8f5e9;--yellow-light:#fff8e1;--red-light:#fff5f5;
+  --shadow:0 2px 8px rgba(0,0,0,.07);--shadow-md:0 4px 16px rgba(0,0,0,.10)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.5 Arial,sans-serif;color:var(--text);background:var(--bg)}
+
+/* ── Demo banner ─────────────────── */
+.demo-banner{
+  background:#fff8e1;border-bottom:2px solid #f9c920;
+  padding:8px 20px;text-align:center;font-size:13px;
+  color:#5c3a00;font-weight:600;position:sticky;top:0;z-index:30
+}
+.demo-banner span{opacity:.65;font-weight:400;margin-left:8px}
+
+/* ── Header ──────────────────────── */
+header{background:var(--blue);color:#fff;padding:28px 20px}
+.header-inner{max-width:1100px;margin:0 auto}
+.header-inner h1{font-size:24px;margin-bottom:6px}
+.header-inner p{font-size:13px;opacity:.8;max-width:680px;line-height:1.6}
+.header-meta{margin-top:14px;display:flex;gap:16px;flex-wrap:wrap}
+.hbadge{
+  display:inline-block;padding:4px 12px;border-radius:20px;
+  font-size:11px;font-weight:700;background:rgba(255,255,255,.15);letter-spacing:.3px
+}
+
+/* ── Nav tabs ────────────────────── */
+.nav{background:var(--surface);border-bottom:1px solid var(--border);
+  position:sticky;top:38px;z-index:20}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;gap:0}
+.tab-btn{
+  padding:13px 22px;font-size:13px;font-weight:600;color:var(--muted);
+  border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;
+  white-space:nowrap;transition:color .15s
+}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* ── Sections ────────────────────── */
+.section{display:none;max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+.section.active{display:block}
+.section-title{font-size:18px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+
+/* ── Pipeline diagram ────────────── */
+.pipeline-wrap{overflow-x:auto;padding-bottom:8px}
+.pipeline{
+  display:grid;min-width:720px;
+  grid-template-rows:auto auto auto auto;gap:0
+}
+.pipe-row{display:flex;align-items:stretch;gap:0;padding:0 0 0 0}
+.pipe-group-label{
+  writing-mode:vertical-lr;transform:rotate(180deg);
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--muted);padding:12px 8px;border-right:2px solid var(--border);
+  min-width:32px;display:flex;align-items:center;justify-content:center
+}
+.pipe-nodes{display:flex;align-items:center;gap:0;flex:1;padding:12px 16px;flex-wrap:nowrap}
+.pipe-node{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:8px;
+  padding:10px 14px;min-width:120px;text-align:center;box-shadow:var(--shadow);
+  flex-shrink:0
+}
+.pipe-node.group-intake{border-color:#4a90d9;background:#f0f6ff}
+.pipe-node.group-decide{border-color:#9b59b6;background:#f9f0ff}
+.pipe-node.group-engage{border-color:#27ae60;background:#f0faf4}
+.pipe-node.group-ops{border-color:#e67e22;background:#fff8f0}
+.pipe-node-num{font-size:10px;font-weight:700;opacity:.6}
+.pipe-node-name{font-size:11px;font-weight:700;line-height:1.3}
+.pipe-node-trigger{font-size:10px;color:var(--muted)}
+.pipe-arrow{
+  flex-shrink:0;width:28px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--muted)
+}
+.pipe-down-arrow{text-align:center;padding:4px 0;color:var(--muted);font-size:18px}
+.pipe-row+.pipe-row{border-top:1px dashed var(--border)}
+.pipe-ops-row{background:#fafbfc;border-top:2px dashed var(--border)}
+
+/* ── Workflow cards ──────────────── */
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.wf-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  box-shadow:var(--shadow);padding:16px;border-left:4px solid
+}
+.wf-card.g-intake{border-left-color:#4a90d9}
+.wf-card.g-decide{border-left-color:#9b59b6}
+.wf-card.g-engage{border-left-color:#27ae60}
+.wf-card.g-ops{border-left-color:#e67e22}
+.wf-num{
+  display:inline-block;padding:2px 7px;border-radius:4px;
+  font-size:10px;font-weight:700;letter-spacing:.3px;margin-bottom:8px
+}
+.g-intake .wf-num{background:#dbe9ff;color:#2c5aa0}
+.g-decide .wf-num{background:#eee0ff;color:#6c3483}
+.g-engage .wf-num{background:#d5f0e0;color:#1a6e3b}
+.g-ops .wf-num{background:#fde8cc;color:#9a4a00}
+.wf-name{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--blue)}
+.wf-row{display:grid;grid-template-columns:72px 1fr;gap:4px;font-size:12px;margin-bottom:4px}
+.wf-row dt{color:var(--muted);font-weight:600}
+.wf-row dd{color:var(--text)}
+.wf-nodes{
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--border);
+  display:flex;flex-wrap:wrap;gap:4px
+}
+.node-pill{
+  display:inline-block;padding:1px 7px;border-radius:12px;
+  font-size:10px;background:#f0f2f5;color:var(--muted);font-weight:600
+}
+
+/* ── E2E Trace ───────────────────── */
+.trace-lead{
+  background:var(--blue);color:#fff;border-radius:10px;
+  padding:16px 20px;margin-bottom:24px;font-size:13px
+}
+.trace-lead h3{font-size:15px;margin-bottom:8px}
+.trace-lead-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.tlf{font-size:12px;opacity:.85}
+.tlf span{opacity:.65;margin-right:4px}
+
+.trace{display:flex;flex-direction:column;gap:0}
+.trace-step{display:flex;gap:0;position:relative}
+.trace-step::before{
+  content:"";position:absolute;left:19px;top:40px;bottom:-8px;
+  width:2px;background:var(--border)
+}
+.trace-step:last-child::before{display:none}
+.trace-icon{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:16px;flex-shrink:0;border:2px solid;margin-right:14px
+}
+.trace-icon.intake{background:#f0f6ff;border-color:#4a90d9}
+.trace-icon.decide{background:#f9f0ff;border-color:#9b59b6}
+.trace-icon.engage{background:#f0faf4;border-color:#27ae60}
+.trace-icon.ops{background:#fff8f0;border-color:#e67e22}
+.trace-icon.error{background:var(--red-light);border-color:var(--red)}
+.trace-body{flex:1;padding-bottom:20px}
+.trace-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.trace-wf{font-size:12px;font-weight:700;color:var(--blue)}
+.trace-status{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700}
+.ts-ok{background:var(--green-light);color:var(--green)}
+.ts-review{background:var(--yellow-light);color:var(--yellow)}
+.ts-skip{background:#f0f2f5;color:var(--muted)}
+.trace-detail{
+  background:#f8fafd;border:1px solid var(--border);border-radius:6px;
+  padding:10px 12px;font-size:12px;line-height:1.6
+}
+.trace-kv{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.kv{display:flex;gap:4px;font-size:11px}
+.kv-k{color:var(--muted);font-weight:600}
+.kv-v{color:var(--blue);font-weight:700;font-family:monospace}
+
+/* ── Engineering logic ───────────── */
+.eng-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.eng-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;box-shadow:var(--shadow);padding:18px
+}
+.eng-icon{font-size:24px;margin-bottom:8px}
+.eng-title{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.eng-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.code-block{
+  background:#1e2a3a;color:#a8c8f8;border-radius:6px;
+  padding:10px 12px;font-size:11px;font-family:monospace;
+  line-height:1.6;overflow-x:auto;white-space:pre
+}
+.code-block .c-kw{color:#c792ea}
+.code-block .c-str{color:#c3e88d}
+.code-block .c-num{color:#f78c6c}
+.code-block .c-comment{color:#546e7a}
+.code-block .c-key{color:#82aaff}
+
+/* ── Lead state machine ──────────── */
+.state-flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-top:16px}
+.state-node{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:10px 14px;border-radius:8px;border:2px solid var(--border);
+  background:var(--surface);min-width:100px;text-align:center;box-shadow:var(--shadow)
+}
+.state-node.active-state{border-color:#4a90d9;background:#f0f6ff}
+.state-node .s-icon{font-size:20px}
+.state-node .s-label{font-size:11px;font-weight:700}
+.state-node .s-score{font-size:10px;color:var(--muted)}
+.state-arrow{font-size:20px;color:var(--muted);padding:0 6px}
+
+/* ── Responsive ──────────────────── */
+@media(max-width:640px){
+  .wf-grid{grid-template-columns:1fr}
+  .eng-grid{grid-template-columns:1fr}
+  .tab-btn{padding:10px 14px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  🔒 Static Demo — no live outreach, credentials or external API calls
+  <span>All workflow logic is shown for architecture purposes only · no real n8n instance connected</span>
+</div>
+
+<header>
+  <div class="header-inner">
+    <h1>Leadgen n8n System</h1>
+    <p>B2B lead generation automation built on 11 interconnected n8n workflows.
+       Covers the full chain: intent signal → profile enrichment → multi-LLM qualification →
+       human-in-the-loop approval → personalised outreach → smart nurture with warmth decay.</p>
+    <div class="header-meta">
+      <span class="hbadge">11 n8n Workflows</span>
+      <span class="hbadge">n8n · PostgreSQL · Docker</span>
+      <span class="hbadge">Multi-LLM Consensus</span>
+      <span class="hbadge">Warmth Decay</span>
+      <span class="hbadge">Human-in-the-Loop</span>
+      <span class="hbadge">43 Tests</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="tab-btn active" onclick="showTab('pipeline')">Pipeline</button>
+    <button class="tab-btn" onclick="showTab('workflows')">11 Workflows</button>
+    <button class="tab-btn" onclick="showTab('trace')">E2E Trace</button>
+    <button class="tab-btn" onclick="showTab('engineering')">Engineering Logic</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ PIPELINE ═══════════════════ -->
+<div id="tab-pipeline" class="section active">
+  <div class="section-title">System Pipeline</div>
+  <div class="section-sub">Four groups of workflows form a complete B2B outreach system. Each workflow is independently deployable and replaceable.</div>
+
+  <div class="pipeline-wrap">
+    <div class="pipeline">
+
+      <!-- Intake row -->
+      <div class="pipe-row">
+        <div class="pipe-group-label" style="background:#f0f6ff;border-color:#4a90d9">Intake</div>
+        <div class="pipe-nodes">
+          <div class="pipe-node group-intake">
+            <div class="pipe-node-num">01</div>
+            <div class="pipe-node-name">Intent Radar</div>
+            <div class="pipe-node-trigger">⏰ Every 15 min</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node group-intake">
+            <div class="pipe-node-num">02</div>
+            <div class="pipe-node-name">Lead DNA Enrichment</div>
+            <div class="pipe-node-trigger">🔗 Webhook</div>
+          </div>
+          <div class="pipe-arrow" style="color:#4a90d9;font-weight:700">→</div>
+          <div style="flex:1;display:flex;align-items:center;font-size:11px;color:var(--muted);font-style:italic;padding-left:8px">
+            ↓ enriched lead forwarded to Decision group
+          </div>
+        </div>
+      </div>
+
+      <!-- Decide row -->
+      <div class="pipe-row">
+        <div class="pipe-group-label" style="background:#f9f0ff;border-color:#9b59b6">Decide</div>
+        <div class="pipe-nodes">
+          <div class="pipe-node group-decide">
+            <div class="pipe-node-num">03</div>
+            <div class="pipe-node-name">Multi-LLM Consensus</div>
+            <div class="pipe-node-trigger">🤖 3 models vote</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node group-decide">
+            <div class="pipe-node-num">04</div>
+            <div class="pipe-node-name">Human in the Loop</div>
+            <div class="pipe-node-trigger">🔗 Webhook → Slack</div>
+          </div>
+          <div class="pipe-arrow" style="color:#27ae60;font-weight:700">→</div>
+          <div style="flex:1;display:flex;align-items:center;font-size:11px;color:var(--muted);font-style:italic;padding-left:8px">
+            ↓ approved lead moves to Engage
+          </div>
+        </div>
+      </div>
+
+      <!-- Engage row -->
+      <div class="pipe-row">
+        <div class="pipe-group-label" style="background:#f0faf4;border-color:#27ae60">Engage</div>
+        <div class="pipe-nodes">
+          <div class="pipe-node group-engage">
+            <div class="pipe-node-num">05</div>
+            <div class="pipe-node-name">Premium Outreach</div>
+            <div class="pipe-node-trigger">▶ Manual / Reply</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-node group-engage">
+            <div class="pipe-node-num">06</div>
+            <div class="pipe-node-name">Smart Nurture</div>
+            <div class="pipe-node-trigger">⏰ Daily cadence</div>
+          </div>
+          <div class="pipe-arrow">+</div>
+          <div class="pipe-node group-engage">
+            <div class="pipe-node-num">07</div>
+            <div class="pipe-node-name">Competitive Intel</div>
+            <div class="pipe-node-trigger">⏰ Periodic scan</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ops row -->
+      <div class="pipe-row pipe-ops-row">
+        <div class="pipe-group-label" style="background:#fff8f0;border-color:#e67e22">Ops</div>
+        <div class="pipe-nodes" style="flex-wrap:wrap;gap:10px">
+          <div class="pipe-node group-ops">
+            <div class="pipe-node-num">08</div>
+            <div class="pipe-node-name">Command Center</div>
+            <div class="pipe-node-trigger">⏰ Weekly report</div>
+          </div>
+          <div class="pipe-node group-ops">
+            <div class="pipe-node-num">09</div>
+            <div class="pipe-node-name">Shadow Validation</div>
+            <div class="pipe-node-trigger">▶ A/B testing</div>
+          </div>
+          <div class="pipe-node group-ops">
+            <div class="pipe-node-num">10</div>
+            <div class="pipe-node-name">Global Error Handler</div>
+            <div class="pipe-node-trigger">⚠ Error trigger</div>
+          </div>
+          <div class="pipe-node group-ops">
+            <div class="pipe-node-num">11</div>
+            <div class="pipe-node-name">Live Dashboard</div>
+            <div class="pipe-node-trigger">📊 Aggregation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead state flow -->
+  <div style="margin-top:32px">
+    <div class="section-title" style="font-size:15px">Lead State Machine</div>
+    <div class="section-sub">How a lead's status changes as it moves through the pipeline</div>
+    <div class="state-flow">
+      <div class="state-node">
+        <div class="s-icon">📡</div>
+        <div class="s-label">Detected</div>
+        <div class="s-score">intent_score &gt; 0</div>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-node">
+        <div class="s-icon">🧬</div>
+        <div class="s-label">Enriched</div>
+        <div class="s-score">Lead DNA ready</div>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-node">
+        <div class="s-icon">🗳️</div>
+        <div class="s-label">Scored</div>
+        <div class="s-score">consensus ≥ 0.6</div>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-node">
+        <div class="s-icon">✅</div>
+        <div class="s-label">Approved</div>
+        <div class="s-score">human OK</div>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-node active-state">
+        <div class="s-icon">📨</div>
+        <div class="s-label">Contacted</div>
+        <div class="s-score">outreach sent</div>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-node">
+        <div class="s-icon">🌡️</div>
+        <div class="s-label">Nurturing</div>
+        <div class="s-score">warmth decay</div>
+      </div>
+      <div class="state-arrow">→</div>
+      <div class="state-node">
+        <div class="s-icon">🏁</div>
+        <div class="s-label">Converted / Archived</div>
+        <div class="s-score">terminal state</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ WORKFLOWS ═══════════════════ -->
+<div id="tab-workflows" class="section">
+  <div class="section-title">11 Workflows</div>
+  <div class="section-sub">Each workflow is an independent JSON template. Import in order 01 → 11 into n8n, then configure credentials via UI.</div>
+  <div class="wf-grid">
+
+    <div class="wf-card g-intake">
+      <div class="wf-num">WF-01</div>
+      <div class="wf-name">Intent Radar</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>⏰ Schedule — every 15 min</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Monitor Reddit + Twitter/X for buying signals; deduplicate; classify intent with OpenAI; enqueue qualified leads</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>New lead saved to Airtable; event forwarded to WF-02 via webhook</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>15 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">HTTP Reddit</span>
+        <span class="node-pill">HTTP Twitter/X</span>
+        <span class="node-pill">AI Classifier</span>
+        <span class="node-pill">Airtable dedup</span>
+        <span class="node-pill">Idempotency gate</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-intake">
+      <div class="wf-num">WF-02</div>
+      <div class="wf-name">Lead DNA — Deep Enrichment</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>🔗 Webhook from WF-01 or external CRM</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Build a full Lead DNA profile: company (size, stack, funding), persona (role, interests) via Reddit, Apollo, Google, Claude</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Enriched Lead DNA card saved to Airtable; forwarded to WF-03</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>11 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Apollo.io</span>
+        <span class="node-pill">Reddit profile</span>
+        <span class="node-pill">Google fallback</span>
+        <span class="node-pill">Claude profiler</span>
+        <span class="node-pill">Score calc</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-decide">
+      <div class="wf-num">WF-03</div>
+      <div class="wf-name">Multi-LLM Consensus</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>▶ Manual (full consensus) / quick draft for warm leads</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>GPT-4o writes strategy, Claude crafts message, Quality Gate validates; weighted vote → consensus score; escalates to Human if divergence &gt; 30%</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Approved draft + consensus_score saved to queue in Airtable</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>9 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">GPT-4o strategy</span>
+        <span class="node-pill">Claude craft</span>
+        <span class="node-pill">Quality gate</span>
+        <span class="node-pill">Merge &amp; vote</span>
+        <span class="node-pill">Airtable queue</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-decide">
+      <div class="wf-num">WF-04</div>
+      <div class="wf-name">Human-in-the-Loop</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>🔗 Webhook when message ready for review</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Format Slack card with full Lead DNA, draft message, consensus score; sales rep approves / edits / rejects via Slack button</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Approved message forwarded to WF-05; rejection re-enters WF-03</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>6 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Slack card</span>
+        <span class="node-pill">Review log</span>
+        <span class="node-pill">Airtable update</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-engage">
+      <div class="wf-num">WF-05</div>
+      <div class="wf-name">Premium Outreach + Conversion Funnel</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>▶ Manual outreach / Inbound reply webhook</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>First personalised touch via LinkedIn/Reddit (manual Slack prompt) or email. Reply analysis: route to calendar / blacklist / FAQ / nurture</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Contact logged to Airtable; follow-up scheduled in WF-06</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>18 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Slack LinkedIn prompt</span>
+        <span class="node-pill">Reply analyzer</span>
+        <span class="node-pill">Calendly route</span>
+        <span class="node-pill">Blacklist</span>
+        <span class="node-pill">Follow-up scheduler</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-engage">
+      <div class="wf-num">WF-06</div>
+      <div class="wf-name">Smart Nurture + Warmth Decay</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>⏰ Schedule — daily</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Fetches all active leads; applies warmth decay formula (×0.9 per inactive day); AI decides next action per warmth bucket; archives cold leads</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Updated warmth scores in Airtable; follow-ups queued or leads archived</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>11 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Warmth decay fn</span>
+        <span class="node-pill">AI next action</span>
+        <span class="node-pill">Channel change</span>
+        <span class="node-pill">Archive cold</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-engage">
+      <div class="wf-num">WF-07</div>
+      <div class="wf-name">Competitive Intelligence</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>⏰ Periodic competitor scan</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Searches Reddit for competitor complaints; OpenAI scores opportunity; enriches leads whose competitors have issues with personalised angles</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Comp-intel score saved; messaging angle updated in Lead DNA</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>7 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Reddit complaints</span>
+        <span class="node-pill">Sentiment score</span>
+        <span class="node-pill">Opportunity angle</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-ops">
+      <div class="wf-num">WF-08</div>
+      <div class="wf-name">Command Center</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>⏰ Weekly report schedule</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Aggregates pipeline metrics; AI generates insights + recommendations; posts weekly Slack digest; acts as orchestration hub for manual re-triggers</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Weekly Slack report; pipeline snapshot saved to Airtable</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>5 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Aggregate metrics</span>
+        <span class="node-pill">AI insights</span>
+        <span class="node-pill">Slack digest</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-ops">
+      <div class="wf-num">WF-09</div>
+      <div class="wf-name">Shadow Mode Validation</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>▶ Manual — shadow run parallel to production</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>New workflow version processes same leads without real outreach; AI compares shadow vs production draft quality; score delta decides promotion</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Shadow score logged; Slack alert if delta significant</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>6 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Shadow check</span>
+        <span class="node-pill">AI compare</span>
+        <span class="node-pill">Delta score</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-ops">
+      <div class="wf-num">WF-10</div>
+      <div class="wf-name">Global Error Handler</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>⚠ Error trigger — catches failures from any workflow</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Classifies severity (INFO / WARNING / CRITICAL); logs to Airtable ErrorLog; CRITICAL → immediate Slack alert; WARNING → Slack digest; retry via Command Center</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>All errors centralised; CRITICAL errors page on-call</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>8 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Severity classify</span>
+        <span class="node-pill">ErrorLog</span>
+        <span class="node-pill">CRITICAL alert</span>
+        <span class="node-pill">WARNING digest</span>
+      </div>
+    </div>
+
+    <div class="wf-card g-ops">
+      <div class="wf-num">WF-11</div>
+      <div class="wf-name">Live Results Dashboard</div>
+      <dl>
+        <div class="wf-row"><dt>Trigger</dt><dd>▶ Manual aggregation trigger</dd></div>
+        <div class="wf-row"><dt>Purpose</dt><dd>Reads live data from Airtable (leads, outreach, warmth, errors); prepares structured payload for dashboard; surfaces real-time funnel metrics</dd></div>
+        <div class="wf-row"><dt>Output</dt><dd>Dashboard data payload; funnel state visible in Airtable views</dd></div>
+        <div class="wf-row"><dt>Nodes</dt><dd>3 nodes</dd></div>
+      </dl>
+      <div class="wf-nodes">
+        <span class="node-pill">Airtable read</span>
+        <span class="node-pill">Aggregation</span>
+        <span class="node-pill">Dashboard payload</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════ E2E TRACE ═══════════════════ -->
+<div id="tab-trace" class="section">
+  <div class="section-title">Mock E2E Trace</div>
+  <div class="section-sub">Based on <code>tests/mock_lead_payload.json</code>. Shows the full pipeline run for a single lead — synthetic data, no real outreach executed.</div>
+
+  <!-- Lead card -->
+  <div class="trace-lead">
+    <h3>📋 Lead: Alex Johnson @ Acme Technologies</h3>
+    <div class="trace-lead-fields">
+      <div class="tlf"><span>lead_id</span>test-lead-001</div>
+      <div class="tlf"><span>company</span>Acme Technologies (SaaS, 50–200)</div>
+      <div class="tlf"><span>title</span>Head of Sales</div>
+      <div class="tlf"><span>location</span>Remote / New York</div>
+      <div class="tlf"><span>signal</span>job_posting — "Hiring 3 Senior AEs"</div>
+      <div class="tlf"><span>source</span>intent_radar</div>
+      <div class="tlf"><span>intent_score</span>0.78</div>
+      <div class="tlf"><span>warmth</span>60 (initial)</div>
+      <div class="tlf"><span>idempotency_key</span>e308cb1b5e34d52b</div>
+    </div>
+  </div>
+
+  <div class="trace">
+
+    <div class="trace-step">
+      <div class="trace-icon intake">📡</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-01 · Intent Radar</span>
+          <span class="trace-status ts-ok">PASS</span>
+        </div>
+        <div class="trace-detail">
+          Reddit search: <em>"hiring SaaS sales team"</em> → matched Acme Technologies job post.<br>
+          Idempotency check: key <code>e308cb1b5e34d52b</code> → <strong>not seen before</strong> → proceed.<br>
+          AI intent classifier → <code>intent_score = 0.78</code> ≥ threshold 0.6 → qualified.<br>
+          Lead saved to Airtable. Webhook fired to WF-02.
+          <div class="trace-kv">
+            <div class="kv"><span class="kv-k">signal_type</span><span class="kv-v">job_posting</span></div>
+            <div class="kv"><span class="kv-k">intent_score</span><span class="kv-v">0.78</span></div>
+            <div class="kv"><span class="kv-k">idempotency</span><span class="kv-v">NEW — enqueued</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trace-step">
+      <div class="trace-icon intake">🧬</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-02 · Lead DNA Deep Enrichment</span>
+          <span class="trace-status ts-ok">PASS</span>
+        </div>
+        <div class="trace-detail">
+          Apollo.io → company size 50–200, funding $12M Series A, stack: Salesforce + HubSpot.<br>
+          Reddit profile → Alex posted in r/sales 3× this month, focused on "AE hiring frameworks".<br>
+          Claude profiler → pain points: <em>ramp time for AEs, forecasting accuracy</em>.<br>
+          Score: company_fit=0.85 + persona_fit=0.80 + signal_strength=0.78 → <strong>enrichment_score = 0.81</strong>.
+          <div class="trace-kv">
+            <div class="kv"><span class="kv-k">enrichment_score</span><span class="kv-v">0.81</span></div>
+            <div class="kv"><span class="kv-k">pain_points</span><span class="kv-v">ramp time, forecasting</span></div>
+            <div class="kv"><span class="kv-k">stack</span><span class="kv-v">Salesforce + HubSpot</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trace-step">
+      <div class="trace-icon decide">🗳️</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-03 · Multi-LLM Consensus</span>
+          <span class="trace-status ts-ok">AGREEMENT</span>
+        </div>
+        <div class="trace-detail">
+          Three models scored the lead independently, then a weighted vote was computed:<br><br>
+          <table style="font-size:11px;border-collapse:collapse;width:100%">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:4px 8px;color:var(--muted)">Model</th>
+                <th style="text-align:left;padding:4px 8px;color:var(--muted)">Role</th>
+                <th style="text-align:right;padding:4px 8px;color:var(--muted)">Score</th>
+                <th style="text-align:right;padding:4px 8px;color:var(--muted)">Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:4px 8px">GPT-4o</td><td style="padding:4px 8px">Strategy</td><td style="padding:4px 8px;text-align:right">0.82</td><td style="padding:4px 8px;text-align:right">1.0</td></tr>
+              <tr><td style="padding:4px 8px">Claude</td><td style="padding:4px 8px">Message craft</td><td style="padding:4px 8px;text-align:right">0.75</td><td style="padding:4px 8px;text-align:right">0.9</td></tr>
+              <tr style="border-top:1px solid var(--border)"><td style="padding:4px 8px">GPT-4o mini</td><td style="padding:4px 8px">Quality gate</td><td style="padding:4px 8px;text-align:right">0.79</td><td style="padding:4px 8px;text-align:right">1.1</td></tr>
+            </tbody>
+          </table>
+          <br>
+          compute_consensus_score([0.82, 0.75, 0.79], weights=[1.0, 0.9, 1.1])
+          <div class="trace-kv">
+            <div class="kv"><span class="kv-k">consensus_score</span><span class="kv-v">0.788</span></div>
+            <div class="kv"><span class="kv-k">divergence</span><span class="kv-v">0.07 ≤ 0.3 → agreement=True</span></div>
+            <div class="kv"><span class="kv-k">action</span><span class="kv-v">forward to Human Review</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trace-step">
+      <div class="trace-icon decide">✅</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-04 · Human-in-the-Loop</span>
+          <span class="trace-status ts-review">REVIEW</span>
+        </div>
+        <div class="trace-detail">
+          Slack card sent to <code>#lead-review</code> with full Lead DNA, draft message, consensus score 0.788.<br>
+          Sales rep reviewed in Slack → clicked <strong>Approve</strong>.<br>
+          Interaction logged to Airtable. Approved draft forwarded to WF-05.
+          <div class="trace-kv">
+            <div class="kv"><span class="kv-k">reviewer_action</span><span class="kv-v">approved</span></div>
+            <div class="kv"><span class="kv-k">time_to_review</span><span class="kv-v">~4 min</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trace-step">
+      <div class="trace-icon engage">📨</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-05 · Premium Outreach</span>
+          <span class="trace-status ts-ok">SCHEDULED</span>
+        </div>
+        <div class="trace-detail">
+          Personalised LinkedIn message prepared using Lead DNA (pain: ramp time, stack: Salesforce).<br>
+          Slack prompt sent to sales rep: <em>"Ready to send to Alex Johnson — click to confirm LinkedIn DM"</em>.<br>
+          <strong>[Demo: no message actually sent]</strong> — in production the rep clicks Confirm in Slack.<br>
+          Contact event logged to Airtable. Follow-up scheduled in WF-06 (+3 days).
+          <div class="trace-kv">
+            <div class="kv"><span class="kv-k">channel</span><span class="kv-v">LinkedIn DM</span></div>
+            <div class="kv"><span class="kv-k">personalisation</span><span class="kv-v">ramp time + Salesforce angle</span></div>
+            <div class="kv"><span class="kv-k">follow_up_in</span><span class="kv-v">+3 days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trace-step">
+      <div class="trace-icon engage">🌡️</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-06 · Smart Nurture · Daily Run (Day +1)</span>
+          <span class="trace-status ts-ok">PASS</span>
+        </div>
+        <div class="trace-detail">
+          Daily schedule triggers. Fetches Alex Johnson: warmth=60, days_inactive=1, has_recent_reply=False.<br>
+          apply_warmth_decay(60, days_inactive=1, decay_rate=0.9) = round(60 × 0.9¹) = <strong>54</strong>.<br>
+          warmth_to_bucket(54) → <strong>"warm"</strong> (threshold: ≥40 and &lt;70).<br>
+          AI next action for "warm" bucket: <em>send light-touch follow-up in 2 days via LinkedIn</em>.
+          <div class="trace-kv">
+            <div class="kv"><span class="kv-k">warmth_before</span><span class="kv-v">60</span></div>
+            <div class="kv"><span class="kv-k">warmth_after</span><span class="kv-v">54</span></div>
+            <div class="kv"><span class="kv-k">bucket</span><span class="kv-v">warm</span></div>
+            <div class="kv"><span class="kv-k">next_action</span><span class="kv-v">follow-up in 2 days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trace-step">
+      <div class="trace-icon ops" style="background:#fff8f0;border-color:#e67e22">📊</div>
+      <div class="trace-body">
+        <div class="trace-header">
+          <span class="trace-wf">WF-11 · Live Dashboard (background)</span>
+          <span class="trace-status ts-skip">PASSIVE</span>
+        </div>
+        <div class="trace-detail">
+          Airtable views updated in real-time throughout the run.<br>
+          WF-11 next manual trigger will aggregate: 1 lead contacted, warmth=54 (warm), 0 errors, consensus=0.788.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════ ENGINEERING ═══════════════════ -->
+<div id="tab-engineering" class="section">
+  <div class="section-title">Engineering Logic</div>
+  <div class="section-sub">Key patterns from <code>workflow_utils.py</code> — Python mirrors of n8n Code nodes, fully unit tested (43 tests).</div>
+
+  <div class="eng-grid">
+
+    <div class="eng-card">
+      <div class="eng-icon">🔑</div>
+      <div class="eng-title">Idempotency Gate (WF-01)</div>
+      <div class="eng-sub">Every incoming event gets a deterministic SHA-256 key computed from its identity fields. Duplicates (same lead seen again within the scan window) are silently dropped before any enrichment or outreach runs.</div>
+      <div class="code-block"><span class="c-kw">def</span> <span class="c-key">make_event_key</span>(event_data, key_fields=<span class="c-kw">None</span>):
+    fields = key_fields <span class="c-kw">or</span> [<span class="c-str">"id"</span>, <span class="c-str">"source"</span>, <span class="c-str">"url"</span>, <span class="c-str">"company"</span>, <span class="c-str">"email"</span>]
+    parts = [str(event_data.get(f, <span class="c-str">""</span>)) <span class="c-kw">for</span> f <span class="c-kw">in</span> fields]
+    raw = <span class="c-str">"|"</span>.join(parts).encode(<span class="c-str">"utf-8"</span>)
+    <span class="c-kw">return</span> hashlib.sha256(raw).hexdigest()[:<span class="c-num">16</span>]
+
+<span class="c-comment"># Mock payload result:</span>
+make_event_key({<span class="c-str">"source"</span>: <span class="c-str">"intent_radar"</span>, <span class="c-str">"company"</span>: <span class="c-str">"Acme Technologies"</span>,
+                <span class="c-str">"email"</span>: <span class="c-str">"alex@acme.example.com"</span>})
+<span class="c-comment"># → "e308cb1b5e34d52b"</span></div>
+    </div>
+
+    <div class="eng-card">
+      <div class="eng-icon">🌡️</div>
+      <div class="eng-title">Warmth Decay Formula (WF-06)</div>
+      <div class="eng-sub">Lead "temperature" decays 10% per inactive day. A recent reply boosts warmth by +30 (capped at 100). Warmth bucket drives nurture cadence: hot = immediate, cold = re-activation sequence.</div>
+      <div class="code-block"><span class="c-kw">def</span> <span class="c-key">apply_warmth_decay</span>(warmth, days_inactive, has_recent_reply=<span class="c-kw">False</span>):
+    decayed = warmth * math.pow(<span class="c-num">0.9</span>, max(<span class="c-num">0.0</span>, days_inactive))
+    result = round(decayed)
+    <span class="c-kw">if</span> has_recent_reply:
+        result = min(<span class="c-num">100</span>, result + <span class="c-num">30</span>)
+    <span class="c-kw">return</span> result
+
+<span class="c-comment"># Buckets: hot ≥70 · warm ≥40 · cool ≥15 · cold &lt;15</span>
+apply_warmth_decay(<span class="c-num">60</span>, days_inactive=<span class="c-num">1</span>)  <span class="c-comment"># → 54 (warm)</span>
+apply_warmth_decay(<span class="c-num">60</span>, days_inactive=<span class="c-num">7</span>)  <span class="c-comment"># → 32 (cool)</span>
+apply_warmth_decay(<span class="c-num">60</span>, days_inactive=<span class="c-num">1</span>,
+    has_recent_reply=<span class="c-kw">True</span>)            <span class="c-comment"># → 84 (hot)</span></div>
+    </div>
+
+    <div class="eng-card">
+      <div class="eng-icon">🗳️</div>
+      <div class="eng-title">Multi-LLM Consensus (WF-03)</div>
+      <div class="eng-sub">Three models score the lead independently. Weighted average gives the consensus score. If max−min &gt; 0.3 (30% divergence), the lead is escalated to Human Review rather than auto-approved.</div>
+      <div class="code-block"><span class="c-kw">def</span> <span class="c-key">compute_consensus_score</span>(scores, weights=<span class="c-kw">None</span>):
+    w = weights <span class="c-kw">or</span> [<span class="c-num">1.0</span>] * len(scores)
+    consensus = sum(s*wt <span class="c-kw">for</span> s,wt <span class="c-kw">in</span> zip(scores,w)) / sum(w)
+    divergence = max(scores) - min(scores)
+    <span class="c-kw">return</span> {<span class="c-str">"score"</span>: round(consensus,<span class="c-num">3</span>),
+            <span class="c-str">"agreement"</span>: divergence &lt;= <span class="c-num">0.3</span>,
+            <span class="c-str">"divergence"</span>: round(divergence,<span class="c-num">3</span>)}
+
+compute_consensus_score([<span class="c-num">0.82</span>, <span class="c-num">0.75</span>, <span class="c-num">0.79</span>],
+                        weights=[<span class="c-num">1.0</span>, <span class="c-num">0.9</span>, <span class="c-num">1.1</span>])
+<span class="c-comment"># → {score: 0.788, agreement: True, divergence: 0.07}</span></div>
+    </div>
+
+    <div class="eng-card">
+      <div class="eng-icon">⚠️</div>
+      <div class="eng-title">Error Classification + Retry Policy (WF-10)</div>
+      <div class="eng-sub">All workflow failures route to the Global Error Handler. Severity is classified by first regex match. Critical errors page immediately; warnings batch to Slack digest; info is logged only.</div>
+      <div class="code-block"><span class="c-kw">def</span> <span class="c-key">classify_error_severity</span>(error_message):
+    <span class="c-kw">if</span> re.search(<span class="c-str">r"timeout|ECONNREFUSED|401|403|5\d\d|fatal"</span>, msg):
+        <span class="c-kw">return</span> <span class="c-str">"CRITICAL"</span>
+    <span class="c-kw">if</span> re.search(<span class="c-str">r"rate|retry|warn|429"</span>, msg):
+        <span class="c-kw">return</span> <span class="c-str">"WARNING"</span>
+    <span class="c-kw">return</span> <span class="c-str">"INFO"</span>
+
+<span class="c-comment"># Retry policy:</span>
+<span class="c-comment"># external_api → 3 attempts, backoff [5s, 15s, 45s]</span>
+<span class="c-comment"># llm_api     → 2 attempts, backoff [10s, 30s] → human review</span>
+<span class="c-comment"># webhook     → 5 attempts, backoff [2s…60s]  → log &amp; skip</span></div>
+    </div>
+
+    <div class="eng-card">
+      <div class="eng-icon">👤</div>
+      <div class="eng-title">Human-in-the-Loop Design (WF-04)</div>
+      <div class="eng-sub">Two stop-points keep humans in control: (1) before first outreach for all high-value leads, (2) when multi-LLM divergence exceeds 30%. Slack interactive buttons allow approve / edit / reject without leaving the chat.</div>
+      <div class="code-block"><span class="c-comment"># Escalation conditions (in n8n router node):</span>
+<span class="c-kw">if</span> consensus[<span class="c-str">"agreement"</span>] == <span class="c-kw">False</span>:   <span class="c-comment"># divergence &gt; 0.3</span>
+    <span class="c-kw">→</span> Human review (mandatory)
+
+<span class="c-kw">if</span> lead[<span class="c-str">"enrichment_score"</span>] >= <span class="c-num">0.75</span>:  <span class="c-comment"># high-value</span>
+    <span class="c-kw">→</span> Human review (standard)
+
+<span class="c-comment"># Slack card includes:</span>
+<span class="c-comment">#   - Lead DNA summary (company, persona, pain points)</span>
+<span class="c-comment">#   - Draft message from Multi-LLM</span>
+<span class="c-comment">#   - Consensus score + divergence</span>
+<span class="c-comment">#   - Buttons: [Approve] [Edit] [Reject]</span></div>
+    </div>
+
+    <div class="eng-card">
+      <div class="eng-icon">🔬</div>
+      <div class="eng-title">Shadow Mode Validation (WF-09)</div>
+      <div class="eng-sub">Before promoting a new workflow version to production, it runs in shadow mode on real leads. Results are compared against production output without affecting real outreach. Delta score decides promotion.</div>
+      <div class="code-block"><span class="c-comment"># Shadow run flow:</span>
+<span class="c-num">1</span>. New WF version runs in parallel → shadow draft
+<span class="c-num">2</span>. AI compares shadow vs production draft quality
+<span class="c-num">3</span>. compute delta_score = shadow_score - prod_score
+<span class="c-num">4</span>. <span class="c-kw">if</span> delta_score &gt; <span class="c-num">0.05</span>:
+       Slack alert → manual promotion decision
+   <span class="c-kw">elif</span> delta_score &lt; -<span class="c-num">0.05</span>:
+       Slack alert → block promotion
+   <span class="c-kw">else</span>:
+       Log <span class="c-str">"no significant diff"</span> → auto-promote option
+
+<span class="c-comment"># Real outreach: never triggered in shadow mode</span></div>
+    </div>
+
+  </div>
+</div>
+
+<footer style="text-align:center;padding:24px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:0">
+  <strong>Leadgen n8n System</strong> ·
+  Static Demo — no live outreach, credentials or external API calls ·
+  <a href="https://github.com/kaluginvit/Portfolio/tree/main/02-automation/leadgen-n8n-system" style="color:var(--blue);text-decoration:none">GitHub</a>
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + id).classList.add("active");
+  event.currentTarget.classList.add("active");
+}
+</script>
+</body>
+</html>
