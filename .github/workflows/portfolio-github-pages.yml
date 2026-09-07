@@ -49,6 +49,7 @@ jobs:
           mkdir -p _site/fintech-ab-test
           cp -r site/dist/. _site/
           cp "01-data-analytics/superstore-retail-analytics/superstore-dashboard.html" _site/superstore/index.html
+          cp "01-data-analytics/superstore-retail-analytics/title-bg.png" _site/superstore/title-bg.png
           cp -r "03-ai-products/rf-macro-risk-ai/docs/." _site/rf-macro-risk-ai/
           cp "01-data-analytics/fintech-ab-test-credit-offer/reports/presentation.html" _site/fintech-ab-test/index.html
           touch _site/.nojekyll
