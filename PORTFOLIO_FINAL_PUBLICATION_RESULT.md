@@ -94,14 +94,16 @@
 | SHA | Описание |
 |-----|----------|
 | `fb47465` | chore(portfolio): finalize public portfolio presentation (Stage 3a) |
-| `TBD` | chore(portfolio): finalize public showcase (Stage 3b — SVO merge) |
+| `a9dc1e4` | chore(portfolio): finalize public showcase (Stage 3b — SVO merge) |
 
 ---
 
 ## 8. Actions Status
 
-GitHub Actions `portfolio-github-pages.yml` запускается автоматически при push в `main`.  
-После push проверить: https://github.com/kaluginvit/Portfolio/actions
+| SHA | Workflow | Conclusion |
+|-----|----------|------------|
+| `a9dc1e4` | Deploy Portfolio site (GitHub Pages) | ✅ success |
+| `fb47465` | Deploy Portfolio site (GitHub Pages) | ✅ success |
 
 ---
 
