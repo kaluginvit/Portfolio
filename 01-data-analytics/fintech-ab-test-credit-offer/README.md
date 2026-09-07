@@ -1,5 +1,7 @@
 # A/B Test: Credit Card Offer Placement in Fintech App
 
+**Live demo:** https://kaluginvit.github.io/Portfolio/fintech-ab-test/
+
 Полный аналитический кейс: A/B-тест переноса карточки «Кредитка дня» в верхнюю часть домашнего экрана финтех-приложения.
 
 Проверяет, улучшает ли изменение позиции ключевые метрики — CR_apply, CTR, ARPU — и можно ли считать результат достаточным для rollout.

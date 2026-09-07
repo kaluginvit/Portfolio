@@ -1,5 +1,7 @@
 ﻿# 📊 Retail Analytics — Sample Superstore
 
+**Live demo:** https://kaluginvit.github.io/Portfolio/superstore/
+
 **Виталий** · аналитика данных · визуализация · упаковка инсайтов для команды и стейкхолдеров
 
 Полный цикл на открытом датасете **Sample - Superstore** (розница, США): исследование в Python → интерактивный HTML-дашборд → презентация → при необходимости экспорт в PowerPoint.
