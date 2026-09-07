@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HR-Breaker — Pipeline Demo</title>
+<style>
+:root{
+  --bg:#f0f2f5;--surface:#fff;--border:#d8e0ea;--text:#1f2933;--muted:#667085;
+  --blue:#1d3557;--green:#178a4a;--red:#c84646;--yellow:#9a6000;--orange:#b85c00;
+  --blue-light:#edf4ff;--green-light:#e8f5e9;--yellow-light:#fff8e1;--red-light:#fff5f5;
+  --shadow:0 2px 8px rgba(0,0,0,.07)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.5 Arial,sans-serif;color:var(--text);background:var(--bg)}
+
+.demo-banner{background:#fff8e1;border-bottom:2px solid #f9c920;padding:8px 20px;text-align:center;font-size:13px;color:#5c3a00;font-weight:600;position:sticky;top:0;z-index:30}
+.demo-banner span{opacity:.65;font-weight:400;margin-left:8px}
+
+header{background:var(--blue);color:#fff;padding:24px 20px}
+.header-inner{max-width:1100px;margin:0 auto}
+.header-inner h1{font-size:22px;margin-bottom:6px}
+.header-inner p{font-size:13px;opacity:.8;max-width:640px;line-height:1.6}
+.hbadges{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.hbadge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,255,255,.15);letter-spacing:.3px}
+
+.nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:38px;z-index:20}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex}
+.tab-btn{padding:13px 20px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+.section{display:none;max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+.section.active{display:block}
+.section-title{font-size:17px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+/* ── Stats row ─── */
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;flex:1;min-width:140px;box-shadow:var(--shadow)}
+.stat-val{font-size:26px;font-weight:700;color:var(--blue)}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.stat.pass .stat-val{color:var(--green)}
+.stat.warn .stat-val{color:var(--orange)}
+
+/* ── Changes ─── */
+.changes-list{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;box-shadow:var(--shadow);margin-bottom:24px}
+.changes-title{font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.4px;margin-bottom:10px}
+.change-item{display:flex;gap:10px;font-size:13px;padding:4px 0;line-height:1.5}
+.change-item::before{content:"→";color:var(--blue);flex-shrink:0;font-weight:700}
+
+/* ── Filter summary bars ─── */
+.filters-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:24px}
+.fsbar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;box-shadow:var(--shadow)}
+.fsbar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.fsbar-name{font-size:12px;font-weight:700}
+.fsbadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.fb-pass{background:var(--green-light);color:var(--green)}
+.fb-fail{background:var(--red-light);color:var(--red)}
+.fb-skip{background:#f0f2f5;color:var(--muted)}
+.bar-track{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;background:var(--blue)}
+.bar-fill.pass{background:var(--green)}
+.bar-fill.skip{background:var(--muted)}
+.fsbar-score{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ── Input tabs ─── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.input-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.input-card-head{padding:12px 16px;background:#f8fafd;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}
+.input-card-body{padding:16px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:monospace;color:#333;max-height:480px;overflow-y:auto}
+
+/* ── Pipeline timeline ─── */
+.phase-row{display:flex;gap:0;margin-bottom:28px}
+.phase-label{writing-mode:vertical-lr;transform:rotate(180deg);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding:10px 8px;border-right:2px solid var(--border);min-width:30px;display:flex;align-items:center;justify-content:center}
+.phase-label.p-parse{border-color:#4a90d9;color:#2c5aa0;background:#f0f6ff}
+.phase-label.p-opt{border-color:#9b59b6;color:#6c3483;background:#f9f0ff}
+.phase-label.p-validate{border-color:#27ae60;color:#1a6e3b;background:#f0faf4}
+.phase-steps{flex:1;padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.phase-step{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;box-shadow:var(--shadow);min-width:160px}
+.ps-icon{font-size:18px;margin-bottom:4px}
+.ps-name{font-weight:700;font-size:12px;color:var(--blue)}
+.ps-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.ps-time{font-size:10px;color:var(--muted);margin-top:4px;font-family:monospace}
+.phase-arrow{font-size:20px;color:var(--muted);align-self:center}
+
+/* ── Filter cards ─── */
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-top:16px}
+.filter-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:16px;border-left:4px solid}
+.filter-card.fc-pass{border-left-color:var(--green)}
+.filter-card.fc-skip{border-left-color:var(--muted);opacity:.7}
+.fc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.fc-name{font-size:13px;font-weight:700;color:var(--blue)}
+.fc-pri{font-size:10px;color:var(--muted);margin-top:2px}
+.fc-score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.fc-score{font-size:18px;font-weight:700}
+.fc-score.pass{color:var(--green)}
+.fc-score.skip{color:var(--muted)}
+.fc-thr{font-size:11px;color:var(--muted)}
+.fc-bar{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.fc-bar-fill{height:100%;border-radius:3px}
+.fc-bar-fill.pass{background:var(--green)}
+.fc-bar-fill.skip{background:var(--muted);opacity:.4}
+.fc-detail{font-size:11px;color:#555;line-height:1.5;margin-top:4px}
+.fc-tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-right:4px;margin-bottom:2px}
+.tag-match{background:#d5f0e0;color:#1a6e3b}
+.tag-miss{background:#fde8cc;color:#9a4a00}
+
+/* ── Optimized resume ─── */
+.resume-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.resume-head{padding:12px 20px;background:#f8fafd;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.resume-head-title{font-size:12px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}
+.resume-body{padding:28px 32px;max-width:720px;margin:0 auto}
+
+/* Resume template styles */
+.r-name{font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:2px;text-align:center;margin-bottom:4px;font-family:Georgia,"Times New Roman",serif}
+.r-contact{text-align:center;font-size:11px;color:#444;margin-bottom:16px;font-family:Georgia,"Times New Roman",serif}
+.r-contact a{color:#444;text-decoration:none}
+.r-section{margin-top:14px;font-family:Georgia,"Times New Roman",serif}
+.r-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #000;padding-bottom:2px;margin-bottom:8px}
+.r-entry{margin-bottom:10px}
+.r-entry-row{display:flex;justify-content:space-between;align-items:baseline}
+.r-company{font-weight:700;font-size:12px}
+.r-date{font-size:11px;color:#444;white-space:nowrap}
+.r-title-role{font-style:italic;font-size:12px}
+.r-bullets{list-style:none;padding:4px 0 0 12px;margin:0}
+.r-bullets li{font-size:11.5px;line-height:1.4;margin-bottom:2px;position:relative}
+.r-bullets li::before{content:"•";position:absolute;left:-10px}
+.r-summary{font-size:12px;line-height:1.5;color:#222}
+.r-skills{font-size:12px;line-height:1.6;color:#222}
+.r-proj{margin-bottom:6px;font-size:12px}
+.r-proj-name{font-weight:700}
+.pdf-note{font-size:11px;color:var(--muted);font-style:italic;margin-top:12px;text-align:center;font-family:Arial,sans-serif}
+
+footer{text-align:center;padding:24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--blue);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  🔬 Static Demo — precomputed sample result, no live LLM calls
+  <span>Alex Johnson resume → FinanceApp Senior Backend Engineer · sample-data/ from repository</span>
+</div>
+
+<header>
+  <div class="header-inner">
+    <h1>HR-Breaker — Resume Optimization Pipeline</h1>
+    <p>Transforms any resume into a job-specific, ATS-friendly PDF.
+       Anti-hallucination guarantee: optimizer restructures existing content only — cannot fabricate experience not in the original.</p>
+    <div class="hbadges">
+      <span class="hbadge">8-Layer Filter Pipeline</span>
+      <span class="hbadge">Anti-Hallucination</span>
+      <span class="hbadge">ATS Simulation</span>
+      <span class="hbadge">TF-IDF Keyword Matching</span>
+      <span class="hbadge">Vector Similarity</span>
+      <span class="hbadge">192 Tests</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="showTab('input')">Input</button>
+    <button class="tab-btn" onclick="showTab('pipeline')">Pipeline</button>
+    <button class="tab-btn" onclick="showTab('output')">Optimized Resume</button>
+  </div>
+</nav>
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<div id="tab-overview" class="section active">
+  <div class="section-title">Sample Run: Alex Johnson → FinanceApp</div>
+  <div class="section-sub">Single optimization iteration. All active filters passed on first attempt.</div>
+
+  <div class="stats">
+    <div class="stat pass"><div class="stat-val">PASS</div><div class="stat-lbl">Validation status</div></div>
+    <div class="stat"><div class="stat-val">1</div><div class="stat-lbl">Iteration (of 3 max)</div></div>
+    <div class="stat pass"><div class="stat-val">7 / 7</div><div class="stat-lbl">Filters passed</div></div>
+    <div class="stat"><div class="stat-val">1 skipped</div><div class="stat-lbl">TranslationCheck (en→en)</div></div>
+    <div class="stat"><div class="stat-val">~43s</div><div class="stat-lbl">Total time</div></div>
+    <div class="stat"><div class="stat-val">1 page</div><div class="stat-lbl">PDF output</div></div>
+  </div>
+
+  <div class="changes-list">
+    <div class="changes-title">Optimizer changes (iteration 1)</div>
+    <div class="change-item">Added targeted summary section highlighting financial API experience and payments domain knowledge</div>
+    <div class="change-item">Reordered TechCorp bullets to lead with FastAPI financial operations context (50K+ daily requests)</div>
+    <div class="change-item">Reframed Stripe integration bullet as "payment processing backend" to match financial domain requirements</div>
+    <div class="change-item">Prioritized Python / FastAPI / PostgreSQL at the top of skills section for ATS keyword placement</div>
+    <div class="change-item">Condensed projects section — removed implementation details, kept names + stars for single-page fit</div>
+  </div>
+
+  <div class="section-title" style="font-size:14px;margin-bottom:10px">Filter Scores Summary</div>
+  <div class="filters-summary">
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">ContentLengthChecker</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:100%"></div></div><div class="fsbar-score">1.00 / 1.00 · priority 0 · 1-page PDF</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">DataValidator</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:100%"></div></div><div class="fsbar-score">1.00 / 1.00 · priority 1 · valid HTML structure</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">HallucinationChecker</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:96%"></div></div><div class="fsbar-score">0.96 / 0.70 · priority 3 · no unsupported claims</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">KeywordMatcher</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:74%"></div></div><div class="fsbar-score">0.74 / 0.65 · priority 4 · TF-IDF weighted</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">LLMChecker</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:88%"></div></div><div class="fsbar-score">0.88 / 0.70 · priority 5 · ATS simulation</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">VectorSimilarityMatcher</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:83%"></div></div><div class="fsbar-score">0.83 / 0.70 · priority 6 · semantic embedding</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">AIGeneratedChecker</span><span class="fsbadge fb-pass">PASS</span></div><div class="bar-track"><div class="bar-fill pass" style="width:79%"></div></div><div class="fsbar-score">0.79 / 0.60 · priority 7 · natural writing style</div></div>
+    <div class="fsbar"><div class="fsbar-head"><span class="fsbar-name">TranslationQualityChecker</span><span class="fsbadge fb-skip">SKIP</span></div><div class="bar-track"><div class="bar-fill skip" style="width:100%"></div></div><div class="fsbar-score">Skipped · priority 8 · same language (en → en)</div></div>
+  </div>
+</div>
+
+<!-- ═══════════ INPUT ═══════════ -->
+<div id="tab-input" class="section">
+  <div class="section-title">Input: Resume + Job Description</div>
+  <div class="section-sub">Sample files from <code>sample-data/</code>. No real personal data.</div>
+  <div class="two-col">
+    <div class="input-card">
+      <div class="input-card-head">Original Resume · sample-data/resume.txt</div>
+      <div class="input-card-body">Alex Johnson
+alex.johnson@email.com | +1-555-0123 | linkedin.com/in/alexjohnson | github.com/alexjohnson
+
+EXPERIENCE
+
+Software Engineer — TechCorp Inc., New York (Jan 2021 – Present)
+- Developed REST APIs using Python/FastAPI serving 50K+ daily requests
+- Built data pipelines processing 1M+ records daily using Apache Airflow
+- Reduced API response time by 40% through query optimization and Redis caching
+- Led migration from monolith to microservices for 3 core services
+- Mentored 2 junior developers, conducted code reviews
+
+Backend Developer — StartupXYZ, Remote (Jun 2019 – Dec 2020)
+- Built MVP backend in Django/PostgreSQL from scratch in 3 months
+- Implemented OAuth2 authentication and JWT token management
+- Integrated payment system (Stripe) processing $50K+ monthly transactions
+- Deployed applications on AWS (EC2, RDS, S3) using Docker
+
+EDUCATION
+
+B.S. Computer Science — State University (2015 – 2019)
+
+SKILLS
+
+Languages: Python, JavaScript, SQL, Go (basic)
+Frameworks: FastAPI, Django, Flask, React
+Databases: PostgreSQL, Redis, MongoDB
+Infrastructure: Docker, AWS, GitHub Actions, Linux
+Other: REST APIs, microservices, Agile/Scrum
+
+PROJECTS
+
+Open-source CLI tool for API testing — 200+ GitHub stars
+Personal finance tracker web app — React + FastAPI + PostgreSQL</div>
+    </div>
+    <div class="input-card">
+      <div class="input-card-head">Job Description · sample-data/job-description.txt</div>
+      <div class="input-card-body">Senior Backend Engineer — FinanceApp (Remote)
+
+About the role:
+We're looking for a Senior Backend Engineer to join our
+platform team and help scale our financial data infrastructure.
+You'll work on APIs that serve millions of financial
+transactions daily.
+
+Requirements:
+- 4+ years of backend development experience
+- Strong Python skills (FastAPI or Django preferred)
+- Experience with PostgreSQL and query optimization
+- Familiarity with message queues (Kafka or RabbitMQ)
+- Experience with Docker and container orchestration
+- Understanding of financial domain (payments, transactions)
+  is a plus
+
+Responsibilities:
+- Design and implement high-performance REST APIs for
+  financial operations
+- Optimize database queries and design efficient data models
+- Build robust data pipelines for financial reporting
+- Participate in architecture decisions for system scalability
+- Code reviews and mentoring junior team members
+
+Nice to have:
+- Experience with Go
+- AWS or GCP cloud services
+- Knowledge of PCI DSS compliance
+
+We offer:
+- Competitive salary
+- Remote-first culture
+- Stock options
+- Health benefits</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PIPELINE ═══════════ -->
+<div id="tab-pipeline" class="section">
+  <div class="section-title">8-Layer Validation Pipeline</div>
+  <div class="section-sub">Sequential mode: sorted by priority, early exit on failure. Iteration 1 — all filters passed.</div>
+
+  <!-- Phase: Parse -->
+  <div class="phase-row">
+    <div class="phase-label p-parse">Parse</div>
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="ps-icon">📄</div>
+        <div class="ps-name">Resume Extraction</div>
+        <div class="ps-desc">Plain text → structured content</div>
+        <div class="ps-time">~2s</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-step">
+        <div class="ps-icon">💼</div>
+        <div class="ps-name">Job Parsing (LLM)</div>
+        <div class="ps-desc">Extract requirements, keywords, role</div>
+        <div class="ps-time">~4s · gemini-2.0-flash</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase: Optimize -->
+  <div class="phase-row">
+    <div class="phase-label p-opt">Optimize</div>
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="ps-icon">🤖</div>
+        <div class="ps-name">LLM Optimizer</div>
+        <div class="ps-desc">Tailors resume to job — restructure only, no fabrication</div>
+        <div class="ps-time">~28s · gemini-2.0-pro</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-step">
+        <div class="ps-icon">📑</div>
+        <div class="ps-name">HTML → PDF Render</div>
+        <div class="ps-desc">WeasyPrint → 1-page PDF + extract text for ATS</div>
+        <div class="ps-time">~3s · local render</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase: Validate -->
+  <div class="phase-row">
+    <div class="phase-label p-validate">Validate</div>
+    <div class="phase-steps">
+      <div class="phase-step">
+        <div class="ps-icon">✅</div>
+        <div class="ps-name">8 Filters Run</div>
+        <div class="ps-desc">Sequential by priority · early exit on fail</div>
+        <div class="ps-time">~6s total</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-step" style="border-left:3px solid var(--green);background:var(--green-light)">
+        <div class="ps-icon">🏁</div>
+        <div class="ps-name" style="color:var(--green)">All Passed · Save PDF</div>
+        <div class="ps-desc">output/&lt;MMDD_HHMM&gt;_alex_financeapp_backend_en.pdf</div>
+        <div class="ps-time">iteration 1 · total ~43s</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter cards -->
+  <div class="section-title" style="font-size:14px;margin-top:8px;margin-bottom:4px">Filter Results</div>
+  <div class="filter-grid">
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">ContentLengthChecker</div><div class="fc-pri">Priority 0 · pre-render fast fail</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">1.00</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:100%"></div></div>
+        <span class="fc-thr">thr 1.0</span>
+      </div>
+      <div class="fc-detail">PDF rendered successfully · 1 page · no overflow to page 2</div>
+    </div>
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">DataValidator</div><div class="fc-pri">Priority 1 · HTML structure check</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">1.00</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:100%"></div></div>
+        <span class="fc-thr">thr 1.0</span>
+      </div>
+      <div class="fc-detail">Valid HTML structure · all required sections present · no malformed tags</div>
+    </div>
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">HallucinationChecker</div><div class="fc-pri">Priority 3 · anti-fabrication core</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">0.96</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:96%"></div></div>
+        <span class="fc-thr">thr 0.70</span>
+      </div>
+      <div class="fc-detail">No fabricated claims detected · all experience and skills verified against original · "financial domain" drawn from Stripe bullet ✓</div>
+    </div>
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">KeywordMatcher</div><div class="fc-pri">Priority 4 · TF-IDF weighted scoring</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">0.74</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:74%"></div></div>
+        <span class="fc-thr">thr 0.65</span>
+      </div>
+      <div class="fc-detail">
+        Matched: <span class="fc-tag tag-match">python</span><span class="fc-tag tag-match">fastapi</span><span class="fc-tag tag-match">postgresql</span><span class="fc-tag tag-match">docker</span><span class="fc-tag tag-match">financial</span><span class="fc-tag tag-match">payments</span><span class="fc-tag tag-match">aws</span><span class="fc-tag tag-match">microservices</span><br>
+        Missing: <span class="fc-tag tag-miss">kafka</span><span class="fc-tag tag-miss">rabbitmq</span> (nice-to-have, not required)
+      </div>
+    </div>
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">LLMChecker</div><div class="fc-pri">Priority 5 · ATS + visual format simulation</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">0.88</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:88%"></div></div>
+        <span class="fc-thr">thr 0.70</span>
+      </div>
+      <div class="fc-detail">ATS-compatible format · clean section headers · no tables or graphics · strong keyword density in summary and first bullets</div>
+    </div>
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">VectorSimilarityMatcher</div><div class="fc-pri">Priority 6 · semantic embedding similarity</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">0.83</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:83%"></div></div>
+        <span class="fc-thr">thr 0.70</span>
+      </div>
+      <div class="fc-detail">High semantic alignment with job requirements · financial APIs, data pipelines, PostgreSQL optimization all strongly matched</div>
+    </div>
+
+    <div class="filter-card fc-pass">
+      <div class="fc-head">
+        <div><div class="fc-name">AIGeneratedChecker</div><div class="fc-pri">Priority 7 · detect AI-sounding text</div></div>
+        <span class="fsbadge fb-pass">PASS</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score pass">0.79</span>
+        <div class="fc-bar"><div class="fc-bar-fill pass" style="width:79%"></div></div>
+        <span class="fc-thr">thr 0.60</span>
+      </div>
+      <div class="fc-detail">Natural, human-like writing style · concrete metrics preserved · no generic filler phrases detected</div>
+    </div>
+
+    <div class="filter-card fc-skip">
+      <div class="fc-head">
+        <div><div class="fc-name">TranslationQualityChecker</div><div class="fc-pri">Priority 8 · multi-language output quality</div></div>
+        <span class="fsbadge fb-skip">SKIP</span>
+      </div>
+      <div class="fc-score-row">
+        <span class="fc-score skip">—</span>
+        <div class="fc-bar"><div class="fc-bar-fill skip" style="width:100%"></div></div>
+        <span class="fc-thr">n/a</span>
+      </div>
+      <div class="fc-detail">Not applicable — source and target language are both English (en → en). Runs when language differs (e.g. English resume → Russian job).</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════ OUTPUT ═══════════ -->
+<div id="tab-output" class="section">
+  <div class="section-title">Optimized Resume</div>
+  <div class="section-sub">Resume restructured for FinanceApp Senior Backend Engineer. No experience added — original content reordered and reframed.</div>
+
+  <div class="resume-wrap">
+    <div class="resume-head">
+      <span class="resume-head-title">Optimized Output · 1-Page PDF · Iteration 1</span>
+      <span class="fsbadge fb-pass" style="font-size:11px">All filters PASS</span>
+    </div>
+    <div class="resume-body">
+
+      <div class="r-name">Alex Johnson</div>
+      <div class="r-contact">
+        alex.johnson@email.com &nbsp;|&nbsp;
+        +1-555-0123 &nbsp;|&nbsp;
+        <a href="#">LinkedIn</a> &nbsp;|&nbsp;
+        <a href="#">GitHub</a>
+      </div>
+
+      <div class="r-section">
+        <div class="r-section-title">Summary</div>
+        <div class="r-summary">
+          Backend engineer with 5+ years building high-throughput REST APIs and financial data pipelines in Python/FastAPI.
+          Payments domain experience — integrated Stripe processing $50K+/month at scale.
+          Expert in PostgreSQL query optimization, Docker, AWS, and microservices architecture. Open to remote.
+        </div>
+      </div>
+
+      <div class="r-section">
+        <div class="r-section-title">Experience</div>
+
+        <div class="r-entry">
+          <div class="r-entry-row">
+            <span class="r-company">TechCorp Inc.</span>
+            <span class="r-date">Jan 2021 – Present</span>
+          </div>
+          <div class="r-title-role">Senior Software Engineer · New York</div>
+          <ul class="r-bullets">
+            <li>Architected FastAPI-based REST APIs for financial operations serving 50K+ daily requests</li>
+            <li>Built Apache Airflow data pipelines processing 1M+ records/day for financial reporting</li>
+            <li>Reduced query latency 40% through PostgreSQL optimization and Redis caching</li>
+            <li>Led monolith → microservices migration for 3 core services, improving horizontal scalability</li>
+            <li>Mentored 2 junior developers; enforced code standards through systematic code reviews</li>
+          </ul>
+        </div>
+
+        <div class="r-entry">
+          <div class="r-entry-row">
+            <span class="r-company">StartupXYZ</span>
+            <span class="r-date">Jun 2019 – Dec 2020</span>
+          </div>
+          <div class="r-title-role">Backend Developer · Remote</div>
+          <ul class="r-bullets">
+            <li>Built payment processing backend (Django/PostgreSQL) handling $50K+/month via Stripe</li>
+            <li>Implemented OAuth2 authentication and JWT token management for secure financial operations</li>
+            <li>Deployed on AWS (EC2, RDS, S3) with Docker; automated CI/CD via GitHub Actions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="r-section">
+        <div class="r-section-title">Education</div>
+        <div class="r-entry">
+          <div class="r-entry-row">
+            <span class="r-company">State University</span>
+            <span class="r-date">2015 – 2019</span>
+          </div>
+          <div class="r-title-role">B.S. Computer Science</div>
+        </div>
+      </div>
+
+      <div class="r-section">
+        <div class="r-section-title">Skills</div>
+        <div class="r-skills">
+          <strong>Backend:</strong> Python, FastAPI, Django, Flask · <strong>Data:</strong> PostgreSQL, Redis, MongoDB, Apache Airflow ·
+          <strong>Infrastructure:</strong> Docker, AWS (EC2 / RDS / S3), GitHub Actions, Linux ·
+          <strong>Other:</strong> REST APIs, Microservices, Payments (Stripe), OAuth2, Agile · Go (basic)
+        </div>
+      </div>
+
+      <div class="r-section">
+        <div class="r-section-title">Projects</div>
+        <div class="r-proj"><span class="r-proj-name">API Testing CLI Tool</span> — Open-source, 200+ GitHub stars</div>
+        <div class="r-proj"><span class="r-proj-name">Personal Finance Tracker</span> — React + FastAPI + PostgreSQL</div>
+      </div>
+
+      <div class="pdf-note">
+        ↑ Rendered in browser for demo · actual output is a single-page PDF generated by WeasyPrint
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>HR-Breaker</strong> ·
+  Static Demo — precomputed sample result, no live LLM calls ·
+  <a href="https://github.com/kaluginvit/Portfolio/tree/main/03-ai-products/hr-breaker">GitHub</a>
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'))
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+  document.getElementById('tab-' + id).classList.add('active')
+  event.currentTarget.classList.add('active')
+}
+</script>
+</body>
+</html>

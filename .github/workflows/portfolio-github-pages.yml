@@ -70,6 +70,7 @@ jobs:
           mkdir -p _site/fedresurs-mvp
           mkdir -p _site/leadgen-n8n-system
           mkdir -p _site/mini-crm-fastapi-react
+          mkdir -p _site/hr-breaker
           cp -r site/dist/. _site/
           cp "01-data-analytics/superstore-retail-analytics/superstore-dashboard.html" _site/superstore/index.html
           cp "01-data-analytics/superstore-retail-analytics/title-bg.png" _site/superstore/title-bg.png
@@ -79,6 +80,7 @@ jobs:
           cp "01-data-analytics/fedresurs-mvp/demo/index.html" _site/fedresurs-mvp/index.html
           cp "02-automation/leadgen-n8n-system/demo/index.html" _site/leadgen-n8n-system/index.html
           cp -r "04-web/mini-crm-fastapi-react/frontend/dist/." _site/mini-crm-fastapi-react/
+          cp "03-ai-products/hr-breaker/demo/index.html" _site/hr-breaker/index.html
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

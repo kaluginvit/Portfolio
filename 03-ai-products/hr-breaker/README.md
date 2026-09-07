@@ -2,6 +2,10 @@
 
 Resume optimization tool that transforms any resume into a job-specific, ATS-friendly PDF.
 
+**Live Demo:** https://kaluginvit.github.io/Portfolio/hr-breaker/
+
+Static demo uses precomputed sample result (Alex Johnson → FinanceApp Senior Backend Engineer) — no live LLM calls.
+
 ![Python 3.10–3.13](https://img.shields.io/badge/python-3.10--3.13-blue.svg)
 
 ## Business Problem
