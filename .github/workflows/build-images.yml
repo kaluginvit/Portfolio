@@ -17,40 +17,30 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Снять предупреждение Node 20 в GitHub Actions (миграция на Node 24).
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { image: mortgage-calculator, context: 02-automation/mortgage-calculator }
-          - { image: weather-api, context: 02-automation/weather-api }
-          - { image: currency-travel-api, context: 02-automation/currency-travel-api }
-          - { image: bankrot-trades-scraper, context: 02-automation/bankrot-trades-scraper }
-          - { image: yandex-google-sync, context: 02-automation/yandex-google-sync }
-          - { image: github-actions-setup, context: 02-automation/github-actions-setup }
-          - { image: weather-tg-bot, context: 03-ai-products/weather-tg-bot }
-          - { image: team-tg-bot-vc, context: 03-ai-products/team-tg-bot-vc }
-          - { image: smart-text-helper, context: 03-ai-products/smart-text-helper }
-          - { image: tg-catalog-analyzer, context: 03-ai-products/tg-catalog-analyzer }
-          - { image: mcp-lesson-mcp-server, context: 03-ai-products/mcp-lesson/mcp_server }
-          - { image: mcp-lesson-telegram-bot, context: 03-ai-products/mcp-lesson/telegram_bot }
-          - { image: pdf-checker, context: 03-ai-products/pdf-checker }
-          - { image: audio-transcriber, context: 03-ai-products/audio-transcriber }
-          - { image: finance-mcp-server, context: 03-ai-products/finance-mcp-server/product-mcp }
-          - { image: yandex-wordstat-mcp, context: 03-ai-products/seo-mcp-bot/yandex-wordstat-mcp }
-          - { image: team-ai-bot, context: 03-ai-products/team-ai-bot }
-          - { image: personal-rag-assistant, context: 03-ai-products/personal-rag-assistant }
-          - { image: memory-bot, context: 03-ai-products/memory-bot }
-          - { image: svo-payments-bot, context: 03-ai-products/svo-payments-bot }
-          - { image: crewai-multiagent, context: 03-ai-products/crewai-multiagent }
-          - { image: autonomous-agents-backend, context: 03-ai-products/autonomous-agents/backend }
-          - { image: svo-payouts-website, context: 04-web/svo-payouts-website/web }
-          - { image: dostaffkin-backend, context: 04-web/dostaffkin, file: 04-web/dostaffkin/Dockerfile.backend }
-          - { image: finsight-backend, context: 04-web/finsight/backend }
-          - { image: finsight-frontend, context: 04-web/finsight/frontend }
-          - { image: mini-crm-backend, context: 04-web/mini-crm-fastapi-react/backend }
+          # 02 — Automation
+          - { image: bankrot-trades-scraper,        context: 02-automation/bankrot-trades-scraper }
+          # 03 — AI Products
+          - { image: finance-mcp-server,            context: 03-ai-products/finance-mcp-server/product-mcp }
+          - { image: hr-breaker,                    context: 03-ai-products/hr-breaker }
+          - { image: rf-macro-risk-ai,              context: 03-ai-products/rf-macro-risk-ai }
+          - { image: svo-payments-bot,              context: 03-ai-products/svo-payments-bot }
+          - { image: team-ai-bot,                   context: 03-ai-products/team-ai-bot }
+          - { image: personal-rag-assistant,        context: 03-ai-products/personal-rag-assistant }
+          - { image: tg-digest-pipeline,            context: 03-ai-products/tg-digest-pipeline }
+          # 04 — Web
+          - { image: svo-payouts-website,           context: 04-web/svo-payouts-website/web }
+          - { image: finance-data-screener-backend, context: 04-web/finance-data-screener/backend }
+          - { image: finance-data-screener-frontend,context: 04-web/finance-data-screener/frontend }
+          - { image: mini-crm-backend,              context: 04-web/mini-crm-fastapi-react }
+          - { image: finsight-backend,              context: 04-web/finsight/backend }
+          - { image: finsight-frontend,             context: 04-web/finsight/frontend }
+          - { image: dostaffkin-backend,            context: 04-web/dostaffkin, file: 04-web/dostaffkin/Dockerfile.backend }
     concurrency:
       group: ghcr-${{ github.ref }}-${{ matrix.image }}
       cancel-in-progress: true
@@ -58,10 +48,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Job summary (какой образ собирается)
+      - name: Job summary
         run: |
           echo "## Docker image: \`${{ matrix.image }}\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "| Параметр | Значение |" >> "$GITHUB_STEP_SUMMARY"
           echo "| --- | --- |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Image | \`${{ matrix.image }}\` |" >> "$GITHUB_STEP_SUMMARY"
