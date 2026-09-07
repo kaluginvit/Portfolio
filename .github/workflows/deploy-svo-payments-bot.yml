@@ -68,19 +68,19 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Проверка секретов
+      - name: Check secrets
+        id: check
         run: |
-          missing=""
-          [ -z "${{ secrets.SSH_HOST }}" ]            && missing="${missing} SSH_HOST"
-          [ -z "${{ secrets.SSH_USER }}" ]            && missing="${missing} SSH_USER"
-          [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]     && missing="${missing} SSH_PRIVATE_KEY"
-          [ -z "${{ secrets.SVO_BOT_DEPLOY_PATH }}" ] && missing="${missing} SVO_BOT_DEPLOY_PATH"
-          if [ -n "$missing" ]; then
-            echo "::error::Задайте секреты:${missing}"
-            exit 1
+          if [ -n "${{ secrets.SSH_HOST }}" ] && [ -n "${{ secrets.SSH_USER }}" ] && \
+             [ -n "${{ secrets.SSH_PRIVATE_KEY }}" ] && [ -n "${{ secrets.SVO_BOT_DEPLOY_PATH }}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️ SSH secrets not configured — skipping SSH deploy. Image pushed to GHCR."
           fi
 
       - name: Deploy
+        if: steps.check.outputs.ready == 'true'
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_USER: ${{ secrets.GHCR_USERNAME }}
