@@ -6,8 +6,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 RUN pip install uv
 COPY pyproject.toml uv.lock* ./
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --no-install-project
 COPY src/ ./src/
 COPY templates/ ./templates/
+COPY README.md ./
+RUN uv sync --frozen --no-dev
 EXPOSE 8899
 CMD ["uv", "run", "hr-breaker", "serve", "--host", "0.0.0.0", "--port", "8899"]
