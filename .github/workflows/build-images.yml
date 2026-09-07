@@ -37,7 +37,7 @@ jobs:
           - { image: svo-payouts-website,           context: 04-web/svo-payouts-website/web }
           - { image: finance-data-screener-backend, context: 04-web/finance-data-screener/backend }
           - { image: finance-data-screener-frontend,context: 04-web/finance-data-screener/frontend }
-          - { image: mini-crm-backend,              context: 04-web/mini-crm-fastapi-react }
+          - { image: mini-crm-backend,              context: 04-web/mini-crm-fastapi-react/backend }
           - { image: finsight-backend,              context: 04-web/finsight/backend }
           - { image: finsight-frontend,             context: 04-web/finsight/frontend }
           - { image: dostaffkin-backend,            context: 04-web/dostaffkin, file: 04-web/dostaffkin/Dockerfile.backend }
