@@ -2,6 +2,10 @@
 
 Внутренняя CRM-система: клиенты, сделки, задачи — с выгрузкой отчётов напрямую в Google Sheets через OAuth.
 
+**Live Demo:** https://kaluginvit.github.io/Portfolio/mini-crm-fastapi-react/
+
+Synthetic frontend-only demo — no backend required, no Google OAuth, in-memory data resets on reload.
+
 ## Business Problem
 
 Небольшие команды часто ведут клиентскую базу в таблицах. Это работает до момента, когда нужно: связать клиента со сделками, поставить задачи по клиенту, выгрузить отчёт для руководителя не вручную.
