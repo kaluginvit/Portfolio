@@ -6,7 +6,7 @@
 
 | Repo | Commit | Push | Working Tree | Actions |
 | ---- | ------ | ---- | ------------ | ------- |
-| Portfolio (root) | `868ec77` | ✅ | clean | ⚠️ (see below) |
+| Portfolio (root) | `128832e` | ✅ | clean | ✅ all green |
 
 All changes are in the root monorepo. No nested git repositories found.
 
@@ -17,26 +17,28 @@ All changes are in the root monorepo. No nested git repositories found.
 | `ca6fdd0` | chore(portfolio): finalize stage 1 curation and GitHub presentation |
 | `2f42a2d` | ci: fix Docker build failures in build-images matrix |
 | `868ec77` | ci: fix mini-crm-backend build context — root + explicit Dockerfile path |
+| `128832e` | fix(hr-breaker): repair Docker build — uv editable install requires README.md |
 
-## Actions Status (sha: 868ec77)
+## Actions Status (sha: 128832e)
 
 | Workflow | Status |
 |---------|--------|
 | Deploy svo-payments-bot | ✅ success |
 | CI — fintech-ab-test-credit-offer | ✅ success |
 | Deploy Portfolio site (GitHub Pages) | ✅ success |
-| Build Docker images (GHCR) — mini-crm-backend | ✅ fixed |
-| Build Docker images (GHCR) — rf-macro-risk-ai | ✅ fixed |
-| Build Docker images (GHCR) — hr-breaker | ❌ failure |
+| Build Docker images (GHCR) — all jobs | ✅ success |
 
-## Blockers
+## hr-breaker Root Cause
 
-**hr-breaker Docker build** (`03-ai-products/hr-breaker`):
-- `uv.lock` was missing → added and committed
-- Build continues to fail; detailed logs inaccessible (GitHub API 403 on job logs)
-- Pre-existing issue (Dockerfile existed before Stage 1 but was not in the matrix)
-- Suspected causes: apt package availability on python:3.12-slim, or complex dependency chain (pydantic-ai, playwright, litellm<1.82.7)
-- Manual action: run build locally or check Actions UI for the exact error
+**Root cause:** `uv sync --frozen --no-dev` в Dockerfile запускался до `COPY src/`, что
+заставляло hatchling читать `README.md` (из `pyproject.toml: readme = "README.md"`)
+ещё до его копирования в контейнер → `OSError: Readme file does not exist: README.md`.
+
+**Fix:** разбит на два вызова:
+1. `uv sync --frozen --no-dev --no-install-project` — устанавливает только зависимости
+2. После `COPY src/ README.md` — `uv sync --frozen --no-dev` — устанавливает сам проект
+
+**Changed files:** `03-ai-products/hr-breaker/Dockerfile` (+3 lines)
 
 ## Preserved
 
@@ -46,4 +48,4 @@ All changes are in the root monorepo. No nested git repositories found.
 - GitHub cleanup, metadata, licenses: preserved
 - Existing SVO production: unchanged
 
-Stage 1 finalized and pushed. Clean baseline ready for Stage 2.
+hr-breaker Docker build fixed. Stage 1 fully green.
