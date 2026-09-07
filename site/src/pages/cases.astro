@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import { cases, categoryFilters } from '../data/cases';
 import { REPO_TREE } from '../data/links';
+
+const featured = cases.filter((c) => c.featured);
+const more = cases.filter((c) => !c.featured);
 ---
 
 <Layout
@@ -29,9 +32,10 @@ import { REPO_TREE } from '../data/links';
         }
       </div>
 
+      <p class="section-label" style="margin-top: 2rem;">Core Showcase</p>
       <div class="grid-cards" id="case-grid">
         {
-          cases.map((c) => (
+          featured.map((c) => (
             <article class="card" data-case-card data-category={c.category}>
               <span class="chip" style="align-self: flex-start;">
                 {c.categoryLabel}
@@ -39,12 +43,47 @@ import { REPO_TREE } from '../data/links';
               <h3>{c.title}</h3>
               <p>{c.result}</p>
               <div class="card-actions">
-                <a href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer">
-                  Репозиторий
+                <a href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
+                  GitHub
                 </a>
-                <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" data-ym-goal={`cases_live_${c.id}`}>
-                  {c.liveLabel}
+                {c.isDemo ? (
+                  <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" data-ym-goal={`cases_live_${c.id}`}>
+                    {c.liveLabel}
+                  </a>
+                ) : (
+                  <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm" data-ym-goal={`cases_live_${c.id}`}>
+                    {c.liveLabel}
+                  </a>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="section-label" style="margin-top: 2.5rem;">More Projects</p>
+      <div class="grid-cards" id="more-grid">
+        {
+          more.map((c) => (
+            <article class="card" data-case-card data-category={c.category}>
+              <span class="chip" style="align-self: flex-start;">
+                {c.categoryLabel}
+              </span>
+              <h3>{c.title}</h3>
+              <p>{c.result}</p>
+              <div class="card-actions">
+                <a href={`${REPO_TREE}/${c.repoPath}`} target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
+                  GitHub
                 </a>
+                {c.isDemo ? (
+                  <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" data-ym-goal={`cases_live_${c.id}`}>
+                    {c.liveLabel}
+                  </a>
+                ) : (
+                  <a href={c.liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm" data-ym-goal={`cases_live_${c.id}`}>
+                    {c.liveLabel}
+                  </a>
+                )}
               </div>
             </article>
           ))

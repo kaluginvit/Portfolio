@@ -76,7 +76,7 @@
 - Полный audit log каждого запроса
 - `docker compose up --build` → готово
 
-→ [`04-web/finance-data-screener`](./04-web/finance-data-screener/)
+→ [`04-web/finance-data-screener`](./04-web/finance-data-screener/) · [Live Demo](https://kaluginvit.github.io/Portfolio/finance-data-screener/)
 
 ---
 
@@ -93,7 +93,7 @@
 - Работает с любым типом актива: квартира, оборудование, транспорт, дебиторка
 - 47 тестов на бизнес-логику оценки
 
-→ [`01-data-analytics/fedresurs-mvp`](./01-data-analytics/fedresurs-mvp/)
+→ [`01-data-analytics/fedresurs-mvp`](./01-data-analytics/fedresurs-mvp/) · [Live Demo](https://kaluginvit.github.io/Portfolio/fedresurs-mvp/)
 
 ---
 
@@ -116,7 +116,7 @@
 - `make all` — полный воспроизводимый pipeline без внешних зависимостей
 
 → [`01-data-analytics/fintech-ab-test-credit-offer`](./01-data-analytics/fintech-ab-test-credit-offer/)  
-[Notebook на nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb)
+[Live Demo](https://kaluginvit.github.io/Portfolio/fintech-ab-test/)
 
 ---
 
@@ -137,7 +137,7 @@
 - Web UI + CLI, SSE streaming прогресса в реальном времени
 - 30+ тестов, multi-LLM (LiteLLM: Gemini, OpenAI, Anthropic)
 
-→ [`03-ai-products/hr-breaker`](./03-ai-products/hr-breaker/)
+→ [`03-ai-products/hr-breaker`](./03-ai-products/hr-breaker/) · [Live Demo](https://kaluginvit.github.io/Portfolio/hr-breaker/)
 
 ---
 
@@ -158,7 +158,7 @@
 - Единый Global Error Handler для всей системы
 - `docker compose up` → UI n8n на :5678 → импорт 11 workflow
 
-→ [`02-automation/leadgen-n8n-system`](./02-automation/leadgen-n8n-system/)
+→ [`02-automation/leadgen-n8n-system`](./02-automation/leadgen-n8n-system/) · [Live Demo](https://kaluginvit.github.io/Portfolio/leadgen-n8n-system/)
 
 ---
 
@@ -203,7 +203,7 @@
 - SECURITY.md: полная документация по работе с секретами
 - `docker compose up --build` → backend готов
 
-→ [`04-web/mini-crm-fastapi-react`](./04-web/mini-crm-fastapi-react/)
+→ [`04-web/mini-crm-fastapi-react`](./04-web/mini-crm-fastapi-react/) · [Live Demo](https://kaluginvit.github.io/Portfolio/mini-crm-fastapi-react/)
 
 ---
 
@@ -211,8 +211,8 @@
 
 | Проект | Стек | Что показывает |
 |--------|------|----------------|
-| [RF Macro Risk AI](./03-ai-products/rf-macro-risk-ai/) | LangChain · LangGraph · GitHub Pages | 35 макро-критериев → risk score · [live demo](https://kaluginvit.github.io/rf-macro-risk-ai) |
-| [Superstore Analytics](./01-data-analytics/superstore-retail-analytics/) | Python · Plotly · Docker | EDA + интерактивный HTML-дашборд |
+| [RF Macro Risk AI](./03-ai-products/rf-macro-risk-ai/) | LangChain · LangGraph · GitHub Pages | 35 макро-критериев → risk score · [Live Demo](https://kaluginvit.github.io/rf-macro-risk-ai) |
+| [Superstore Analytics](./01-data-analytics/superstore-retail-analytics/) | Python · Plotly · Docker | EDA + интерактивный HTML-дашборд · [Live Demo](https://kaluginvit.github.io/Portfolio/superstore/) |
 | [Hotel Booking n8n](./02-automation/hotel-booking-n8n/) | n8n · Supabase · HTML | Автоматизация бронирования: форма → бронь → email |
 | [Team AI Bot](./03-ai-products/team-ai-bot/) | Python · Pinecone · aiogram · Docker | Корпоративный RAG по истории чата команды |
 
