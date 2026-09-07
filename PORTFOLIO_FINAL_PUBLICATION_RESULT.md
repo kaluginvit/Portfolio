@@ -1,7 +1,7 @@
 # Portfolio Final Publication Result
 
 **Дата:** 2026-09-08  
-**Статус:** Завершено
+**Статус:** Завершено (Stage 3 finalized)
 
 ---
 
@@ -16,31 +16,32 @@
 | https://kaluginvit.github.io/Portfolio/leadgen-n8n-system/ | ✅ 200 |
 | https://kaluginvit.github.io/Portfolio/mini-crm-fastapi-react/ | ✅ 200 |
 | https://kaluginvit.github.io/Portfolio/hr-breaker/ | ✅ 200 |
+| https://kaluginvit.github.io/Portfolio/superstore/ | ✅ 200 |
 | https://kaluginvit.github.io/rf-macro-risk-ai/ | ✅ 200 |
 | https://svorazbor.ru | ✅ 200 |
 
 ---
 
-## 2. Tier A — Core Showcase (финальный порядок)
+## 2. Tier A — Core Showcase (7 систем, финальный порядок)
 
-Порядок определён по принципу Finance × Software × AI × Automation на первом экране:
+Порядок: Finance × Software × AI × Automation на первом экране.
 
-| # | Проект | Категория | Live |
-|---|--------|-----------|------|
-| 1 | SVO Web — svorazbor.ru | Веб / Production | ✅ svorazbor.ru |
-| 2 | Finance MCP Server | ИИ-продукты / Finance × AI | GitHub (local tool) |
-| 3 | HR-Breaker | ИИ-продукты / AI depth | ✅ Live Demo |
-| 4 | Leadgen n8n | Автоматизация / 11 workflows | ✅ Live Demo |
-| 5 | Finance Data Screener | Веб / Finance × AI × React | ✅ Live Demo |
-| 6 | Fedresurs MVP | Аналитика / Finance × Valuation | ✅ Live Demo |
-| 7 | A/B-тест в финтех | Аналитика / методология | ✅ Live Demo |
-| 8 | SVO Bot | ИИ-продукты / Production Bot | GHCR container |
+| # | Система | Категория | Live |
+|---|---------|-----------|------|
+| 1 | **SVO System** (Web + Telegram + CI/CD) | Веб / Production | ✅ svorazbor.ru |
+| 2 | **Finance MCP Server** | ИИ-продукты / Finance × AI | GitHub (local MCP tool) |
+| 3 | **HR-Breaker** | ИИ-продукты / AI depth | ✅ Live Demo |
+| 4 | **Leadgen n8n** | Автоматизация / 11 workflows | ✅ Live Demo |
+| 5 | **Finance Data Screener** | Веб / Finance × AI × React | ✅ Live Demo |
+| 6 | **Fedresurs MVP** | Аналитика / Finance × Valuation | ✅ Live Demo |
+| 7 | **A/B-тест в финтех** | Аналитика / методология | ✅ Live Demo |
 
-Первый экран покрывает: Finance (#1,#2,#5,#6,#7) × Software (#1,#5) × AI (#2,#3,#5) × Automation (#4)
+**SVO = одна карточка**, охватывающая Next.js сайт + aiogram 3 Telegram-бот.  
+Первый экран покрывает: Finance × Software × AI × Automation.
 
 ---
 
-## 3. Tier B — More Projects
+## 3. Tier B — More Projects (5 проектов)
 
 | Проект | Live |
 |--------|------|
@@ -52,108 +53,73 @@
 
 ---
 
-## 4. Исправленные ссылки (cases.ts + README.md)
+## 4. Исправления cases.ts (Stage 3)
 
-| Проект | Было | Стало |
-|--------|------|-------|
-| hr-breaker | `${tree}/...` · liveLabel 'FastAPI + CLI' | Pages demo · liveLabel 'Live Demo' |
-| finance-data-screener | `${tree}/...` · 'docker compose' | Pages demo · 'Live Demo' |
-| leadgen-n8n | `${tree}/...` · 'docker compose' | Pages demo · 'Live Demo' |
-| fedresurs-mvp | `${tree}/...` · 'Flask UI' | Pages demo · 'Live Demo' |
-| fintech-ab-test | nbviewer · 'nbviewer' | Pages demo · 'Live Demo' |
-| mini-crm | `${tree}/...` · 'Репозиторий' | Pages demo · 'Live Demo' |
-| superstore | ✅ (уже был) | без изменений |
-| rf-macro-risk | ✅ (уже был) | без изменений |
-| svo-web | ✅ svorazbor.ru | без изменений |
+- `svo-web` + `svo-bot` (2 карточки featured) → `svo` единая карточка `SVO System — Web + Telegram + CI/CD`
+- Результат: Core Showcase = **7 featured items** (было 8)
 
 ---
 
-## 5. Изменения в cases.ts
+## 5. GitHub Metadata — kaluginvit/Portfolio
 
-- Добавлено поле `isDemo?: boolean` в CaseItem
-- Переставлен порядок Tier A (Finance × Software × AI × Automation в первых позициях)
-- Tier B без `featured` — отображается отдельным блоком
+| Поле | Было | Стало |
+|------|------|-------|
+| Description | "Monorepo: Finance x AI x Automation x Web. Python, FastAPI, React, n8n, Docker, CI/CD." | "Corporate Finance × Software Development × AI × Automation — applied systems, analytics and live demos." |
+| Homepage | https://kaluginvit.github.io/Portfolio/ ✅ | без изменений |
+| Topics | ai, docker, fastapi, finance, github-actions, n8n, portfolio, python, react, typescript | **ai, automation, data-analysis, fastapi, finance, github-pages, python, react** |
 
-## 6. Изменения в cases.astro
-
-- Разделение на два блока: **Core Showcase** (featured) и **More Projects** (!featured)
-- Кнопки `isDemo=true` → `btn btn-primary` (Live Demo заметно), остальные → `btn btn-ghost`
-- Два кнопки на каждой карточке: GitHub + Live Demo / GitHub
-
-## 7. Изменения в README.md
-
-Добавлены Live Demo ссылки в Core Showcase секции:
-- fintech-ab: nbviewer → Pages demo
-- hr-breaker: tree → tree + Live Demo
-- leadgen-n8n: tree → tree + Live Demo
-- finance-data-screener: tree → tree + Live Demo
-- fedresurs-mvp: tree → tree + Live Demo
-- mini-crm: tree → tree + Live Demo
-- More Projects: RF Macro + Superstore добавлены Live Demo ссылки
+**rf-macro-risk-ai** — metadata в норме (homepage, topics, description корректны).
 
 ---
 
-## 8. Рекомендованные Pinned Repos (ручное действие)
+## 6. 6 Pinned Repos — список для ручного закрепления
 
-GitHub позволяет закрепить до 6 репозиториев. Рекомендуемый список:
+Все перечисленные ниже — существующие публичные репозитории:
 
-1. **kaluginvit/Portfolio** — главный монорепо: 7 core showcase + 5 more projects, 8 live demos
-2. **kaluginvit/rf-macro-risk-ai** — отдельный репо с live macro analytics report
+| # | Repo | Обоснование |
+|---|------|-------------|
+| 1 | **kaluginvit/Portfolio** | Главный монорепо: 7 showcase + 8 live demos, весь стек |
+| 2 | **kaluginvit/svo-payouts-website** | Production Next.js, реальный трафик, svorazbor.ru |
+| 3 | **kaluginvit/svo-payments-bot** | Production Telegram-бот, FSM, GHCR, CI/CD |
+| 4 | **kaluginvit/rf-macro-risk-ai** | Live AI agent, LangChain, 35 критериев, еженедельный отчёт |
+| 5 | **kaluginvit/fintech-ab-test-credit-offer** | Финансовая аналитика, Live Demo, A/B методология |
+| 6 | **kaluginvit/mini-crm-fastapi-react** | FastAPI + React + Google OAuth, Live Demo |
 
-> Если у вас есть другие публичные репозитории — проверьте и выберите из них. Если только 2 публичных репо — закрепить оба.
-
-Ручные шаги: GitHub → Settings → Customize your profile → Edit pinned repositories.
-
----
-
-## 9. GitHub Metadata — ручные действия
-
-Для репозитория `kaluginvit/Portfolio` рекомендуется проверить и установить:
-
-- **Description:** `Corporate Finance × Software Development × AI × Automation — 12 showcase projects, 8 live demos`
-- **Homepage:** `https://kaluginvit.github.io/Portfolio/`
-- **Topics:** `python` `fastapi` `react` `n8n` `langchain` `pydantic-ai` `mcp` `finance` `automation` `docker` `portfolio`
-
-Для `kaluginvit/rf-macro-risk-ai`:
-- **Homepage:** `https://kaluginvit.github.io/rf-macro-risk-ai/`
+Ручной шаг: GitHub → Profile → Customize → Edit pinned repositories.
 
 ---
 
-## 10. Commit
+## 7. Commits
 
-После изменений: `chore(portfolio): finalize public portfolio presentation`
-
-Файлы:
-- `README.md` — обновлены live links
-- `site/src/data/cases.ts` — liveUrl/liveLabel/isDemo/порядок
-- `site/src/pages/cases.astro` — Tier A/B split + Live Demo кнопки
-- `PORTFOLIO_FINAL_PUBLICATION_RESULT.md` — этот файл
+| SHA | Описание |
+|-----|----------|
+| `fb47465` | chore(portfolio): finalize public portfolio presentation (Stage 3a) |
+| `TBD` | chore(portfolio): finalize public showcase (Stage 3b — SVO merge) |
 
 ---
 
-## 11. Actions Status
+## 8. Actions Status
 
-GitHub Actions workflow `portfolio-github-pages.yml` запустится после push в main.  
-Предыдущий успешный статус: commit `1049b3c` — все jobs прошли.
+GitHub Actions `portfolio-github-pages.yml` запускается автоматически при push в `main`.  
+После push проверить: https://github.com/kaluginvit/Portfolio/actions
 
 ---
 
-## 12. Итоговые оценки
+## 9. Итоговые оценки
 
 | Критерий | Оценка | Комментарий |
 |----------|--------|-------------|
-| Profile Quality | 8/10 | README структурирован, live links обновлены, clear positioning |
-| Portfolio Clarity | 9/10 | Tier A/B явно разделены, Live Demo кнопки заметны |
-| Technical Impression | 8/10 | 192 тесты, CI/CD, Docker, MCP, multi-LLM — видно в карточках |
-| Finance × Tech Positioning | 9/10 | Finance MCP + Screener + Fedresurs + A/B в первом экране |
-| GitHub Hygiene | 7/10 | Нужно вручную поставить description/topics/homepage в repos |
-| **Overall** | **8.2/10** | Сильная витрина для Middle+; все demos live, структура чистая |
+| Profile Quality | 8/10 | README структурирован, все live links актуальны |
+| Portfolio Clarity | 9/10 | Tier A = 7 систем, Live Demo кнопки, Core/More разделены |
+| Technical Impression | 9/10 | 192 тесты, CI/CD, MCP, LangChain, n8n — видно в карточках |
+| Finance × Tech Positioning | 9/10 | Finance × AI × Automation × Software во всех Tier A |
+| GitHub Hygiene | 9/10 | Metadata обновлена via gh CLI, topics и description чистые |
+| **Overall** | **8.8/10** | Сильная витрина Middle+; 10 live demos, структура чистая |
 
 ---
 
-## 13. Оставшиеся ручные действия
+## 10. Оставшиеся ручные действия
 
-- [ ] GitHub → kaluginvit/Portfolio → Settings: обновить description, topics, homepage
-- [ ] GitHub → kaluginvit/rf-macro-risk-ai → Settings: проверить homepage
-- [ ] Закрепить pinned repos (Settings → Customize profile)
-- [ ] Проверить Actions после push (обычно ~3-4 мин)
+- [ ] Закрепить 6 pinned repos (GitHub → Profile → Customize)
+- [ ] Проверить Actions после push (~3-4 мин)
+- [ ] Опционально: скриншоты demo для Twitter/LinkedIn анонса

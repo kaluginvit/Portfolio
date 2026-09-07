@@ -20,11 +20,11 @@ export const cases: CaseItem[] = [
   // Порядок: Finance × Software × AI × Automation на первом экране
 
   {
-    id: 'svo-web',
+    id: 'svo',
     category: '04',
     categoryLabel: 'Веб',
-    title: 'Сайт СВО — выплаты семьям',
-    result: 'Production Next.js 14 + TypeScript: квиз, лид-форма, Playwright E2E, CI/CD → VPS.',
+    title: 'SVO System — Web + Telegram + CI/CD',
+    result: 'Production Next.js 14 + aiogram 3: сайт с квизом и лид-формой + FSM-бот с анкетой. Playwright E2E, Docker, GHCR, CI/CD → VPS. Реальный трафик.',
     repoPath: '04-web/svo-payouts-website',
     liveLabel: 'svorazbor.ru',
     liveUrl: 'https://svorazbor.ru',
@@ -100,17 +100,6 @@ export const cases: CaseItem[] = [
     liveLabel: 'Live Demo',
     liveUrl: 'https://kaluginvit.github.io/Portfolio/fintech-ab-test/',
     isDemo: true,
-    featured: true,
-  },
-  {
-    id: 'svo-bot',
-    category: '03',
-    categoryLabel: 'ИИ-продукты',
-    title: 'Telegram-бот выплат (СВО)',
-    result: 'Production FSM-бот: анкета, расчёт, заявки; Docker, CI/CD, GHCR.',
-    repoPath: '03-ai-products/svo-payments-bot',
-    liveLabel: 'GHCR',
-    liveUrl: 'https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payments-bot',
     featured: true,
   },
 
