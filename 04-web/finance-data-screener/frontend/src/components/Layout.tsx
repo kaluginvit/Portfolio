@@ -1,4 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { DEMO_MODE } from "../api/client";
+import DemoModeBanner from "./DemoModeBanner";
 
 const NAV = [
   { to: "/datasets", label: "Датасеты" },
@@ -12,6 +14,7 @@ const NAV = [
 export default function Layout() {
   return (
     <div className="min-h-screen bg-t-bg">
+      {DEMO_MODE && <DemoModeBanner />}
       <header className="bg-[#020d09] border-b border-t-border sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center gap-6 h-12">

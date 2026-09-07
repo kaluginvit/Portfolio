@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import type { Dataset, QueryResponse } from "../types";
 import { getDatasets, queryDataset } from "../api/datasets";
+import { DEMO_MODE } from "../api/client";
+
+const DEMO_EXAMPLES = [
+  "Какой курс доллара?",
+  "Какой курс евро?",
+  "Акции Сбербанка — цена и объём",
+  "Топ акций по объёму торгов",
+  "Акции Яндекса",
+];
 
 interface HistoryItem {
   question: string;
@@ -83,6 +92,25 @@ export default function QueryPage() {
               ))}
             </select>
           </div>
+
+          {DEMO_MODE && (
+            <div>
+              <label className="block font-mono text-t-muted text-xs uppercase tracking-wider mb-1.5">
+                Примеры запросов
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {DEMO_EXAMPLES.map((ex) => (
+                  <button
+                    key={ex}
+                    onClick={() => setQuestion(ex)}
+                    className="px-3 py-1 border border-t-border text-t-muted font-mono text-xs rounded hover:border-t-accent hover:text-t-accent transition-colors"
+                  >
+                    {ex}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block font-mono text-t-muted text-xs uppercase tracking-wider mb-1.5">

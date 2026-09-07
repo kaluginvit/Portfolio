@@ -1,5 +1,7 @@
 # ИИ-скринер финансовых данных
 
+**Live Demo:** https://kaluginvit.github.io/Portfolio/finance-data-screener/ — preloaded public sample data (MOEX, CBR), no backend required.
+
 Приложение для сбора и анализа финансовых данных с помощью LLM. Пользователь вводит запрос на русском языке — система автоматически определяет источник, строит URL запроса и возвращает структурированные данные с графиком.
 
 ## Возможности

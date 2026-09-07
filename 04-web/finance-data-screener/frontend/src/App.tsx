@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import DatasetsPage from "./pages/DatasetsPage";
 import CollectPage from "./pages/CollectPage";
@@ -9,7 +9,7 @@ import QueryPage from "./pages/QueryPage";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/datasets" replace />} />
@@ -21,6 +21,6 @@ export default function App() {
           <Route path="query" element={<QueryPage />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
