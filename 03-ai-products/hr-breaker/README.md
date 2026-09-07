@@ -4,6 +4,14 @@ Resume optimization tool that transforms any resume into a job-specific, ATS-fri
 
 ![Python 3.10–3.13](https://img.shields.io/badge/python-3.10--3.13-blue.svg)
 
+## Business Problem
+
+Sending the same resume to every job posting is ineffective — ATS systems reject candidates before a human sees the resume. Manual tailoring is time-consuming and often introduces fabricated claims.
+
+HR-Breaker automates the tailoring process with an **anti-hallucination guarantee**: the optimizer restructures and emphasizes existing content, but cannot fabricate experience or skills not present in the original resume.
+
+> The tool improves ATS matching by aligning keywords and structure — it does not guarantee any specific ATS score or hiring outcome.
+
 ## Features
 
 - **Any format in** - LaTeX, plain text, markdown, HTML, PDF
@@ -28,6 +36,23 @@ Resume optimization tool that transforms any resume into a job-specific, ATS-fri
 4. System runs internal filters (ATS simulation, keyword matching, hallucination detection)
 5. If filters reject, regenerates using feedback
 6. When all checks pass, renders HTML→PDF via WeasyPrint
+
+## Quick Demo
+
+Sample files included in `sample-data/`:
+
+```bash
+uv sync
+cp .env.example .env
+# Add GEMINI_API_KEY to .env
+
+# CLI demo with sample files
+uv run hr-breaker optimize sample-data/resume.txt sample-data/job-description.txt
+
+# Web UI (auto-opens browser)
+uv run hr-breaker serve
+# Drop sample-data/resume.txt → paste job description → click Optimize
+```
 
 ## Quick Start
 

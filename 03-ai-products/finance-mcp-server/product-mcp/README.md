@@ -66,7 +66,7 @@ python server.py
     "product-mcp": {
       "command": "python",
       "args": ["server.py"],
-      "cwd": "C:/полный/путь/к/product-mcp"
+      "cwd": "<absolute-path-to>/product-mcp"
     }
   }
 }

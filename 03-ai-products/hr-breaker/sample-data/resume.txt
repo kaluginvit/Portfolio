@@ -1,0 +1,34 @@
+Alex Johnson
+alex.johnson@email.com | +1-555-0123 | linkedin.com/in/alexjohnson | github.com/alexjohnson
+
+EXPERIENCE
+
+Software Engineer — TechCorp Inc., New York (Jan 2021 – Present)
+- Developed REST APIs using Python/FastAPI serving 50K+ daily requests
+- Built data pipelines processing 1M+ records daily using Apache Airflow
+- Reduced API response time by 40% through query optimization and Redis caching
+- Led migration from monolith to microservices for 3 core services
+- Mentored 2 junior developers, conducted code reviews
+
+Backend Developer — StartupXYZ, Remote (Jun 2019 – Dec 2020)
+- Built MVP backend in Django/PostgreSQL from scratch in 3 months
+- Implemented OAuth2 authentication and JWT token management
+- Integrated payment system (Stripe) processing $50K+ monthly transactions
+- Deployed applications on AWS (EC2, RDS, S3) using Docker
+
+EDUCATION
+
+B.S. Computer Science — State University (2015 – 2019)
+
+SKILLS
+
+Languages: Python, JavaScript, SQL, Go (basic)
+Frameworks: FastAPI, Django, Flask, React
+Databases: PostgreSQL, Redis, MongoDB
+Infrastructure: Docker, AWS, GitHub Actions, Linux
+Other: REST APIs, microservices, Agile/Scrum
+
+PROJECTS
+
+Open-source CLI tool for API testing — 200+ GitHub stars
+Personal finance tracker web app — React + FastAPI + PostgreSQL

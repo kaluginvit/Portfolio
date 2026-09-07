@@ -1,8 +1,10 @@
 # RF Macro Outlook AI
 
-AI-агент для **макро-оценки экономики РФ**: негативные/позитивные тенденции и риск кризисного сценария на горизонте **6 месяцев**.
+AI-агент для **макро-оценки экономики РФ**: 35 макро-критериев, weighted scoring, оценка риска кризисного сценария на горизонте 6 месяцев с публикацией на GitHub Pages.
 
-> **Based on** [Rai220/money_alert_ai](https://github.com/Rai220/money_alert_ai) by Konstantin Krestnikov — спасибо за оригинальную архитектуру.
+**Live demo:** [kaluginvit.github.io/rf-macro-risk-ai](https://kaluginvit.github.io/rf-macro-risk-ai)
+
+> **Основан на** [Rai220/money_alert_ai](https://github.com/Rai220/money_alert_ai) (Константин Крестников). Что добавлено: 35 оригинальных критериев, scoring engine, source registry, GitHub Pages pipeline, multi-LLM support, deposit access risk block. Детали: [CONTRIBUTION.md](CONTRIBUTION.md).
 
 ## Что делает
 

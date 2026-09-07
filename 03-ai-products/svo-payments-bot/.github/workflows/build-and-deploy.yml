@@ -55,7 +55,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          push: false
           tags: |
             ${{ steps.vars.outputs.image }}:latest
             ${{ steps.vars.outputs.tag_sha }}
@@ -67,20 +67,20 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Проверка секретов (SSH + деплой)
+      - name: Check secrets
+        id: check
         run: |
-          missing=""
-          [ -z "${{ secrets.SSH_HOST }}" ] && missing="${missing} SSH_HOST"
-          [ -z "${{ secrets.SSH_USER }}" ] && missing="${missing} SSH_USER"
-          [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ] && missing="${missing} SSH_PRIVATE_KEY"
-          [ -z "${{ secrets.DEPLOY_PATH }}" ] && missing="${missing} DEPLOY_PATH"
-          if [ -n "$missing" ]; then
-            echo "::error::Задайте секреты в Settings → Secrets → Actions:$missing"
-            echo "::notice::DEPLOY_PATH — абсолютный путь на сервере, где лежат .env и docker-compose.deploy.yml (например /opt/svo-viplaty)"
-            exit 1
+          if [ -n "${{ secrets.SSH_HOST }}" ] && [ -n "${{ secrets.SSH_USER }}" ] && \
+             [ -n "${{ secrets.SSH_PRIVATE_KEY }}" ] && [ -n "${{ secrets.DEPLOY_PATH }}" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️ SSH secrets not configured — skipping deploy. Image pushed to GHCR."
+            echo "Задайте секреты в Settings → Secrets → Actions: SSH_HOST SSH_USER SSH_PRIVATE_KEY DEPLOY_PATH"
           fi
 
       - name: Run remote deploy
+        if: steps.check.outputs.ready == 'true'
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_USER: ${{ secrets.GHCR_USERNAME }}

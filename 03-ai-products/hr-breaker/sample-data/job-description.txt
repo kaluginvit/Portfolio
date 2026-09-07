@@ -1,0 +1,30 @@
+Senior Backend Engineer — FinanceApp (Remote)
+
+About the role:
+We're looking for a Senior Backend Engineer to join our platform team and help scale our financial data infrastructure. You'll work on APIs that serve millions of financial transactions daily.
+
+Requirements:
+- 4+ years of backend development experience
+- Strong Python skills (FastAPI or Django preferred)
+- Experience with PostgreSQL and query optimization
+- Familiarity with message queues (Kafka or RabbitMQ)
+- Experience with Docker and container orchestration
+- Understanding of financial domain (payments, transactions) is a plus
+
+Responsibilities:
+- Design and implement high-performance REST APIs for financial operations
+- Optimize database queries and design efficient data models
+- Build robust data pipelines for financial reporting
+- Participate in architecture decisions for system scalability
+- Code reviews and mentoring junior team members
+
+Nice to have:
+- Experience with Go
+- AWS or GCP cloud services
+- Knowledge of PCI DSS compliance
+
+We offer:
+- Competitive salary
+- Remote-first culture
+- Stock options
+- Health benefits

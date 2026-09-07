@@ -1,94 +1,194 @@
 # Mini CRM
 
-Мини-CRM система: FastAPI + SQLite + интеграция с Google Drive/Sheets (OAuth) + веб-интерфейс на React.
+Внутренняя CRM-система: клиенты, сделки, задачи — с выгрузкой отчётов напрямую в Google Sheets через OAuth.
 
-### Публичный репозиторий (портфолио)
+## Business Problem
 
-Секреты не должны попадать в git: см. **`.gitignore`** и **[`SECURITY.md`](SECURITY.md)**. В репозитории только **шаблоны** с суффиксом `.example` (`google_integration/client_secret.example.json`, `config/google_settings.example.json`). После клона скопируйте их в рабочие файлы и заполните своими данными из Google Cloud; база и токены создаются локально в `data/`.
+Небольшие команды часто ведут клиентскую базу в таблицах. Это работает до момента, когда нужно: связать клиента со сделками, поставить задачи по клиенту, выгрузить отчёт для руководителя не вручную.
 
-## Быстрый старт
+CRM закрывает этот gap: связанные сущности, простой интерфейс, кнопка «Выгрузить отчёт» → новая Google Таблица в нужной папке Drive.
 
-1. Перейдите в корень этого проекта (где лежат `docker-compose.yml` и `requirements.txt`). В монорепозитории Portfolio путь: `04-web/mini-crm-fastapi-react/`.
+## Solution
 
-2. **Бэкенд — из Docker:**
+FastAPI backend + React TypeScript frontend + Google Drive/Sheets OAuth. Единственная команда запуска — `docker compose up --build`.
 
-```powershell
-docker compose up --build
+## Key Features
+
+- CRUD для клиентов, сделок и задач с фильтрацией
+- Выгрузка любого раздела в Google Sheets одной кнопкой → ссылка на таблицу
+- Google OAuth flow (Web Application credentials)
+- SQLite с автоматической инициализацией схемы
+- Тестовый seed: 250+ строк через `fill_test_data.py`
+
+## Architecture
+
+```
+React (TypeScript) :5173
+        │  Vite dev proxy
+        ▼
+FastAPI :8000
+  ├── /clients      CRUD
+  ├── /deals        CRUD
+  ├── /tasks        CRUD
+  ├── /reports      → Google Sheets export
+  ├── /auth/google  OAuth flow
+  └── /health
+
+SQLite (data/crm.db)
+  └── Docker volume → ./data/
+
+Google APIs
+  ├── Google Drive API   (create folder, upload)
+  └── Google Sheets API  (create spreadsheet, write data)
 ```
 
-API: **http://localhost:8000/docs** · Health: **http://localhost:8000/health**  
-Код из `./backend` и `./google_integration` смонтирован в контейнер, SQLite — в `./data/crm.db` на хосте.
+## Tech Stack
 
-3. **Фронтенд** (отдельный терминал, на хосте):
+| Слой | Технологии |
+|------|-----------|
+| Backend | FastAPI, Python 3.11+, SQLAlchemy |
+| Frontend | React 18, TypeScript, Vite |
+| Database | SQLite (docker volume) |
+| Integration | Google Drive API v3, Google Sheets API v4, OAuth 2.0 |
+| Container | Docker + Docker Compose |
 
-```powershell
+## Project Structure
+
+```
+mini-crm-fastapi-react/
+├── backend/          # FastAPI
+│   ├── routers/      # clients, deals, tasks, reports, auth
+│   ├── models.py     # SQLAlchemy models
+│   ├── schemas.py    # Pydantic schemas
+│   └── main.py
+├── frontend/         # React TypeScript
+│   └── src/
+│       ├── pages/    # Clients, Deals, Tasks, Settings, Reports
+│       └── api/      # axios клиент
+├── google_integration/
+│   ├── oauth_service.py
+│   ├── google_drive.py
+│   ├── google_sheets.py
+│   └── report_generator.py
+├── scripts/
+│   └── smoke_curl.ps1
+├── tests/
+│   └── test_api_smoke.py
+├── docker-compose.yml
+└── SECURITY.md
+```
+
+## Quick Start
+
+```bash
+# 1. Клонировать, перейти в директорию проекта
+git clone <repo-url>
+cd mini-crm-fastapi-react
+
+# 2. Backend через Docker
+docker compose up --build
+# API: http://localhost:8000/docs
+# Health: http://localhost:8000/health
+
+# 3. Frontend (отдельный терминал)
 cd frontend
 npm install
 npm run dev
+# UI: http://localhost:5173
 ```
 
-Откройте `http://localhost:5173` (в `frontend/.env.development` указан `VITE_API_URL=http://localhost:8000` — тот же порт, что у контейнера).
+## Configuration
 
-### Бэкенд без Docker (только для отладки)
+`.env.example` → `.env`:
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-$env:PYTHONPATH = "."
-python start_backend.py
-```
+| Переменная | По умолчанию | Описание |
+|-----------|:------------:|---------|
+| `DATABASE_URL` | `sqlite:///./data/crm.db` | Путь к SQLite |
+| `CORS_ORIGINS` | `http://localhost:5173` | Разрешённые origins |
 
-При необходимости скопируйте `.env.example` в `.env` (для `DATABASE_URL`, `CORS_ORIGINS` при локальном запуске).
+Google credentials не в `.env` — настраиваются через UI (раздел «Настройки Google»).
 
-## Google Cloud и OAuth
+## Google Drive Integration Setup
 
-1. В GCP включите **Google Drive API** и **Google Sheets API**.
-2. Создайте учётные данные **OAuth 2.0 Client ID** типа **Web application** (для localhost).
-3. Добавьте **Authorized redirect URI**: `http://localhost:8000/auth/google/callback` (совпадает с `backend.config.Settings.google_redirect_uri`, при необходимости задайте через переменную окружения при расширении).
-4. Скачанный JSON с client id/secret положите в проект (например `google_integration/client_secret.json`) — файл **не коммитьте**.
-5. В OAuth consent screen добавьте свою почту как **Test users**, пока приложение в тестовом режиме.
-6. В веб-приложении: **Настройки Google** — укажите путь к JSON и ID родительской папки на Drive (из URL после `folders/`), сохраните, затем «Войти через Google».
+1. В [Google Cloud Console](https://console.cloud.google.com):
+   - Включить Google Drive API и Google Sheets API
+   - Создать OAuth 2.0 Client ID (тип Web application)
+   - Добавить Authorized redirect URI: `http://localhost:8000/auth/google/callback`
+   - Скачать JSON с client_id/secret
 
-Токен OAuth сохраняется в подпапке корня: `data/google_token.pickle` (рядом с SQLite; в `.gitignore`). Путь можно переопределить переменной окружения `GOOGLE_TOKEN_PATH`.
+2. В интерфейсе CRM → **Настройки Google**:
+   - Указать путь к JSON файлу
+   - Указать ID папки на Google Drive (из URL после `folders/`)
+   - Нажать «Войти через Google»
 
-Типичные проблемы: не добавлен redirect URI; аккаунт не в списке тестировчиков; не выбрана правильная папка или нет доступа Drive.
+3. `data/google_token.pickle` создаётся автоматически (в `.gitignore`)
 
-## Заполнение тестовыми данными
+Подробнее: `SECURITY.md`
 
-С поднятым API:
+## Demo / Sample Data
 
-```powershell
-$env:PYTHONPATH="."
+```bash
+# Заполнить 250+ тестовых записей (при запущенном API)
 python fill_test_data.py
 ```
 
-Число строк на таблицу: переменная `CRM_SEED_ROWS` (по умолчанию 250). URL API: `CRM_API_URL` (по умолчанию `http://127.0.0.1:8000`).
+Количество строк: `CRM_SEED_ROWS` env (по умолчанию 250).
 
-## Тесты и smoke
+## Screenshots
 
-```powershell
+→ `docs/SCREENSHOTS_TODO.md`
+
+## Tests
+
+```bash
+# Smoke тесты API
 $env:PYTHONPATH="."
 $env:CRM_SKIP_INIT_DB="1"
 python -m pytest tests/ -q
-```
 
-Скрипт PowerShell для ручной проверки API: `scripts/smoke_curl.ps1`.
+# Ручная проверка API
+.\scripts\smoke_curl.ps1
 
-Проверка **доступа к Google Drive** (после сохранения настроек и авторизации):
-
-```powershell
-$env:PYTHONPATH="."
+# Проверка Google Drive (после OAuth)
 python scripts/check_google_drive.py
 ```
 
-## Выгрузка отчётов
+## Engineering Decisions
 
-На страницах **Клиенты / Сделки / Задачи** кнопка «Выгрузить отчёт» создаёт новую Google Таблицу в указанной папке, заполняет данные и метаданные, возвращает ссылку (можно открыть или скопировать).
+**SQLite вместо PostgreSQL:** для внутреннего инструмента небольшой команды PostgreSQL избыточен. SQLite в Docker volume с автоматической схемой — проще в поддержке, backup = `cp`.
 
-## Чек-лист сдачи на платформе (артефакты)
+**OAuth через Web Application (не Service Account):** пользователь явно авторизует доступ к своему Drive/Sheets. Это важно для внутреннего инструмента — не нужно выдавать сервисный аккаунт доступ ко всему Drive.
 
-- Скриншоты: Docker или терминалы, интерфейс со списком/фильтром, Swagger или `/health`, настройки Google **без ключа**, успешная выгрузка со ссылкой, открытая таблица.
-- Архив или GitHub **без** `client_secret*.json` (реальных), `data/google_token.*`, `config/google_settings.json`, `data/*.db`, `.env`.
+**Google Sheets вместо email/PDF:** отчёт сразу оказывается в привычном инструменте, доступен для совместного редактирования, сохраняется в Drive.
 
-Проект содержит `.env.example`, шаблоны `*.example.json` и `.gitignore` для секретов; подробности — в **`SECURITY.md`**.
+## Security
+
+Подробно: `SECURITY.md`
+
+- `client_secret.json` и `google_token.pickle` — не коммитятся (`.gitignore`)
+- `data/crm.db` — не коммитится
+- Только `*.example.json` шаблоны в репозитории
+
+## Reuse / Customization
+
+Тип: **Reusable internal tool**
+
+**Для адаптации под новую предметную область:**
+- Добавить сущности в `backend/models.py` и `backend/schemas.py`
+- Добавить router в `backend/routers/`
+- Добавить страницу в `frontend/src/pages/`
+- Google integration остаётся без изменений
+
+## Limitations
+
+- SQLite: один writer, не подходит для >10 одновременных пользователей
+- Google OAuth в тестовом режиме GCP: требуется добавить email пользователей в Test Users
+- Нет аутентификации пользователей (внутренний инструмент без auth)
+- Нет пагинации на больших объёмах данных (>10K записей)
+
+## Roadmap
+
+- JWT auth для multi-user режима
+- Pagination + search на больших объёмах
+- PostgreSQL backend (замена SQLite коннектора)
+- Email-уведомления о задачах (дедлайны)

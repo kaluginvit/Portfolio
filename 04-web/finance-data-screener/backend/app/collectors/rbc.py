@@ -4,20 +4,25 @@ import ssl
 import feedparser
 
 from .base import BaseCollector
+from app.database import SSL_VERIFY
 
 # РБК заблокировал server-side запросы (Qrator антибот) — используем ТАСС как fallback
 _DEFAULT_URL = "https://tass.ru/rss/v2.xml"
 _FALLBACK_URL = "https://tass.ru/rss/v2.xml"
 
-# SSL-контекст без проверки сертификата (SSL-перехват корпоративного прокси/антивируса)
-_NO_VERIFY_CTX = ssl.create_default_context()
-_NO_VERIFY_CTX.check_hostname = False
-_NO_VERIFY_CTX.verify_mode = ssl.CERT_NONE
+
+def _make_ssl_context():
+    if not SSL_VERIFY:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        return ctx
+    return ssl.create_default_context()
 
 
 def _fetch_feed(url: str):
     import urllib.request
-    handler = urllib.request.HTTPSHandler(context=_NO_VERIFY_CTX)
+    handler = urllib.request.HTTPSHandler(context=_make_ssl_context())
     feed = feedparser.parse(url, handlers=[handler])
     # Если основной URL заблокирован — пробуем fallback
     if (feed.get("status") not in (200, 301) or not feed.entries) and url != _FALLBACK_URL:

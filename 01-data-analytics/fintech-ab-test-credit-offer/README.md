@@ -1,204 +1,185 @@
-﻿# A/B-тест: перенос карточки «Кредитка дня» выше в ленте финтех-приложения
+# A/B Test: Credit Card Offer Placement in Fintech App
 
-Этот репозиторий — законченный portfolio case по A/B-тесту в финтех-приложении.  
-Задача: проверить, улучшает ли перенос карточки `credit_of_day` в верхнюю часть домашнего экрана ключевые продуктовые метрики — в первую очередь `CR_apply`, а также `CTR`, `CR_home_apply`, `ARPU` и долю одобренных заявок.
+Полный аналитический кейс: A/B-тест переноса карточки «Кредитка дня» в верхнюю часть домашнего экрана финтех-приложения.
 
-Проект приведен в соответствие с ТЗ и исходным CSV со схемой:
+Проверяет, улучшает ли изменение позиции ключевые метрики — CR_apply, CTR, ARPU — и можно ли считать результат достаточным для rollout.
 
-`dt | client_id | ab_group | event_type | offer_id | value`
+## Business Problem
 
-Файл **Техническое задание** (исходное ТЗ курсового/финального проекта) лежит в [`docs/Техническое задание.docx`](./docs/Техническое%20задание.docx).
+На домашнем экране финтех-приложения показывается лента спецпредложений. Карточка «Кредитка дня» находится в нижней части ленты. Гипотеза: её перемещение выше увеличит видимость и конверсию в заявку.
 
-## Executive summary
+Задача: оценить статистическую значимость эффекта, рассчитать MDE и дать продуктовую рекомендацию.
 
-- **Primary metric:** `CR_apply = offer_apply / offer_impression`
-- **Вторичная метрика:** `CTR = offer_click / offer_impression`
-- **Дополнительные метрики:** `CR_home_apply`, `ARPU`, `Approval Rate`
-- **Метод проверки:** user-level Welch t-test
-- **MDE по ТЗ:** `2.5%`
-- **Главный вывод:** в анализируемых данных тестовая группа показывает сильный положительный uplift по `CR_apply` и `CTR`, но исходный 7-дневный эксперимент недостаточно мощный для надежной проверки столь малого MDE на реальном независимом трафике. Поэтому результат стоит интерпретировать как **сильный directional signal**, а не как окончательное доказательство для безусловного rollout.
+## Solution
 
-## Методология и воспроизводимость
+Полный воспроизводимый аналитический pipeline:
 
-| Тема | Где в проекте |
-|------|----------------|
-| MDE 2.5%, мощность, размер выборки | Разделы **Methodology**, **MDE and sample size**, **Limitations** ниже; выгрузки в `data/processed/` (`mde_grid.csv`, `sample_size_recommendation.csv`) |
-| Статистика | User-level **Welch t-test** по основным метрикам |
-| Ноутбук с разбором | [`notebooks/ab_test_analysis_showcase.ipynb`](./notebooks/ab_test_analysis_showcase.ipynb) — просмотр онлайн после публикации репозитория: [открыть в nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb) |
-| Пайплайн без UI | `make all` или шаги из **Quick start** |
+1. **Data layer:** raw CSV → bootstrap-расширение траекторий пользователей → processed datasets
+2. **SQL layer:** user-level funnel (4 SQL-запроса с window functions и CTEs)
+3. **Analysis:** user-level метрики → Welch t-test → MDE grid → sample size calculation
+4. **Visualization:** 6 ключевых графиков
+5. **Report:** итоговый Markdown-отчёт с продуктовой рекомендацией
 
-## Business context
+## Key Features
 
-В финтех-приложении на домашнем экране показывается лента продуктов и спецпредложений.  
-Сейчас карточка «Кредитка дня» находится в нижней части ленты. Маркетинг предложил поднять ее выше, чтобы увеличить видимость и конверсии в заявку.
+- **Методологически корректный подход:** user-level aggregation → Welch t-test (не Mann-Whitney — объяснено почему)
+- **MDE и power analysis:** расчёт требуемого размера выборки при MDE=2.5%, мощность 80%
+- **Честная интерпретация:** разница между directional signal и статистически подтверждённым результатом
+- **Полностью воспроизводимо:** `make all` восстанавливает все артефакты с нуля
+- **SQL + Python pipeline:** четыре SQL-запроса документируют логику агрегации независимо от Python
 
-## Цель проекта
+## Architecture
 
-1. Спроектировать A/B-тест по ТЗ.
-2. Подготовить данные на уровне пользователя и дня.
-3. Рассчитать метрики и статистическую значимость.
-4. Оценить мощность теста и требуемый размер выборки при `MDE = 2.5%`.
-5. Сформулировать продуктовую рекомендацию.
+```
+data/raw/
+├── data_raw_fintech_credit_offer_seed.csv     # исходный датасет
+└── data_raw_fintech_credit_offer_20000.csv    # расширенный (bootstrap)
 
-## Project structure
+Makefile pipeline:
+  make data     → augment_dataset.py → data/processed/
+  make analysis → ab_analysis.py + sample_size.py → ab_results.csv, mde_grid.csv
+  make report   → run_analysis.py + visualization.py → final_report.md + figures/
 
-```text
-ab_test_credit_card_banner_repo/
-├── .github/workflows/run-analysis.yml
-├── data/
-│   ├── raw/
-│   │   ├── data_raw_fintech_credit_offer_seed.csv
-│   │   └── data_raw_fintech_credit_offer_20000.csv
-│   └── processed/
-│       ├── augmentation_validation.csv
-│       ├── quality_checks.csv
-│       ├── event_mix_by_group.csv
-│       ├── day_split_by_group.csv
-│       ├── user_day_funnel.csv
-│       ├── user_level_metrics.csv
-│       ├── group_metric_summary.csv
-│       ├── ab_results.csv
-│       ├── mde_grid.csv
-│       └── sample_size_recommendation.csv
-├── docs/
-│   ├── Техническое задание.docx
-│   ├── experiment_design.md
-│   ├── metrics_definition.md
-│   ├── event_tracking.md
-│   ├── limitations.md
-│   └── portfolio_summary.md
-├── notebooks/
-│   └── ab_test_analysis_showcase.ipynb
-├── reports/
-│   ├── final_report.md
-│   └── figures/
-├── sql/
-├── src/
-├── Makefile
-├── README.md
-└── requirements.txt
+sql/
+├── 01_user_day_funnel.sql
+├── 02_user_level_metrics.sql
+├── 03_group_metric_summary.sql
+└── 04_srm_check.sql
 ```
 
-## Data
+## Tech Stack
 
-### Seed dataset
-`data/raw/data_raw_fintech_credit_offer_seed.csv` — исходный файл из задания.
+| Компонент | Технология |
+|-----------|-----------|
+| Language | Python 3.10+ |
+| Analysis | pandas, scipy (Welch t-test), statsmodels |
+| Visualization | matplotlib, seaborn |
+| Data | CSV, SQL (window functions, CTEs) |
+| Pipeline | Makefile |
+| Tests | pytest |
+| Notebook | Jupyter (showcase) |
 
-### Expanded dataset
-`data/raw/data_raw_fintech_credit_offer_20000.csv` — синтетически расширенный набор до **20 000 строк**.
+## Business / Domain Logic
 
-Расширение выполнено **не построчным random sampling**, а через bootstrap **целых пользовательских траекторий** внутри каждой группы. Это позволяет сохранять:
-- типовую последовательность событий,
-- связь между impression → click → apply → approved → revenue,
-- 7-дневное окно теста,
-- близкие к исходным пропорции событий.
+**Primary metric:** `CR_apply = offer_apply / offer_impression`
 
-При этом расширенный датасет используется **для воспроизводимости кейса и демонстрации пайплайна**, а не как замена реального независимого трафика.
+Выбрана как основная потому что: ближе к бизнес-результату чем CTR, более чувствительная чем downstream revenue.
 
-## Methodology
+**Secondary metrics:** CTR, CR_home_apply, ARPU, Approval Rate
 
-### Primary metric
-`CR_apply = offer_apply / offer_impression`
+**Statistical approach:**
+- User-level Welch t-test: устойчив к неравенству дисперсий между группами
+- Уровень значимости α=0.05, мощность 80%
+- MDE=2.5% (задан по условию задачи)
 
-Почему именно она:
-- ТЗ прямо рекомендует `CR_apply` как ключевую метрику;
-- она ближе к бизнес-результату, чем CTR;
-- она чувствительнее, чем downstream-показатели вроде revenue или approval.
+**Dataset augmentation:** исходный датасет расширен через bootstrap целых пользовательских траекторий — не построчный sampling. Сохраняет: типовую последовательность событий, связь impression→click→apply→approved, 7-дневное окно, близкие пропорции событий.
 
-### Secondary metrics
-- `CTR`
-- `CR_home_apply`
-- `ARPU`
-- `Approval Rate`
+**Ключевой вывод:** при MDE=2.5% и 7-дневном окне теста доступная выборка не обеспечивает достаточную статистическую мощность. Наблюдаемый uplift по CR_apply и CTR — **directional signal, не окончательное доказательство для rollout**.
 
-### Statistical test
-Для user-level метрик используется Welch t-test:
-- устойчив к неравенству дисперсий;
-- соответствует постановке “считать средние и дисперсии по пользователям”;
-- прост в интерпретации в портфельном кейсе.
+## Project Structure
 
-### MDE and sample size
-По ТЗ минимально детектируемый эффект зафиксирован на уровне `2.5%`.  
-В проекте строится зависимость MDE от размера выборки и рассчитывается рекомендуемый объем пользователей на группу.
+```
+fintech-ab-test-credit-offer/
+├── src/
+│   ├── data_processing.py    # очистка и валидация
+│   ├── augment_dataset.py    # bootstrap расширение
+│   ├── ab_analysis.py        # Welch t-test, результаты
+│   ├── sample_size.py        # MDE grid, расчёт размера выборки
+│   ├── visualization.py      # 6 графиков
+│   └── run_analysis.py       # пайплайн и отчёт
+├── sql/                      # 4 SQL-запроса
+├── data/
+│   ├── raw/                  # исходные данные
+│   └── processed/            # артефакты пайплайна
+├── reports/
+│   ├── final_report.md
+│   └── figures/              # PNG графики
+├── notebooks/
+│   └── ab_test_analysis_showcase.ipynb
+├── docs/
+│   ├── experiment_design.md
+│   ├── metrics_definition.md
+│   ├── limitations.md
+│   └── event_tracking.md
+├── tests/test_data.py
+└── Makefile
+```
 
-## Запуск
-
-1. Клонировать репозиторий, перейти в `01-data-analytics/fintech-ab-test-credit-offer/`.
-2. `python -m venv .venv` → активировать (Windows: `.venv\Scripts\activate`), затем `pip install -r requirements.txt`.
-3. **Dev / воспроизведение:** `make all` (или по шагам `make data`, `make analysis`, `make report`).
-
-### Smoke-чеклист
-
-- [ ] `make all` завершается без ошибки.
-- [ ] Появляются файлы в `data/processed/` и `reports/final_report.md`.
-- [ ] Ноутбук открывается в [nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb).
-
-## Quick start
+## Quick Start
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-make data
-make analysis
-make report
-```
-
-Или одной командой:
-
-```bash
 make all
 ```
 
-## Expected outputs
+Или по шагам:
+```bash
+make data       # подготовка данных
+make analysis   # A/B анализ
+make report     # финальный отчёт
+```
 
-После запуска появляются:
+**Ожидаемые артефакты:**
+- `data/processed/ab_results.csv` — результаты тестов по метрикам
+- `data/processed/mde_grid.csv` — MDE vs sample size
+- `reports/final_report.md` — продуктовый отчёт
+- `reports/figures/*.png` — графики
 
-- `data/processed/user_day_funnel.csv`
-- `data/processed/user_level_metrics.csv`
-- `data/processed/group_metric_summary.csv`
-- `data/processed/ab_results.csv`
-- `data/processed/mde_grid.csv`
-- `data/processed/sample_size_recommendation.csv`
-- `data/processed/quality_checks.csv`
-- `reports/final_report.md`
-- графики в `reports/figures/`
+## Notebook
 
-## Main findings
+Интерактивный разбор: [открыть в nbviewer](https://nbviewer.org/github/kaluginvit/Portfolio/blob/main/01-data-analytics/fintech-ab-test-credit-offer/notebooks/ab_test_analysis_showcase.ipynb)
 
-По синтетически расширенному датасету тестовая группа показывает:
-- заметный рост `CR_apply`;
-- рост `CTR`;
-- рост `ARPU`.
+## Tests
 
-Но это не отменяет ограничения мощности: если целевой MDE действительно равен `2.5%`, 7-дневного окна и доступной структуры данных недостаточно для уверенной проверки такого маленького эффекта на реальном трафике.
+```bash
+pytest tests/ -v
+```
+
+## Main Findings
+
+По расширенному датасету тестовая группа показывает:
+- Статистически значимый рост `CR_apply` (p < 0.05)
+- Рост `CTR` и `ARPU`
+
+**Caveat:** при MDE=2.5% и реальной вариативности исходных данных 7-дневное окно теста недостаточно мощное для уверенного подтверждения эффекта на реальном трафике.
+
+## Engineering Decisions
+
+**Welch t-test вместо Mann-Whitney:** Welch устойчив к неравенству дисперсий (что типично при AB тестах), прост в интерпретации и имеет понятные предположения. Mann-Whitney — непараметрический, хорош для медианных сдвигов, но менее информативен для среднего ARPU. Задача — оценить средние метрики → Welch корректен.
+
+**Bootstrap augmentation, не random sampling:** построчный sampling ломает пользовательские траектории. Bootstrap целых сессий сохраняет реалистичную последовательность событий. Датасет используется для воспроизводимости кейса, не как замена реальному трафику.
+
+**Makefile pipeline:** воспроизводимость важнее интерактивности для аналитического кейса. `make all` гарантирует детерминированный результат.
 
 ## Limitations
 
-### Ограничения исследования
+- Синтетически расширенный датасет не заменяет независимый реальный трафик
+- 7-дневное окно недостаточно для MDE=2.5% при стандартных параметрах мощности
+- Downstream-метрики (approved, revenue) требуют более длинного горизонта наблюдения
+- Не проверялась каннибализация других карточек в ленте
 
-В рамках проекта был проанализирован A/B-тест изменения позиции карточки спецпредложения на главном экране финтех-приложения. Несмотря на то, что метрики по группам посчитаны корректно, интерпретация итогов требует учета ограничений дизайна эксперимента и доступной выборки.
+## Reuse / Customization
 
-Ключевое ограничение связано с мощностью теста. По условиям задания минимально детектируемый эффект (MDE) для основной метрики `CR_apply` задан на уровне `2.5%`. При наблюдаемом baseline и доступной вариативности расчет требуемого размера выборки показывает, что для надежного обнаружения такого эффекта при стандартных параметрах значимости и мощности нужен объем данных, существенно превышающий доступную выборку за 7 дней теста. Поэтому текущий эксперимент не обеспечивает достаточную статистическую мощность для уверенной проверки гипотезы именно на уровне `MDE = 2.5%`.
+Тип: **Analytical case study → Reusable pipeline template**
 
-Это означает, что отсутствие статистически значимого эффекта нельзя интерпретировать как доказательство отсутствия влияния изменения. Корректный вывод в таком случае формулируется так: по имеющимся данным не удалось надежно обнаружить эффект целевого размера. Иными словами, результаты теста имеют направляющую ценность, но ограниченно подходят для окончательного продуктового решения, если требуется строгое подтверждение эффекта на заданном уровне MDE.
+Pipeline переиспользуем для аналогичных A/B задач:
+1. Заменить входной CSV с нужной схемой (`dt | user_id | ab_group | event_type | value`)
+2. Обновить определения метрик в `ab_analysis.py`
+3. Обновить MDE в `sample_size.py`
+4. `make all`
 
-Дополнительное ограничение связано с горизонтом наблюдения. Тест охватывает только 7 дней, тогда как для продуктовых решений в финтехе часть downstream-метрик может проявляться с лагом. Это особенно важно для интерпретации показателей `offer_approved` и `revenue`.
+## Final Recommendation
 
-Также необходимо учитывать, что в проекте использован расширенный датасет, полученный путем масштабирования исходного набора наблюдений с сохранением базовой структуры распределений. Такой подход пригоден для демонстрации пайплайна, воспроизводимости анализа и оформления портфельного кейса, но не заменяет реальный прирост независимого трафика.
+- Изменение перспективно по направлению эффекта
+- Не использовать как безусловное основание для rollout
+- Подтвердить на реальном трафике или пересогласовать MDE/сроки теста
+- Проверить эффект по сегментам (new/returning, iOS/Android)
 
-## Final recommendation
+## Roadmap
 
-Промежуточная продуктовая рекомендация:
-- считать изменение **перспективным** по направлению эффекта;
-- не использовать этот кейс как безусловное основание для полного rollout;
-- подтвердить результат на реальном трафике или пересогласовать MDE / сроки теста.
-
-## What I would do next
-
-1. Повторить тест на большем объеме независимого трафика.
-2. Согласовать более реалистичный MDE, если 7 дней — жесткое ограничение.
-3. Проверить эффект по сегментам: новые/старые пользователи, iOS/Android, активные/неактивные.
-4. Добавить долгосрочные продуктовые метрики после approval.
-5. Проверить каннибализацию других карточек на домашнем экране.
+- Байесовский анализ вместо/в дополнение к frequentist
+- Sequential testing для раннего stopping
+- Сегментный анализ (cohorts, platforms)

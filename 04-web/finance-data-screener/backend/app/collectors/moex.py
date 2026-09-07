@@ -3,13 +3,13 @@ from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 import httpx
 
 from .base import BaseCollector
+from app.database import SSL_VERIFY
 
 
 class MoexCollector(BaseCollector):
     async def _fetch(self, api_url: str) -> list[dict]:
         url = _prepare_url(api_url)
-        # verify=False: SSL-перехват корпоративного прокси/антивируса в dev-окружении
-        async with httpx.AsyncClient(timeout=30, verify=False) as client:
+        async with httpx.AsyncClient(timeout=30, verify=SSL_VERIFY) as client:
             response = await client.get(url)
             response.raise_for_status()
             data = response.json()

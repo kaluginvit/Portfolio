@@ -69,27 +69,26 @@ jobs:
 
       # При ошибке pull (403) для приватного GHCR добавьте PAT с read:packages в секрет GHCR_READ_TOKEN
       # и замените строку login на: echo "${{ secrets.GHCR_READ_TOKEN }}" | docker login ghcr.io -u USER --password-stdin
-      - name: Verify VPS secrets
+      - name: Check VPS secrets
+        id: vps-check
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
           VPS_APP_DIR: ${{ vars.VPS_APP_DIR || secrets.VPS_APP_DIR }}
         run: |
-          missing=
-          [ -z "$VPS_HOST" ] && missing="${missing} VPS_HOST"
-          [ -z "$VPS_USER" ] && missing="${missing} VPS_USER"
-          [ -z "$VPS_SSH_KEY" ] && missing="${missing} VPS_SSH_KEY"
-          [ -z "$VPS_APP_DIR" ] && missing="${missing} VPS_APP_DIR"
-          if [ -n "$missing" ]; then
-            echo "::error::Задайте Secrets/Variables (пусто сейчас):$missing"
-            echo "Путь деплоя лучше задать как Repository variable VPS_APP_DIR=/var/www/svorazbor — тогда логи не маскируют путь."
-            exit 1
+          if [ -n "$VPS_HOST" ] && [ -n "$VPS_USER" ] && [ -n "$VPS_SSH_KEY" ] && [ -n "$VPS_APP_DIR" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️ VPS secrets not configured — skipping SSH deploy. Image pushed to GHCR."
           fi
 
-      # Не используйте script_stop — в appleboy/ssh-action@v1.2.x этого input нет (warning + игнор).
       - name: Deploy on VPS
+        if: steps.vps-check.outputs.ready == 'true'
         uses: appleboy/ssh-action@v1.2.2
+        # Note: comment below kept for reference
+        # Не используйте script_stop — в appleboy/ssh-action@v1.2.x этого input нет (warning + игнор).
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}

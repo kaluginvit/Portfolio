@@ -1,80 +1,219 @@
-﻿<div align="center">
+# SVO Payouts Website
 
-# Сайт для семей: выплаты и ориентиры
+Production Next.js сайт: квиз → ориентировочный расчёт выплат → лид-форма → webhook в CRM. Часть end-to-end системы вместе с [Telegram-ботом](../../03-ai-products/svo-payments-bot/).
 
-**Живой сайт:** [svorazbor.ru](https://svorazbor.ru)
+**Live:** [svorazbor.ru](https://svorazbor.ru)
 
-[![Live](https://img.shields.io/badge/Live-svorazbor.ru-22c55e?style=flat)](https://svorazbor.ru)
-[![Vercel-friendly](https://img.shields.io/badge/Deploy-Vercel%20%7C%20аналог-000000?style=flat&logo=vercel)](https://vercel.com/docs)
+> Расчёты — ориентиры, не юридическое заключение.
 
-*Помочь родственникам погибших участников СВО разобраться, на что ориентироваться по мерам поддержки и что делать дальше.*
+## Business Problem
 
-<br/>
+Семьи погибших участников СВО часто не понимают: какие выплаты существуют, чем разовые отличаются от ежемесячных, куда обращаться. Высокий стресс + сложный регуляторный ландшафт = люди теряются ещё на первом шаге.
 
-</div>
+Сайт решает одну задачу: дать понятный вход. Без канцелярита, по шагам, с ориентировочными цифрами — и с возможностью оставить заявку на консультацию.
 
----
+## Solution
 
-## Парный продукт (Telegram-бот)
+Next.js 14 App Router сайт с интерактивным квизом в двух ветках:
 
-Тот же сценарий «ориентир по выплатам и шагам» доступен в **Telegram** — репозиторий: [`03-ai-products/svo-payments-bot`](../../03-ai-products/svo-payments-bot/). Кратко о связке: [`RELATED.md`](RELATED.md).
+- **Fresh flow:** ответил на вопросы → получил ориентировочный расчёт федеральных мер
+- **Clarify flow:** документы уже поданы, нужно разобраться в ситуации → фокус на шагах, не на суммах
 
----
+Заявка сохраняется в файловое хранилище, дублируется в Telegram и опционально отправляется в CRM через webhook.
 
-## Зачем нужен этот проект
+## Key Features
 
-После трагической потери близкого человека семьям часто сложно:
+- Два сценария квиза (fresh / clarify) с независимой логикой
+- Расчёт с учётом состава семьи и региона
+- localStorage persistence — незавершённый квиз восстанавливается при возврате
+- Lead форма: имя, телефон, согласие на ПДн → Telegram + webhook
+- Vitest (unit + integration) + Playwright E2E тесты
+- Full CI/CD: GitHub Actions → Docker → GHCR → SSH deploy → VPS
 
-- понять, **какие выплаты и меры** вообще существуют на федеральном и региональном уровне;
-- отличить **разовые суммы** от **ежемесячных** выплат (например, на детей);
-- собрать в голове **порядок шагов**: документы, куда обращаться, что уже подано.
+## Architecture
 
-Сайт даёт **понятный вход**: без канцелярита, по шагам, с ориентировочными цифрами там, где это уместно, и с возможностью **оставить контакт**, чтобы с вами связался специалист.
+```
+User
+  │
+  ▼
+Next.js App Router (svorazbor.ru)
+  ├── / (quiz-context, calculator, localStorage)
+  ├── /api/lead (Zod validation → storage → Telegram → webhook)
+  ├── /thanks
+  └── /privacy, /consent
 
----
+Storage (file or memory)
+  └── data/leads.json (Docker volume on VPS)
 
-## Для кого
+Telegram Bot API ──► Admin chat
+Webhook (optional) ──► CRM / n8n
 
-- для **родственников** и близких, которые впервые сталкиваются с темой выплат;
-- для тех, кому нужно **не только число**, но и ощущение структуры: «что к чему относится»;
-- для **консультантов и организаций**, которым важно, чтобы люди приходили уже с базовым пониманием и не терялись в первых шагах.
+CI/CD Pipeline:
+  push main → GitHub Actions → Docker build
+    → GHCR (ghcr.io/.../svo-site:latest)
+      → SSH to VPS → docker compose pull && up -d
+        → nginx (HTTPS) → app :3001
+```
 
----
+## Tech Stack
 
-## Что человек может сделать на сайте
+| Компонент | Технология |
+|-----------|-----------|
+| Framework | Next.js 14 App Router |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| UI | Radix primitives + CVA (shadcn-style) |
+| Animation | Framer Motion |
+| Forms | React Hook Form + Zod |
+| Unit tests | Vitest |
+| E2E tests | Playwright |
+| Container | Docker (multi-stage, standalone Next.js) |
+| Proxy | nginx |
+| CI/CD | GitHub Actions → GHCR → SSH deploy |
 
-1. **Пройти короткий опрос «с нуля»** — ответить на вопросы о ситуации и увидеть **ориентировочный расчёт** по федеральным мерам (с пояснениями, где нужны уточнения).
-2. **Выбрать путь «прояснить ситуацию»** — если важнее разобраться в документах и статусе заявления, **без акцента на суммах на экране**.
-3. **Указать регион** — чтобы учитывать контекст региональных мер (в том виде, в каком они отражены на сайте).
-4. **Оставить заявку** — имя, телефон и коротко о ситуации, чтобы **получить обратную связь** от тех, кто ведёт приём обращений.
+## Business / Domain Logic
 
----
+**Калькулятор** (`src/lib/calculator.ts`): федеральные единовременные и ежемесячные выплаты с учётом состава семьи и региональных надбавок.
 
-## Важно понимать
+**Квиз-контекст** (`src/contexts/quiz-context.tsx`): глобальное состояние с синхронизацией в localStorage под ключом `svo_quiz_v2`. Сценарий (A/B) определяется на первом шаге и не меняется до сброса.
 
-Расчёты и подсказки на сайте — **ориентиры**, а не юридическое заключение и не гарантия суммы «в рублях на руки». Итоговые решения принимают органы и зависят от документов, состава семьи, региона и конкретного дела. Тексты на сайте как раз подчёркивают, где нужна **дополнительная проверка** и разбор кейса.
+**Lead валидация** (`src/lib/validation/lead.ts`): Zod схема — имя, телефон (≥10 цифр), регион, согласие, сценарий квиза. Телефон нормализуется (+7).
 
----
+**Analytics events** (`src/lib/analytics/events.ts`): события в GA4 + Яндекс.Метрика по ключевым шагам воронки (`quiz_start`, `result_view`, `lead_form_success`, ...).
 
-## Что такое эта страница (GitHub) простыми словами
+## Project Structure
 
-**GitHub** — это место, где **хранится программный код** сайта: тексты интерфейса, логика опросов, форма заявки. Это не сам сайт для посетителей, а **«чертежи и инструкция»** для тех, кто сайт поддерживает и развивает.
+```
+svo-payouts-website/
+├── web/                  # Next.js приложение
+│   ├── src/
+│   │   ├── app/          # Роуты, API handlers
+│   │   ├── components/   # quiz/, sections/, ui/
+│   │   ├── lib/          # calculator, validation, telegram, analytics
+│   │   └── data/         # texts, seo metadata
+│   ├── e2e/              # Playwright тесты
+│   ├── Dockerfile
+│   └── .env.example
+├── deploy/
+│   ├── nginx/            # nginx конфиги для VPS
+│   ├── scripts/          # VPS setup script
+│   └── env.production.example
+├── docker-compose.yml
+├── Makefile
+└── RELATED.md            # Связь с Telegram-ботом
+```
 
-Если вы **не разработчик**, вам достаточно открыть **[svorazbor.ru](https://svorazbor.ru)**.  
-Файлы в репозитории нужны тем, кто **вносит правки в код**, настраивает сервер или подключает уведомления (например, в мессенджер).
+## Quick Start
 
----
+```bash
+cd web
+cp .env.example .env
+npm install
+npm run dev
+# http://localhost:3000
+```
 
-## Для специалистов по внедрению и разработке
+Минимальные переменные: без них сайт запустится, Telegram и webhook не будут работать (лиды пишутся только в файл).
 
-Техническая документация: **[web/README.md](web/README.md)** (запуск у себя на компьютере, переменные окружения, лиды, Telegram, вебхук, деплой, CI).
+## Configuration
 
-Код в составе портфолио: [github.com/kaluginvit/Portfolio — `04-web/svo-payouts-website`](https://github.com/kaluginvit/Portfolio/tree/main/04-web/svo-payouts-website)
+`.env.example` в `web/`:
 
----
+| Переменная | Обязательно | Описание |
+|-----------|:-----------:|---------|
+| `NEXT_PUBLIC_SITE_URL` | prod | `https://svorazbor.ru` |
+| `TELEGRAM_BOT_TOKEN` | нет | Token бота для уведомлений |
+| `TELEGRAM_CHAT_ID` | нет | Chat ID админа |
+| `LEAD_WEBHOOK_URL` | нет | POST endpoint для CRM/n8n |
+| `LEAD_WEBHOOK_SECRET` | нет | Bearer token для webhook |
+| `LEADS_STORAGE_MODE` | нет | `file` (default) или `memory` |
+| `LEADS_FILE_PATH` | нет | Путь к JSON-файлу лидов |
+| `NEXT_PUBLIC_GA_ID` | нет | Google Analytics 4 |
+| `NEXT_PUBLIC_YM_ID` | нет | Яндекс.Метрика |
 
-<div align="center">
+## Tests
 
-**Идея проекта:** снизить тревогу и неопределённость на первом этапе — и дать человеку опору, куда двигаться дальше.
+```bash
+cd web
 
-</div>
+# Unit + integration
+npm run test
+
+# E2E (нужен установленный Chromium)
+npx playwright install chromium
+npm run test:e2e
+
+# Smoke (lint + test + build)
+npm run smoke
+```
+
+**E2E сценарии:** `fresh-flow.spec.ts`, `lead-form.spec.ts`, `quiz-navigation.spec.ts`, `stuck-flow.spec.ts`
+
+**Unit/integration:** calculator, region normalization, phone normalization, payout breakdown builder, Zod schemas, quiz navigation.
+
+## Screenshots
+
+→ `docs/SCREENSHOTS_TODO.md`
+
+## Engineering Decisions
+
+**Next.js App Router (не Pages Router):** поддержка Server Components, удобная структура route handlers для `/api/lead`. Standalone output для компактного Docker-образа.
+
+**localStorage для квиза:** пользователь может уйти и вернуться — квиз восстанавливается с того же шага. Простое решение без backend state.
+
+**Два сценария (A/B), не один:** пользователи разные — один приходит разбираться с нуля, другой уже в процессе получения и хочет понять "почему тормозит". Одинаковый квиз для обоих плохо работает.
+
+**Docker + GHCR + SSH deploy:** VPS без managed platform. Простая, предсказуемая цепочка. PM2 рассматривался, Docker выбран для изоляции и воспроизводимости.
+
+## Security / Privacy
+
+- Персональные данные (имя, телефон) только в `data/leads.json` на VPS (Docker volume)
+- Telegram токен и webhook URL только через `.env` на VPS, не в образе
+- `.gitignore` исключает `.env` и `data/`
+- HTTPS через nginx + Certbot
+
+## Reuse / Customization
+
+Тип: **Production case → Reusable architecture**
+
+Квиз-архитектура переиспользуема для похожих сценариев: мед. льготы, налоговые вычеты, социальные выплаты.
+
+**Для адаптации под другую тему:**
+1. Заменить тексты в `src/data/texts/`
+2. Заменить логику расчёта в `src/lib/calculator.ts`
+3. Обновить шаги квиза в `src/components/quiz/`
+4. Заменить SEO-данные в `src/data/seo/`
+
+**Технический стек остаётся тем же** — webhook, Telegram, хранилище, CI/CD.
+
+## Limitations
+
+- Расчёты — ориентиры на основе публичной информации, не юридически значимые суммы
+- Региональные меры не полностью актуализированы (указано в интерфейсе)
+- Файловое хранилище лидов (`data/leads.json`): при высоком трафике стоит заменить на БД
+- Zero-downtime deploy требует дополнительной настройки (blue/green)
+
+## CI/CD и Deployment
+
+Полная документация по деплою: [`web/README.md`](./web/README.md)
+
+Краткая схема:
+```
+git push main
+  → GitHub Actions (CI: lint + test + build)
+  → Docker build → push to GHCR
+  → SSH to VPS → docker compose pull && up -d
+  → nginx proxy → HTTPS via Certbot
+```
+
+## Парный продукт
+
+Telegram-бот с той же логикой квиза: [`03-ai-products/svo-payments-bot`](../../03-ai-products/svo-payments-bot/)  
+Связь и архитектура системы: [`RELATED.md`](./RELATED.md)
+
+## Roadmap
+
+- База данных для лидов (PostgreSQL) вместо JSON-файла
+- Автоматическое обновление региональных надбавок
+- A/B тест разных формулировок расчёта
+- Кабинет для просмотра заявок (без внешней CRM)

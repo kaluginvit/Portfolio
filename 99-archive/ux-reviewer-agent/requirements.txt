@@ -1,8 +1,0 @@
-openai
-requests
-beautifulsoup4
-lxml
-python-dotenv
-tenacity
-fastapi
-uvicorn[standard]

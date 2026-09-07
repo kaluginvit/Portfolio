@@ -1,0 +1,22 @@
+{
+  "_comment": "Mock lead payload for testing the Intent Radar → Lead DNA → Consensus → Outreach chain.",
+  "_usage": "In n8n: open workflow 01, click 'Listen for test event' on Webhook node, POST this payload.",
+  "lead_id": "test-lead-001",
+  "company": "Acme Technologies",
+  "contact_name": "Alex Johnson",
+  "title": "Head of Sales",
+  "email": "alex@acme.example.com",
+  "linkedin_url": "https://linkedin.com/in/alexjohnson",
+  "source": "intent_radar",
+  "signal_type": "job_posting",
+  "signal_detail": "Hiring 3 Senior Account Executives",
+  "company_size": "50-200",
+  "industry": "SaaS",
+  "location": "Remote / New York",
+  "intent_score": 0.78,
+  "warmth": 60,
+  "last_activity": "2026-09-07T10:00:00Z",
+  "has_recent_reply": false,
+  "timestamp": "2026-09-07T12:00:00Z",
+  "idempotency_key": "test-lead-001|intent_radar|alex@acme.example.com"
+}

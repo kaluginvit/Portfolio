@@ -55,10 +55,10 @@ cp .env.example .env
 # Открыть .env и вписать свой PROXYAPI_KEY
 
 # 3. Поднять все сервисы
-docker compose -p screener up --build
+docker compose up --build
 ```
 
-> **Важно:** команды `docker compose` в этом проекте всегда требуют флага `-p screener` из-за кириллицы в пути. Без него Docker Compose не может определить имя проекта.
+> **Примечание:** `.env.example` содержит `COMPOSE_PROJECT_NAME=screener` — это задаёт имя проекта Docker Compose и гарантирует корректную работу независимо от имени директории.
 
 После запуска откройте http://localhost
 
@@ -281,4 +281,4 @@ curl http://localhost/api/audit
 | [ЦБ РФ](https://cbr-xml-daily.ru) | Курсы 34 валют | JSON-ответ, без ключа |
 | [ТАСС RSS](https://tass.ru/rss/v2.xml) | До 100 финансовых новостей | Fallback вместо РБК (Qrator-защита) |
 
-> SSL-проверка отключена (`verify=False`) из-за корпоративного SSL-перехвата. Данные публичные и не чувствительные.
+> **SSL:** по умолчанию включён (`SSL_VERIFY=true`). Установите `SSL_VERIFY=false` в `.env` если ваша среда использует корпоративный SSL-прокси/антивирус. Публичные данные — конфиденциальных сведений в запросах нет.

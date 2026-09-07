@@ -1,6 +1,7 @@
 import httpx
 
 from .base import BaseCollector
+from app.database import SSL_VERIFY
 
 # Default endpoint if LLM omits a URL
 _DEFAULT_URL = "https://www.cbr-xml-daily.ru/daily_json.js"
@@ -9,8 +10,7 @@ _DEFAULT_URL = "https://www.cbr-xml-daily.ru/daily_json.js"
 class CbrCollector(BaseCollector):
     async def _fetch(self, api_url: str) -> list[dict]:
         url = api_url or _DEFAULT_URL
-        # verify=False: SSL-перехват корпоративного прокси/антивируса в dev-окружении
-        async with httpx.AsyncClient(timeout=30, verify=False) as client:
+        async with httpx.AsyncClient(timeout=30, verify=SSL_VERIFY) as client:
             response = await client.get(url)
             response.raise_for_status()
             data = response.json()
