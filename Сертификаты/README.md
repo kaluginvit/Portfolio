@@ -14,6 +14,8 @@
 | [![Perplexity](./Perplexity_рус.png)](./Perplexity_рус.png) | Perplexity (продвинутый поиск с ИИ) | Подбор источников, deep research, факт-чек | Применяю в исследовании рынков и подготовке стратегий ([`05-ai-consulting`](../05-ai-consulting/)) |
 | [![ИИ-презентации](./ИИ-презентации_рус.png)](./ИИ-презентации_рус.png) | ИИ-презентации | Подготовка презентаций и слайдов с ИИ | [`05-ai-consulting/ai-in-accounting-strategic-plan`](../05-ai-consulting/ai-in-accounting-strategic-plan/) |
 | [![Лендинг](./Лендинг.png)](./Лендинг.png) | Веб / лендинг | Построение лендинга, лид-форма, базовый фронт | [`04-web/svo-payouts-website`](../04-web/svo-payouts-website/) ([svorazbor.ru](https://svorazbor.ru)) |
+| [![1С-разработчик](./1С-разработчик_рус.png)](./1С-разработчик_рус.png) | Профессия 1С-разработчик | 1С:Предприятие — конфигурации, расширения, HTTP-сервисы, СКД, интеграции | Выпускной проект ИС «ГСМ_Учет»: HTTP-сервис + Telegram-бот |
+| [![Вайб-кодинг на Claude Code](./Вайб-кодинг_на_ClaudeCode_рус.png)](./Вайб-кодинг_на_ClaudeCode_рус.png) | Вайб-кодинг на Claude Code | Разработка с Claude Code: агенты, инструменты, продвинутые workflow | Весь [`Portfolio`](../) — все проекты разработаны с Claude Code |
 
 ---
 

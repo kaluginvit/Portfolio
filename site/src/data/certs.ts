@@ -15,4 +15,6 @@ export const certificates: { src: string; label: string }[] = [
   { src: p('Нейросети_для_финансистов_рус.png'), label: 'Нейросети для финансистов' },
   { src: p('Профессия_Вайбкодер_рус.png'), label: 'Профессия Вайбкодер' },
   { src: p('Лендинг.png'), label: 'Лендинг' },
+  { src: p('1С-разработчик_рус.png'), label: '1С-разработчик' },
+  { src: p('Вайб-кодинг_на_ClaudeCode_рус.png'), label: 'Вайб-кодинг на Claude Code' },
 ];
