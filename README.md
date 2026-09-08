@@ -244,7 +244,7 @@
 <td align="center"><a href="./Сертификаты/Автоматизатор_бизнес-процессов_рус.png"><img src="./Сертификаты/Автоматизатор_бизнес-процессов_рус.png" width="150"/></a><br/><sub>Автоматизация процессов</sub></td>
 <td align="center"><a href="./Сертификаты/AI_в_таблицах_рус.png"><img src="./Сертификаты/AI_в_таблицах_рус.png" width="150"/></a><br/><sub>ИИ в таблицах</sub></td>
 <td align="center"><a href="./Сертификаты/Профессия_Вайбкодер_рус.png"><img src="./Сертификаты/Профессия_Вайбкодер_рус.png" width="150"/></a><br/><sub>Профессия Вайбкодер</sub></td>
-<td align="center"><a href="./Сертификаты/Вайбкодинг_на_Claude_Code_рус.png"><img src="./Сертификаты/Вайбкодинг_на_Claude_Code_рус.png" width="150"/></a><br/><sub>Вайбкодинг на Claude Code</sub></td>
+<td align="center"><a href="./Сертификаты/Вайб-кодинг_на_ClaudeCode_рус.png"><img src="./Сертификаты/Вайб-кодинг_на_ClaudeCode_рус.png" width="150"/></a><br/><sub>Вайб-кодинг на Claude Code</sub></td>
 </tr>
 <tr>
 <td align="center"><a href="./Сертификаты/1С-разработчик_рус.png"><img src="./Сертификаты/1С-разработчик_рус.png" width="150"/></a><br/><sub>1С-разработчик</sub></td>
