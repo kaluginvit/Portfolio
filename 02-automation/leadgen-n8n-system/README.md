@@ -2,6 +2,9 @@
 
 Система B2B лидогенерации из 11 связанных n8n workflow. Закрывает полную цепочку: сигнал интента → обогащение профиля → AI-решение с human-in-the-loop → персонализированное касание → nurture с затуханием → конкурентная разведка → live dashboard.
 
+**Live Demo:** https://kaluginvit.github.io/Portfolio/leadgen-n8n-system/  
+**Testing:** Shadow validation workflow (WF 09) runs all logic against production data without affecting real leads — used for pre-production validation.
+
 ## Business Problem
 
 В B2B-воронке недостаточно просто отправлять письма. Нужно:

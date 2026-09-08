@@ -1,6 +1,10 @@
 # Telegram-бот: предварительный расчёт выплат (СВО) и заявки
 
 > **EN brief:** Production Telegram bot — guided quiz with FSM, payout calculator, lead collection with personal data consent, SQLite WAL storage, webhook to CRM. Part of an end-to-end system with a [paired Next.js website](../../04-web/svo-payouts-website/). Full CI/CD: GitHub Actions → GHCR → SSH deploy.
+>
+> **Business problem:** Families of SVO participants need a quick way to estimate available payouts and submit a lead — without navigating complex government websites. This bot provides a guided quiz and payout estimate directly in Telegram.
+>
+> **Live:** [svorazbor.ru](https://svorazbor.ru) (paired website) · [GHCR image](https://github.com/kaluginvit/Portfolio/pkgs/container/svo-payments-bot)
 
 Production-ready бот на **Python 3.10+**, **aiogram 3** и **SQLite**. Проводит пользователя по короткой анкете, показывает ориентировочный расчёт (в том числе оценку «цены ожидания» для ветки «документы уже поданы»), собирает контакты и согласие на обработку ПДн, сохраняет заявки в БД и при настройке дублирует их администратору в Telegram.
 
