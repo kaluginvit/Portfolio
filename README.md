@@ -248,9 +248,9 @@
 </tr>
 <tr>
 <td align="center"><a href="./Сертификаты/1С-разработчик_рус.png"><img src="./Сертификаты/1С-разработчик_рус.png" width="150"/></a><br/><sub>1С-разработчик</sub></td>
-<td align="center"><a href="./Сертификаты/Вайб-кодинг_на_ClaudeCode_рус.png"><img src="./Сертификаты/Вайб-кодинг_на_ClaudeCode_рус.png" width="150"/></a><br/><sub>Вайб-кодинг на Claude Code</sub></td>
-<td></td>
-<td></td>
+<td align="center"><a href="./Сертификаты/Perplexity_рус.png"><img src="./Сертификаты/Perplexity_рус.png" width="150"/></a><br/><sub>Perplexity</sub></td>
+<td align="center"><a href="./Сертификаты/ИИ-презентации_рус.png"><img src="./Сертификаты/ИИ-презентации_рус.png" width="150"/></a><br/><sub>ИИ-презентации</sub></td>
+<td align="center"><a href="./Сертификаты/Лендинг.png"><img src="./Сертификаты/Лендинг.png" width="150"/></a><br/><sub>Лендинг</sub></td>
 </tr>
 </table>
 
